@@ -1,0 +1,75 @@
+user: {
+    name: string,
+    email: string,
+    emailVerifiedAt: timestamp,
+    password: string,
+    level: enum,
+    apiToken: string,
+}
+
+admin: {
+    userId: [{_id: ObjectId}],
+    birthdate: date,
+    address: string,
+    phoneNumber: string,
+}
+
+freelancer :{
+    userId: [{_id: ObjectId}],
+    birthdate: date,
+    address: string,
+    phoneNumber: string,
+    profileImg: string,
+    serviceCategory: enum,
+    serviceTitle: string,
+    serviceDescription: string,
+    serviceImg: string,
+    serviceRating: number,
+    bankName: string,
+    bankAccount: string,
+    accountHolder: string,
+}
+ 
+product : {
+    freelancerId: [{_id: ObjectId}],
+    title: string,
+    description: string,
+    price: number,
+    picture: string,
+} 
+
+service_user : { 
+    userId: [{_id: ObjectId}],
+    birthdate: date,
+    address: string, 
+    phoneNumber: string,       
+    interest: string,
+    rating: string,
+    profileImg: string,
+}
+
+order : {
+    productId: [{
+        _id: ObjectId,
+        price: number,
+    }],
+    serviceUserId: [{_id: ObjectId}],
+    bankId: [{_id: ObjectId}],
+    proofPayment: string,
+    bankFrom: string,
+    accountHolder: string,
+    status: string,
+}
+
+review : {
+    freelancerId: [{_id: ObjectId}],
+    serviceUserId: [{_id: ObjectId}],
+    rating: number,
+    description: string,
+}
+
+bank : {
+    bankName: string,
+    bankAccount: string,
+    accountHolder: string,
+}
