@@ -1,68 +1,52 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 
 const freelancerSchema = new mongoose.Schema({
-  userId: [
-    {
-      type: ObjectId,
-      ref: "User",
-    },
-  ],
-  birthdate: {
-    type: Date,
-    required: true,
+  userId: {
+    type: ObjectId,
+    ref: "User",
   },
-  address: {
-    type: String,
-    required: true,
-  },
-  phoneNumber: {
-    type: String,
-    validate: {
-      validator: function (v) {
-        return /\d{3}-\d{3}-\d{4}/.test(v);
-      },
-      message: (props) => `${props.value} is not a valid phone number!`,
-    },
-    required: true,
-  },
-  profileImg: {
-    type: String,
-    required: true,
-  },
-  serviceCategory: {
+  categoryId: {
     type: ObjectId,
     ref: "Category",
   },
-  serviceTitle: {
+  bankName: {
     type: String,
-    required: true,
   },
-  serviceDescription: {
+  bankAccount: {
     type: String,
-    required: true,
   },
-  serviceImg: {
+  accountHolder: {
     type: String,
-    required: true,
   },
-  serviceRating: {
+  rating: {
     type: Number,
     required: true,
     min: 1,
     max: 5,
   },
-  bankName: {
-    type: String,
-    required: true,
+  isBanned: {
+    type: Boolean,
+    default: false,
   },
-  bankAccount: {
+  title: {
     type: String,
-    required: true,
   },
-  accountHolder: {
+  description: {
     type: String,
-    required: true,
   },
+  imgUrl: {
+    type: String,
+  },
+  serviceId: [
+    {
+      type: ObjectId,
+      ref: "Service",
+    },
+  ],
+  reviewId: [{
+    type: ObjectId,
+    ref: "Review",
+  }],
 });
-
 module.exports = mongoose.model("Freelancer", freelancerSchema);

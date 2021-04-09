@@ -1,33 +1,10 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 
 const serviceUserSchema = new mongoose.Schema({
-  userId: [
-    {
-      type: ObjectId,
-      ref: "User",
-    },
-  ],
-  birthdate: {
-    type: Date,
-    required: true,
-  },
-  address: {
-    type: String,
-    required: true,
-  },
-  phoneNumber: {
-    type: String,
-    validate: {
-      validator: function (v) {
-        return /\d{3}-\d{3}-\d{4}/.test(v);
-      },
-      message: (props) => `${props.value} is not a valid phone number!`,
-    },
-    required: true,
-  },
-  interest: {
+  userId: {
     type: ObjectId,
-    ref: "Category",
+    ref: "User",
   },
   rating: {
     type: Number,
@@ -35,10 +12,21 @@ const serviceUserSchema = new mongoose.Schema({
     min: 1,
     max: 5,
   },
-  profileImg: {
+  imgUrl: {
     type: String,
-    required: true,
   },
+  isBanned: {
+    type: Boolean,
+    default: false,
+  },
+  orderId: [{
+    type: ObjectId,
+    ref: "Order",
+  }],
+  reviewId: [{
+    type: ObjectId,
+    ref: "Review",
+  }],
 });
 
 module.exports = mongoose.model("ServiceUser", serviceUserSchema);

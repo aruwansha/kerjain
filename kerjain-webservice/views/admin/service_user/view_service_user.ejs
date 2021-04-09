@@ -16,8 +16,46 @@
       <!-- Begin Page Content -->
       <div class="container-fluid">
         <!-- Page Heading -->
-        <h1 class="h3 mb-4 text-gray-800">Welcome to Service User</h1>
-        <%- include('table_service_user.ejs')%>
+        <h1 class="h3 mb-4 text-gray-800">Service User</h1>
+        <%- include('../../partials/message.ejs') %>
+        <% if(action == 'view') { %>
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                id="home-tab"
+                data-toggle="tab"
+                href="#show-freelancer"
+                role="tab"
+                aria-controls="home"
+                aria-selected="true"
+                >List Freelancer</a
+              >
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <%- include('show_table_service_user.ejs')%>
+          </div>
+          <% } else if(action == 'detail') { %>
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                id="home-tab"
+                data-toggle="tab"
+                href="#edit-freelancer"
+                role="tab"
+                aria-controls="home"
+                aria-selected="true"
+                >Detail Freelancer</a
+              >
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <%- include('show_edit_service_user.ejs')%>
+          </div>
+          <% } %>
+        
       </div>
       <!-- /.container-fluid -->
     </div>
@@ -35,5 +73,4 @@
 <a class="scroll-to-top rounded" href="#page-top">
   <i class="fas fa-angle-up"></i>
 </a>
-
-<%- include('../../partials/js.ejs') %>
+<%- include('add_modal.ejs') %> <%- include('../../partials/js.ejs') %>

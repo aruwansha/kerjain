@@ -1,0 +1,16 @@
+<div
+  class="tab-pane fade show active"
+  id="edit-freelancer"
+  role="tabpanel"
+  aria-labelledby="home-tab"
+>
+  <!-- DataTales Example -->
+  <div class="card  mt-2 mb-4">
+    <div class="card-body">
+      <form action="/admin/serviceuser/<%= serviceUser._id %>/delete?_method=DELETE" method="POST">
+
+        <button type="submit" class="btn btn-danger">Delete</button>
+      </form>
+    </div>
+  </div>
+</div>

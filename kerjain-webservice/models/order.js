@@ -1,29 +1,29 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 
 const orderSchema = new mongoose.Schema({
-  productId: [
+  orderDate: {
+    type: Date,
+    required: true,
+  },
+  serviceUserId: {
+    type: ObjectId,
+    ref: "ServiceUser",
+  },
+  serviceId: [
     {
       _id: {
         type: ObjectId,
-        ref: "Product",
+        ref: "Service",
+      },
+      title: {
+        type: String,
         required: true,
       },
       price: {
         type: Number,
         required: true,
       },
-    },
-  ],
-  serviceUserId: [
-    {
-      type: ObjectId,
-      ref: "ServiceUser",
-    },
-  ],
-  bankId: [
-    {
-      type: ObjectId,
-      ref: "Bank",
     },
   ],
   proofPayment: {

@@ -14,7 +14,7 @@
   <div class="card-body">
     <div class="table-responsive">
       <table
-        class="table table-bordered"
+        class="table table-bordered text-center"
         id="dataTable"
         width="100%"
         cellspacing="0"
@@ -25,6 +25,7 @@
             <th>Bank Name</th>
             <th>Bank Account</th>
             <th>Account Holder</th>
+            <th>Image</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -36,6 +37,9 @@
             <td><%= bank[i].bankName %></td>
             <td><%= bank[i].bankAccount %></td>
             <td><%= bank[i].accountHolder %></td>
+            <td>
+              <img src="http://localhost:3000/<%= bank[i].imgUrl%>" height="50" alt="Image Url">
+            </td>
             <td>
               <a
                 href="javascript:void()"

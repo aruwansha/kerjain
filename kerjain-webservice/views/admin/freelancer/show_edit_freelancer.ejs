@@ -1,0 +1,37 @@
+<div
+  class="tab-pane fade show active"
+  id="edit-freelancer"
+  role="tabpanel"
+  aria-labelledby="home-tab"
+>
+  <!-- DataTales Example -->
+  <div class="card  mt-2 mb-4">
+    <div class="card-body">
+      <form action="/admin/freelancer/<%= freelancer._id %>/delete?_method=DELETE" method="POST">
+        <div class="form-group">
+          <!-- <label for="inputRating">Rating</label>
+          <input
+            type="number"
+            class="form-control"
+            name="rating"
+            value="<%= freelancer.rating %>"
+            placeholder="Enter rating"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="inputCategory">Category</label>
+          <select name="categoryId" id="category" class="form-control">
+            <option value="<%= freelancer.categoryId.name %>"><%= freelancer.categoryId.name %></option>
+            <% for(let i = 0; i < category.length; i++){ %>
+            <option value="<%= category[i]._id %>">
+              <%= category[i].name %>
+            </option>
+            <% } %>
+          </select>
+        </div> -->
+        <button type="submit" class="btn btn-danger">Delete</button>
+      </form>
+    </div>
+  </div>
+</div>

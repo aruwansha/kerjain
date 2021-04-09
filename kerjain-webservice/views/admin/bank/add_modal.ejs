@@ -21,27 +21,25 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="/admin/bank" method="POST">
+        <form action="/admin/bank" method="POST" enctype="multipart/form-data">
           <div class="form-group">
             <label for="inputBankName">Bank Name</label>
             <input
               type="text"
               class="form-control"
-              id="bankName"
               name="bankName"
-              aria-describedby="bankNameHelp"
-              placeholder="Enter Bank Name"
+              placeholder="Enter bank Name"
+              required
             />
           </div>
           <div class="form-group">
-            <label for="inputBankAccount">Bank Account</label>
+            <label for="inputbankAccount">Bank Account</label>
             <input
               type="number"
               class="form-control"
-              id="bankAccount"
               name="bankAccount"
-              aria-describedby="bankAccountHelp"
-              placeholder="Enter Bank Account"
+              placeholder="Enter bank Account"
+              required
             />
           </div>
           <div class="form-group">
@@ -49,10 +47,18 @@
             <input
               type="text"
               class="form-control"
-              id="accountHolder"
               name="accountHolder"
-              aria-describedby="acountHolderHelp"
               placeholder="Enter Account Holder"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="inputImgUrl">Bank Logo</label>
+            <input
+              type="file"
+              class="form-control-file"
+              name="image"
+              required
             />
           </div>
           <div class="modal-footer">

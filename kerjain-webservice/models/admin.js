@@ -1,23 +1,10 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 
 const adminSchema = new mongoose.Schema({
-  userId: [
-    {
-      type: ObjectId,
-      ref: "User",
-    },
-  ],
-  birthdate: {
-    type: Date,
-    required: true,
-  },
-  address: {
-    type: String,
-    required: true,
-  },
-  phoneNumber: {
-    type: String,
-    required: true,
+  userId: {
+    type: ObjectId,
+    ref: "User",
   },
 });
 

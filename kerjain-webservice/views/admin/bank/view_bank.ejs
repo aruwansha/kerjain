@@ -16,8 +16,9 @@
       <!-- Begin Page Content -->
       <div class="container-fluid">
         <!-- Page Heading -->
-        <h1 class="h3 mb-4 text-gray-800">Welcome to Bank</h1>
-        <%- include('table_bank.ejs')%>
+        <h1 class="h3 mb-4 text-gray-800">Bank</h1>
+        <%- include('../../partials/message.ejs')%> <%-
+        include('table_bank.ejs')%>
       </div>
       <!-- /.container-fluid -->
     </div>
@@ -36,8 +37,8 @@
   <i class="fas fa-angle-up"></i>
 </a>
 
-<%- include('add_modal.ejs') %> <%- include('edit_modal.ejs') %> <%-
-include('delete_modal.ejs') %> <%- include('../../partials/js.ejs') %>
+<%- include('add_modal.ejs') %> <%- include('delete_modal.ejs') %> <%-
+include('edit_modal.ejs') %> <%- include('../../partials/js.ejs') %>
 
 <script>
   $("#dataTable").on("click", ".button-edit", function () {
@@ -54,7 +55,6 @@ include('delete_modal.ejs') %> <%- include('../../partials/js.ejs') %>
 
   $("#dataTable").on("click", ".button-delete", function () {
     let id = $(this).data("id");
-    console.log(id);
     $("#deleteModal").modal("show");
     $(".id").val(id);
   });
