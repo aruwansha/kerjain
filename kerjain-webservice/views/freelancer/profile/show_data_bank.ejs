@@ -5,51 +5,45 @@
 </style>
 <div
   class="tab-pane fade show active"
-  id="edit-service-user"
+  id="personal"
   role="tabpanel"
-  aria-labelledby="home-tab"
+  aria-labelledby="personal-tab"
 >
   <!-- DataTales Example -->
   <div class="card mt-2 mb-4">
     <div class="card-body">
-      <!-- Detail Form -->
+      <h4>Bank Profile</h4>
+      <hr />
       <div class="form-group">
-        <label for="inputName">Nama</label>
+        <label for="inputBankName">Bank Name</label>
         <input
           type="text"
           class="form-control input-disabled"
-          name="name"
-          value="<%= serviceUser.userId.name %>"
+          name="bankName"
+          value="<%= freelancer.bankName %>"
+          placeholder="Enter Bank Name"
           readonly
         />
       </div>
       <div class="form-group">
-        <label for="inputEmail">Email</label>
+        <label for="inputbankAccount">Bank Account</label>
         <input
           type="text"
           class="form-control input-disabled"
-          name="email"
-          value="<%= serviceUser.userId.email %>"
+          name="bankAccount"
+          value="<%= freelancer.bankAccount %>"
+          placeholder="Enter bank Account"
           readonly
         />
       </div>
       <div class="form-group">
-        <label for="inputAddress">Address</label>
+        <label for="inputAccountHolder">Bank Account Holder</label>
         <input
           type="text"
           class="form-control input-disabled"
-          name="address"
-          value="<%= serviceUser.userId.address %>"
-          readonly
-        />
-      </div>
-      <div class="form-group">
-        <label for="inputPhone">Phone Number</label>
-        <input
-          type="text"
-          class="form-control input-disabled"
-          name="phone"
-          value="<%= serviceUser.userId.phone %>"
+          name="accountHolder"
+          value="<%= freelancer.accountHolder %>"
+          placeholder="Enter Bank Name"
           readonly
         />
       </div>

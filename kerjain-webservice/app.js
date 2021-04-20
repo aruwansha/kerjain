@@ -4,14 +4,14 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 // method override
-const methodOverride = require('method-override');
+const methodOverride = require("method-override");
 // express-session
-const session = require('express-session')
+const session = require("express-session");
 // connect-flash
-var flash = require('connect-flash');
-
+var flash = require("connect-flash");
 // mongoose
 const mongoose = require("mongoose");
+
 mongoose.connect("mongodb://localhost:27017/db_kerjain", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -22,8 +22,10 @@ mongoose.connect("mongodb://localhost:27017/db_kerjain", {
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 
-// router admin
+// router custom
 const adminRouter = require("./routes/admin");
+const freelancerRouter = require("./routes/freelancer");
+const apiRouter = require("./routes/api");
 
 var app = express();
 
@@ -32,12 +34,14 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(methodOverride("_method"));
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge: 60000 }
-}))
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 3600000 },
+  })
+);
 app.use(flash());
 app.use(logger("dev"));
 app.use(express.json());
@@ -52,8 +56,10 @@ app.use(
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
-// admin
+// use custom router
 app.use("/admin", adminRouter);
+app.use("/freelancer", freelancerRouter);
+app.use("/api/v1", apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -6,11 +6,14 @@ const serviceUserSchema = new mongoose.Schema({
     type: ObjectId,
     ref: "User",
   },
+  categoryId: {
+    type: ObjectId,
+    ref: "Category",
+  },
   rating: {
     type: Number,
-    required: true,
-    min: 1,
     max: 5,
+    default: 0,
   },
   imgUrl: {
     type: String,

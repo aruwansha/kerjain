@@ -26,6 +26,9 @@ const orderSchema = new mongoose.Schema({
       },
     },
   ],
+  total: {
+    type: Number,
+  },
   proofPayment: {
     type: String,
     required: true,

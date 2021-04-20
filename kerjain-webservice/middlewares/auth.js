@@ -1,8 +1,8 @@
 const isLogin = (req, res, next) => {
   if (req.session.user == null || req.session.user == undefined) {
-    req.flash("alertMessage", "Session is runout, please signin again!");
+    req.flash("alertMessage", "Session telah berakhir, Silakan Login Kembali!");
     req.flash("alertStatus", "danger");
-    res.redirect("/admin/signin");
+    res.redirect("/signin");
   } else {
     next();
   }

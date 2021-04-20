@@ -10,6 +10,12 @@ const freelancerSchema = new mongoose.Schema({
     type: ObjectId,
     ref: "Category",
   },
+  orderId: [
+    {
+      type: ObjectId,
+      ref: "Order",
+    },
+  ],
   bankName: {
     type: String,
   },
@@ -40,13 +46,17 @@ const freelancerSchema = new mongoose.Schema({
   },
   serviceId: [
     {
-      type: ObjectId,
-      ref: "Service",
+      _id: {
+        type: ObjectId,
+        ref: "Service",
+      },
     },
   ],
-  reviewId: [{
-    type: ObjectId,
-    ref: "Review",
-  }],
+  reviewId: [
+    {
+      type: ObjectId,
+      ref: "Review",
+    },
+  ],
 });
 module.exports = mongoose.model("Freelancer", freelancerSchema);

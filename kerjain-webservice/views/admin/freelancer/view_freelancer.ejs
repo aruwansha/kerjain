@@ -2,7 +2,7 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
   <!-- Sidebar -->
-  <%- include('../../partials/sidebar.ejs') %>
+  <%- include('../../partials/admin/sidebar.ejs') %>
   <!-- End of Sidebar -->
 
   <!-- Content Wrapper -->
@@ -18,42 +18,38 @@
         <!-- Page Heading -->
         <h1 class="h3 mb-4 text-gray-800">Freelancer</h1>
         <!-- End of Heading -->
-        <%- include('../../partials/message.ejs')%>
-        <% if(action == 'view') { %>
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item">
-            <a
-              class="nav-link active"
-              id="home-tab"
-              data-toggle="tab"
-              href="#show-freelancer"
-              role="tab"
-              aria-controls="home"
-              aria-selected="true"
-              >List Freelancer</a
-            >
-          </li>
-        </ul>
-        <div class="tab-content" id="myTabContent">
+        <%- include('../../partials/message.ejs') %>  <% if(action == 'view') { %>
           <%- include('show_table_freelancer.ejs')%>
-        </div>
         <% } else if(action == 'detail') { %>
         <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item">
             <a
               class="nav-link active"
-              id="home-tab"
+              id="detail-tab"
               data-toggle="tab"
-              href="#edit-freelancer"
+              href="#detail-freelancer"
               role="tab"
               aria-controls="home"
               aria-selected="true"
               >Detail Freelancer</a
             >
           </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              id="delete-tab"
+              data-toggle="tab"
+              href="#delete-freelancer"
+              role="tab"
+              aria-controls="home"
+              aria-selected="true"
+              >Danger Zone</a
+            >
+          </li>
         </ul>
         <div class="tab-content" id="myTabContent">
-          <%- include('show_edit_freelancer.ejs')%>
+          <%- include('show_detail_freelancer.ejs')%> <%-
+          include('show_delete_zone.ejs')%>
         </div>
         <% } %>
       </div>

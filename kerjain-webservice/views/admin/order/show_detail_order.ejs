@@ -1,0 +1,112 @@
+<style>
+  .input-disabled {
+    background-color: #ffffff !important;
+  }
+</style>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4 mt-2">
+  <div class="card-header py-3">
+    <a href="/admin/order" class="btn btn-warning">Back</a>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-4">
+        <img
+          src="http://localhost:3000/<%= order.proofPayment %>"
+          alt="image"
+          style="width: 100%; display: block"
+        />
+
+        <div class="row ml-1">
+          <% if(order.status == 'unpaid' || order.status == 'rejected') {%>
+
+          <form
+            action="/admin/order/<%= order.id %>/confirm?_method=PUT"
+            method="POST"
+          >
+            <button type="submit" class="btn btn-success btn-sm">
+              <i class="fas fa-check"></i>
+              Confirmation
+            </button>
+          </form>
+          <form
+            action="/admin/order/<%= order.id %>/reject?_method=PUT"
+            method="POST"
+            class="ml-2"
+          >
+            <button type="submit" class="btn btn-danger btn-sm">
+              <i class="fas fa-times"></i>
+              Reject
+            </button>
+          </form>
+          <% } %>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="form-group">
+          <label for="inputName">Nama</label>
+          <input
+            type="text"
+            class="form-control input-disabled"
+            name="name"
+            value="<%= user.name %>"
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="inputEmail">Email</label>
+          <input
+            type="text"
+            class="form-control input-disabled"
+            name="email"
+            value="<%= user.email %>"
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="inputPhone">Phone Number</label>
+          <input
+            type="number"
+            class="form-control input-disabled"
+            name="phone"
+            value="<%= user.phone %>"
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="inputService">Service</label>
+          <% for(let i = 0; i < order.serviceId.length; i++){ %>
+          <input
+            type="text"
+            class="form-control input-disabled mb-1"
+            name="service"
+            value="<%= order.serviceId[i].title %> - Rp <%= order.serviceId[i].price %> "
+            readonly
+          />
+          <% } %>
+        </div>
+        <div class="form-group">
+          <label for="inputStatus">Status</label>
+          <input
+            type="text"
+            class="form-control input-disabled"
+            name="status"
+            value="<%= order.status %>"
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="inputTotal">Total</label>
+          <input
+            type="text"
+            class="form-control input-disabled"
+            name="total"
+            value="Rp <%= order.total %>"
+            readonly
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

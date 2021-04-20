@@ -12,6 +12,12 @@ const categorySchema = new mongoose.Schema({
       ref: "Freelancer",
     },
   ],
+  serviceUserId: [
+    {
+      type: ObjectId,
+      ref: "ServiceUser",
+    },
+  ],
 });
 
 module.exports = mongoose.model("Category", categorySchema);
