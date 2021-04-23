@@ -40,10 +40,10 @@ module.exports = {
       if (level != "admin") {
         level == "freelancer" ? res.redirect("/freelancer") : res.redirect("/");
       } else {
-        const category = await Category.find();
         const alertMessage = req.flash("alertMessage");
         const alertStatus = req.flash("alertStatus");
         const alert = { message: alertMessage, status: alertStatus };
+        const category = await Category.find();
         res.render("admin/category/view_category", {
           title: "View Category | Admin Kerjain",
           user: req.session.user,
@@ -107,10 +107,10 @@ module.exports = {
       if (level != "admin") {
         level == "freelancer" ? res.redirect("/freelancer") : res.redirect("/");
       } else {
-        const bank = await Bank.find();
         const alertMessage = req.flash("alertMessage");
         const alertStatus = req.flash("alertStatus");
         const alert = { message: alertMessage, status: alertStatus };
+        const bank = await Bank.find();
         res.render("admin/bank/view_bank", {
           title: "View Bank | Admin Kerjain",
           user: req.session.user,
@@ -200,7 +200,6 @@ module.exports = {
         const freelancer = await Freelancer.find()
           .populate("userId")
           .populate("categoryId");
-        console.log(freelancer);
         res.render("admin/freelancer/view_freelancer", {
           title: "View Freelancer | Admin Kerjain",
           user: req.session.user,
@@ -222,6 +221,9 @@ module.exports = {
         level == "freelancer" ? res.redirect("/freelancer") : res.redirect("/");
       } else {
         const { id } = req.params;
+        const alertMessage = req.flash("alertMessage");
+        const alertStatus = req.flash("alertStatus");
+        const alert = { message: alertMessage, status: alertStatus };
         const freelancer = await Freelancer.findOne({ _id: id })
           .populate({
             path: "categoryId",
@@ -231,11 +233,7 @@ module.exports = {
             path: "userId",
             select: "id name email address phone",
           });
-        console.log(freelancer);
         const category = await Category.find();
-        const alertMessage = req.flash("alertMessage");
-        const alertStatus = req.flash("alertStatus");
-        const alert = { message: alertMessage, status: alertStatus };
         res.render("admin/freelancer/view_freelancer", {
           title: "Detail Freelancer | Admin Kerjain",
           user: req.session.user,
@@ -308,7 +306,6 @@ module.exports = {
       });
       // // get userId
       // const getUserById = await User.findOne({ _id: user._id });
-      // console.log({getUser, category})
       // // push userId to user schema
       // getUserById.freelancerId.push({ _id: freelancer._id });
       // await getUserById.save();
@@ -404,13 +401,13 @@ module.exports = {
         level == "freelancer" ? res.redirect("/freelancer") : res.redirect("/");
       } else {
         const { id } = req.params;
+        const alertMessage = req.flash("alertMessage");
+        const alertStatus = req.flash("alertStatus");
+        const alert = { message: alertMessage, status: alertStatus };
         const serviceUser = await ServiceUser.findOne({ _id: id }).populate({
           path: "userId",
           select: "id name email address phone",
         });
-        const alertMessage = req.flash("alertMessage");
-        const alertStatus = req.flash("alertStatus");
-        const alert = { message: alertMessage, status: alertStatus };
         res.render("admin/service_user/view_service_user", {
           title: "Detail Service User | Admin Kerjain",
           user: req.session.user,
@@ -439,24 +436,24 @@ module.exports = {
 
   viewOrder: async (req, res) => {
     try {
-      const level = req.session.user.level;
-      if (level != "admin") {
-        level == "freelancer" ? res.redirect("/freelancer") : res.redirect("/");
-      } else {
-        const order = await Order.find()
-          .sort("orderDate")
-          .populate("serviceUserId");
-        const alertMessage = req.flash("alertMessage");
-        const alertStatus = req.flash("alertStatus");
-        const alert = { message: alertMessage, status: alertStatus };
-        res.render("admin/order/view_order", {
-          title: "View Order | Admin Kerjain",
-          user: req.session.user,
-          alert,
-          order,
-          action: "view",
-        });
-      }
+    const level = req.session.user.level;
+    if (level != "admin") {
+      level == "freelancer" ? res.redirect("/freelancer") : res.redirect("/");
+    } else {
+      const alertMessage = req.flash("alertMessage");
+      const alertStatus = req.flash("alertStatus");
+      const alert = { message: alertMessage, status: alertStatus };
+      const order = await Order.find()
+        .select("id accountHolder orderDate total status")
+        .sort("orderDate");
+      res.render("admin/order/view_order", {
+        title: "View Order | Admin Kerjain",
+        user: req.session.user,
+        alert,
+        order,
+        action: "view",
+      });
+    }
     } catch (error) {
       res.redirect("/admin/dashboard");
     }
@@ -469,14 +466,14 @@ module.exports = {
         level == "freelancer" ? res.redirect("/freelancer") : res.redirect("/");
       } else {
         const { id } = req.params;
+        const alertMessage = req.flash("alertMessage");
+        const alertStatus = req.flash("alertStatus");
+        const alert = { message: alertMessage, status: alertStatus };
         const order = await Order.findOne({ _id: id }).populate({
           path: "serviceUserId",
           select: "id userId",
         });
         const user = await User.findOne({ _id: order.serviceUserId.userId });
-        const alertMessage = req.flash("alertMessage");
-        const alertStatus = req.flash("alertStatus");
-        const alert = { message: alertMessage, status: alertStatus };
         res.render("admin/order/view_order", {
           title: "Detail Order | Admin Kerjain",
           user: req.session.user,
@@ -508,7 +505,6 @@ module.exports = {
     try {
       const { id } = req.params;
       const order = await Order.findOne({ _id: id });
-      console.log(order);
       order.status = "rejected";
       req.flash("alertMessage", "Order Rejected");
       req.flash("alertStatus", "success");

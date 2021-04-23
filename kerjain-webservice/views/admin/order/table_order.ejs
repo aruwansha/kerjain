@@ -13,10 +13,9 @@
           <tr>
             <th>No</th>
             <th>Tanggal Order</th>
-            <th>Name</th>
-            <th>Bank Name</th>
+            <th>Nama Pengirim</th>
             <th>Status</th>
-            <th>Action</th>
+            <th>Aksi</th>
           </tr>
         </thead>
 
@@ -26,8 +25,7 @@
             <td><%= i+1 %></td>
             <td><%= order[i].orderDate.toLocaleString().split(',')[0] %></td>
             <td><%= order[i].accountHolder %></td>
-            <td><%= order[i].bankFrom %></td>
-            <td><%= order[i].status %></td>
+            <td><%= order[i].status == 'finished' ? 'Selesai' : order[i].status == 'paid' ? 'Menunggu Konfirmasi Admin' : order[i].status == 'unpaid' ? 'Menunggu Pembayaran' : 'undefined' %></td>
             <td>
               <a href="/admin/order/<%= order[i]._id %>" class="btn btn-primary btn-circle btn-sm"><i class="fas fa-eye"></i></a>
             </td>

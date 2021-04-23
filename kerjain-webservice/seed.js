@@ -111,6 +111,7 @@ var data = [
       // admin 1
       {
         _id: mongoose.Types.ObjectId("5e96cbe292b97300fc902227"),
+        // adminId: mongoose.Types.ObjectId("5e96cbe292b97300fc902226"),
         name: "Ilham Febrian Arwansyah",
         email: "ilhamfebrianarwansyah@gmail.com",
         password: "ilham123",
@@ -122,6 +123,7 @@ var data = [
       // admin 2
       {
         _id: mongoose.Types.ObjectId("5e96cbe292b97300fc902229"),
+        // adminId: mongoose.Types.ObjectId("5e96cbe292b97300fc902228"),
         name: "Dhimas Krisna Ahmadi",
         email: "dhimaskrisna@gmail.com",
         password: "dhimas123",
@@ -133,6 +135,7 @@ var data = [
       // freelancer 1
       {
         _id: mongoose.Types.ObjectId("605b5889babfe71e8432d311"),
+        // freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d312"),
         name: "Adi Prasetyo",
         email: "adipras@gmail.com",
         password: "adipras123",
@@ -145,6 +148,7 @@ var data = [
       // freelancer 2
       {
         _id: mongoose.Types.ObjectId("605b5889babfe71e8432d313"),
+        // freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d314"),
         name: "Galeh Desena Ramadhian",
         email: "galdes@gmail.com",
         password: "galehdesena",
@@ -157,6 +161,7 @@ var data = [
       // freelancer 3
       {
         _id: mongoose.Types.ObjectId("605b5889babfe71e8432d315"),
+        // freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d316"),
         name: "Alfiyan",
         email: "alfiyan@gmail.com",
         password: "alfiyan123",
@@ -169,6 +174,7 @@ var data = [
       // freelancer 4
       {
         _id: mongoose.Types.ObjectId("605b5889babfe71e8432d317"),
+        // freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d318"),
         name: "Rizky Zahro",
         email: "rizkyz@gmail.com",
         password: "rizky123",
@@ -181,8 +187,9 @@ var data = [
       // service user 1
       {
         _id: mongoose.Types.ObjectId("605b5889babfe71e8432d319"),
+        // serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
         name: "Rizky Dandi",
-        email: "rizkyD@gmail.com",
+        email: "rizkyd@gmail.com",
         password: "rizky123",
         level: "service_user",
         birthdate: "2000-02-06",
@@ -192,8 +199,9 @@ var data = [
       // service user 2
       {
         _id: mongoose.Types.ObjectId("605b5889babfe71e8432d321"),
+        // serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d322"),
         name: "Krisna Pramana",
-        email: "krisnaPD@gmail.com",
+        email: "krisnapd@gmail.com",
         password: "kris123",
         level: "service_user",
         birthdate: "2000-02-06",
@@ -426,8 +434,9 @@ var data = [
     documents: [
       {
         _id: mongoose.Types.ObjectId("605c3f698f15569950d6e566"),
-        orderDate: "3-29-2021",
+        freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d312"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
+        orderDate: "3-29-2021",
         serviceId: [
           {
             _id: mongoose.Types.ObjectId("605c3f698f15569950d6e562"),
@@ -443,8 +452,9 @@ var data = [
       },
       {
         _id: mongoose.Types.ObjectId("605c3f698f15569950d6e567"),
-        orderDate: "4-1-2021",
+        freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d316"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d322"),
+        orderDate: "4-1-2021",
         serviceId: [
           {
             _id: mongoose.Types.ObjectId("605c3f698f15569950d6e564"),
@@ -465,8 +475,9 @@ var data = [
       },
       {
         _id: mongoose.Types.ObjectId("605c3f698f15569950d6e568"),
-        orderDate: "4-5-2021",
+        freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d318"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
+        orderDate: "4-5-2021",
         serviceId: [
           {
             _id: mongoose.Types.ObjectId("605c3f698f15569950d6e565"),

@@ -3,10 +3,18 @@ const { ObjectId } = mongoose.Schema;
 const bcrypt = require("bcrypt");
 
 const usersSchema = new mongoose.Schema({
-  serviceUserId: {
-    type: ObjectId,
-    ref: "ServiceUser",
-  },
+  // adminId: {
+  //   type: ObjectId,
+  //   ref: "Admin",
+  // },
+  // freelancerId: {
+  //   type: ObjectId,
+  //   ref: "Freelancer",
+  // },
+  // serviceUserId: {
+  //   type: ObjectId,
+  //   ref: "ServiceUser",
+  // },
   name: {
     type: String,
     required: true,
@@ -42,7 +50,7 @@ const usersSchema = new mongoose.Schema({
   },
   imgUrl: {
     type: String,
-  }
+  },
 });
 
 usersSchema.pre("save", async function (next) {

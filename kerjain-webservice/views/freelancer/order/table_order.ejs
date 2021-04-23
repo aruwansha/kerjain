@@ -12,10 +12,10 @@
         <thead>
           <tr>
             <th>No</th>
-            <th>Order Date</th>
-            <th>Name</th>
-            <th>Bank Name</th>
+            <th>Tanggal Order</th>
+            <th>Nama</th>
             <th>Status</th>
+            <th>Total</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -24,10 +24,12 @@
           <% for( i = 0; i < totalOrder; i++){ %>
           <tr>
             <td><%= i+1 %></td>
-            <td><%= order.orderId[i].orderDate.toLocaleString().split(',')[0] %></td>
-            <td><%= order.orderId[i].accountHolder %></td>
-            <td><%= order.orderId[i].bankFrom %></td>
+            <td>
+              <%= order.orderId[i].orderDate.toLocaleString().split(',')[0] %>
+            </td>
+            <td><%= user.name %></td>
             <td><%= order.orderId[i].status %></td>
+            <td><%= order.orderId[i].total %></td>
             <td>
               <a href="#" class="btn btn-primary btn-circle btn-sm"
                 ><i class="fas fa-eye"></i

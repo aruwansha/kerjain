@@ -67,7 +67,7 @@
         <div class="form-group">
           <label for="inputPhone">Phone Number</label>
           <input
-            type="number"
+            type="text"
             class="form-control input-disabled"
             name="phone"
             value="<%= user.phone %>"
@@ -79,9 +79,10 @@
           <% for(let i = 0; i < order.serviceId.length; i++){ %>
           <input
             type="text"
-            class="form-control input-disabled mb-1"
+            class="form-control input-disabled mb-2"
             name="service"
-            value="<%= order.serviceId[i].title %> - Rp <%= order.serviceId[i].price %> "
+            value="<%= `${i+1}.` %> <%= order.serviceId[i].title %> - <%= Intl.NumberFormat('id-ID', {style: 'currency',
+            currency: 'IDR'}).format(order.serviceId[i].price) %> "
             readonly
           />
           <% } %>
@@ -92,7 +93,7 @@
             type="text"
             class="form-control input-disabled"
             name="status"
-            value="<%= order.status %>"
+            value="<%= order.status == 'finished' ? 'Selesai' : order.status == 'paid' ? 'Menunggu Konfirmasi Admin' : order.status == 'unpaid' ? 'Menunggu Pembayaran' : 'undefined' %>"
             readonly
           />
         </div>
@@ -102,7 +103,8 @@
             type="text"
             class="form-control input-disabled"
             name="total"
-            value="Rp <%= order.total %>"
+            value="<%=  Intl.NumberFormat('id-ID', {style: 'currency',
+            currency: 'IDR'}).format(order.total) %>"
             readonly
           />
         </div>
