@@ -4,6 +4,7 @@ const Freelancer = require("../models/freelancer");
 const ServiceUser = require("../models/service_user");
 const Service = require("../models/service");
 const Order = require("../models/order");
+const Chat = require("../models/chat");
 const fs = require("fs-extra");
 const path = require("path");
 
@@ -20,11 +21,14 @@ module.exports = {
       const order = await Freelancer.findOne({ userId: id })
         .select("_id")
         .populate("orderId");
+      const chats = await Chat.find({ isRead: false });
       res.render("freelancer/dashboard/view_dashboard", {
         title: "Dashboard | Freelancer",
         user: req.session.user,
         alert,
+        chats,
         order,
+        chats,
       });
     }
   },
@@ -38,6 +42,7 @@ module.exports = {
       const alertStatus = req.flash("alertStatus");
       const alert = { message: alertMessage, status: alertStatus };
       const id = req.session.user.id;
+      const chats = await Chat.find({ isRead: false });
       const freelancer = await Freelancer.findOne({ userId: id })
         .select(
           "_id title description rating bankName bankAccount accountHolder"
@@ -48,6 +53,74 @@ module.exports = {
         title: "Dashboard | Profile",
         user: req.session.user,
         alert,
+        chats,
+        freelancer,
+      });
+    }
+  },
+
+  viewService: async (req, res) => {
+    const level = req.session.user.level;
+    if (level != "freelancer") {
+      level == "admin" ? res.redirect("/admin") : res.redirect("/");
+    } else {
+      const alertMessage = req.flash("alertMessage");
+      const alertStatus = req.flash("alertStatus");
+      const alert = { message: alertMessage, status: alertStatus };
+      const id = req.session.user.id;
+      const chats = await Chat.find({ isRead: false });
+      const freelancer = await Freelancer.findOne({ userId: id }).select("_id");
+      const service = await Service.find({ freelancerId: freelancer._id });
+      res.render("freelancer/service/view_service", {
+        title: "Dashboard | Profile",
+        user: req.session.user,
+        alert,
+        chats,
+        service,
+      });
+    }
+  },
+
+  viewChat: async (req, res) => {
+    const level = req.session.user.level;
+    if (level != "freelancer") {
+      level == "admin" ? res.redirect("/admin") : res.redirect("/");
+    } else {
+      const alertMessage = req.flash("alertMessage");
+      const alertStatus = req.flash("alertStatus");
+      const alert = { message: alertMessage, status: alertStatus };
+      const id = req.session.user.id;
+      const chats = await Chat.find({ isRead: false });
+      res.render("freelancer/chat/view_chat", {
+        title: "Chat | Kerjain",
+        user: req.session.user,
+        alert,
+        chats,
+      });
+    }
+  },
+
+  viewEditProfil: async (req, res) => {
+    const level = req.session.user.level;
+    if (level != "freelancer") {
+      level == "admin" ? res.redirect("/admin") : res.redirect("/");
+    } else {
+      const alertMessage = req.flash("alertMessage");
+      const alertStatus = req.flash("alertStatus");
+      const alert = { message: alertMessage, status: alertStatus };
+      const id = req.session.user.id;
+      const chats = await Chat.find({ isRead: false });
+      const freelancer = await Freelancer.findOne({ userId: id })
+        .select(
+          "_id title description rating bankName bankAccount accountHolder"
+        )
+        .populate("userId")
+        .populate({ path: "categoryId", select: "id name" });
+      res.render("freelancer/setting/view_edit_profile", {
+        title: "Dashboard | Profile",
+        user: req.session.user,
+        alert,
+        chats,
         freelancer,
       });
     }
@@ -105,37 +178,18 @@ module.exports = {
     }
   },
 
-  viewService: async (req, res) => {
-    const level = req.session.user.level;
-    if (level != "freelancer") {
-      level == "admin" ? res.redirect("/admin") : res.redirect("/");
-    } else {
-      const alertMessage = req.flash("alertMessage");
-      const alertStatus = req.flash("alertStatus");
-      const alert = { message: alertMessage, status: alertStatus };
-      const id = req.session.user.id;
-      const freelancer = await Freelancer.findOne({ userId: id }).select("_id");
-      const service = await Service.find({ freelancerId: freelancer._id });
-      res.render("freelancer/service/view_service", {
-        title: "Dashboard | Profile",
-        user: req.session.user,
-        alert,
-        service,
-      });
-    }
-  },
-
   viewOrder: async (req, res) => {
-    // try {
+    try {
     const level = req.session.user.level;
     if (level != "freelancer") {
       level == "admin" ? res.redirect("/admin") : res.redirect("/");
     } else {
-      const userId = req.session.user.id;
+      const id = req.session.user.id;
+      const chats = await Chat.find({ isRead: false });
       const alertMessage = req.flash("alertMessage");
       const alertStatus = req.flash("alertStatus");
       const alert = { message: alertMessage, status: alertStatus };
-      const order = await Freelancer.findOne({ userId: userId })
+      const order = await Freelancer.findOne({ userId: id })
         .select("orderId")
         .populate({
           path: "orderId",
@@ -154,6 +208,7 @@ module.exports = {
           title: "View Order | Admin Kerjain",
           user: req.session.user,
           alert,
+          chats,
           order,
           totalOrder,
           user,
@@ -161,8 +216,8 @@ module.exports = {
         });
       }
     }
-    // } catch (error) {
-    // res.redirect("/freelancer/dashboard");
-    // }
+    } catch (error) {
+    res.redirect("/freelancer/dashboard");
+    }
   },
 };

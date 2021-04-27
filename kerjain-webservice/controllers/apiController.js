@@ -38,8 +38,8 @@ module.exports = {
       // get selected user
       const user = await User.findOne({ _id: createUser._id });
       // insert serviceUserId to user schema
-      user.serviceUserId = createServiceUser._id;
-      await user.save();
+      // user.serviceUserId = createServiceUser._id;
+      // await user.save();
       // push serviceUserId to category schema
       category.serviceUserId.push({ _id: createServiceUser._id });
       await category.save();

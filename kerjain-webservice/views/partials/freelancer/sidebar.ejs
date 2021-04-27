@@ -52,16 +52,15 @@
   </li>
 
   <li class="nav-item">
-    <a class="nav-link" href="#">
+    <a class="nav-link" href="/freelancer/chat">
       <i class="far fa-fw fa-comments"></i>
-      <span>Chat</span></a
-    >
+      <span>Chat</span><span class="badge badge-danger badge-counter"><%= chats.length %> </span>
+    </a>
   </li>
 
   <li class="nav-item">
     <a
-      class="nav-link collapsed"
-      href="#"
+      class="nav-link collapsed cursor-pointer noselect"
       data-toggle="collapse"
       data-target="#collapseTwo"
       aria-expanded="true"
@@ -77,7 +76,9 @@
       data-parent="#accordionSidebar"
     >
       <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item text-secondary" href="buttons.html">Edit Profil</a>
+        <a class="collapse-item text-secondary" href="/freelancer/setting/edit-profile"
+          >Edit Profil</a
+        >
         <!-- <a class="collapse-item text-secondary" href="cards.html">Hapus Akun</a> -->
       </div>
     </div>

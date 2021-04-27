@@ -1,38 +1,43 @@
 <div class="card mt-2 mb-4">
   <div class="card-body">
+    <form
+      action="/freelancer/profile/<%= freelancer._id %>/bank?_method=PUT"
+      method="post"
+    >
       <div class="form-group">
         <label for="inputBankName">Nama Bank</label>
         <input
           type="text"
-          class="form-control input-disabled cursor-default"
+          class="form-control"
           name="bankName"
           value="<%= freelancer.bankName %>"
           placeholder="Enter Bank Name"
-          readonly
-          />
+        />
       </div>
       <div class="form-group">
         <label for="inputbankAccount">Rekening Bank</label>
         <input
           type="text"
-          class="form-control input-disabled cursor-default"
+          class="form-control"
           name="bankAccount"
           value="<%= freelancer.bankAccount %>"
           placeholder="Enter bank Account"
-          readonly
-          />
+        />
       </div>
       <div class="form-group">
         <label for="inputAccountHolder">Pemilik Rekening</label>
         <input
           type="text"
-          class="form-control input-disabled cursor-default"
+          class="form-control"
           name="accountHolder"
           value="<%= freelancer.accountHolder %>"
           placeholder="Enter Bank Name"
-          readonly
-          />
+        />
       </div>
       <hr />
+      <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">Simpan</button>
+      </div>
+    </form>
   </div>
 </div>

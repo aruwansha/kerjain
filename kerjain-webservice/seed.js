@@ -13,6 +13,7 @@ seeder.connect(
   function () {
     // Load Mongoose models
     seeder.loadModels([
+      "./models/Chat",
       "./models/Category",
       "./models/Bank",
       "./models/Service",
@@ -34,6 +35,7 @@ seeder.connect(
         "Order",
         "Category",
         "Bank",
+        "Chat",
       ],
       function () {
         // Callback to populate DB once collections have been cleared
@@ -102,7 +104,7 @@ var data = [
       },
     ],
   },
-  // // end bank
+  // end bank
 
   // start user
   {
@@ -494,4 +496,31 @@ var data = [
     ],
   },
   // end order
+
+  {
+    model: "Chat",
+    documents: [
+      {
+        _id: mongoose.Types.ObjectId("6082bac5a09b4aab456a8a89"),
+        from: mongoose.Types.ObjectId("605b5889babfe71e8432d319"),
+        to: mongoose.Types.ObjectId("605b5889babfe71e8432d317"),
+        message: "Gan saya bisa pesen desain logo dengan estimasi....",
+        isRead: false,
+      },
+      {
+        _id: mongoose.Types.ObjectId("6082bac5a09b4aab456a8a90"),
+        from: mongoose.Types.ObjectId("605b5889babfe71e8432d319"),
+        to: mongoose.Types.ObjectId("605b5889babfe71e8432d317"),
+        message: "Gan logonya udah jadi gan keren",
+        isRead: false,
+      },
+      {
+        _id: mongoose.Types.ObjectId("6082bac5a09b4aab456a8a91"),
+        from: mongoose.Types.ObjectId("605b5889babfe71e8432d317"),
+        to: mongoose.Types.ObjectId("605b5889babfe71e8432d319"),
+        message: "Terima kasih feedbacknya",
+        isRead: true,
+      },
+    ],
+  },
 ];

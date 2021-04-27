@@ -1,0 +1,50 @@
+<style>
+  .input-disabled {
+    background-color: #ffffff !important;
+  }
+</style>
+<div class="card mt-2 mb-4">
+  <div class="card-body">
+    <form
+      action="/freelancer/profile/<%= freelancer._id %>/service?_method=PUT"
+      method="post"
+    >
+      <div class="form-group">
+        <label for="inputTitle">Judul</label>
+        <input
+          type="text"
+          class="form-control"
+          name="title"
+          value="<%= freelancer.title %>"
+        />
+      </div>
+      <div class="form-group">
+        <label for="inputDescription">Deskripsi</label>
+        <input
+          type="text"
+          class="form-control"
+          name="description"
+          value="<%= freelancer.description %>"
+        />
+      </div>
+      <div class="form-group">
+        <label for="inputCategory">Kategori</label>
+        <select name="categoryId" id="category" class="form-control">
+          <option value="<%= freelancer.categoryId.name %>">
+            <%= freelancer.categoryId.name %>
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="image">Gambar</label>
+        <br />
+        <img src="" alt="" width="200" height="200" class="img-fluid mb-2" />
+        <input type="file" class="form-control-file mt-2" name="image" />
+      </div>
+      <hr />
+      <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
