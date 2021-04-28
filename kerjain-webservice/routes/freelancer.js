@@ -21,6 +21,7 @@ router.get("/service", freelancerController.viewService);
 
 // chat
 router.get("/chat", freelancerController.viewChat);
+router.get("/chat/:id", freelancerController.viewDetailChat);
 
 // setting
 router.get("/setting/edit-profile", freelancerController.viewEditProfil);
