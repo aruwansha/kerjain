@@ -54,7 +54,12 @@
   <li class="nav-item">
     <a class="nav-link" href="/freelancer/chat">
       <i class="far fa-fw fa-comments"></i>
-      <span>Chat</span><span class="badge badge-danger badge-counter"><%= unread.length %> </span>
+      <span>Chat</span>
+      <% if(unread.length != 0){ %>
+      <span class="badge badge-danger badge-counter"
+        ><%= unread.length %>
+      </span>
+      <% } %>
     </a>
   </li>
 
@@ -76,7 +81,9 @@
       data-parent="#accordionSidebar"
     >
       <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item text-secondary" href="/freelancer/setting/edit-profile"
+        <a
+          class="collapse-item text-secondary"
+          href="/freelancer/setting/edit-profile"
           >Edit Profil</a
         >
         <!-- <a class="collapse-item text-secondary" href="cards.html">Hapus Akun</a> -->

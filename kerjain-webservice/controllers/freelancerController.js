@@ -128,17 +128,39 @@ module.exports = {
       const alert = { message: alertMessage, status: alertStatus };
       const unread = await Chat.find({ isRead: false }).select("isRead");
       const serviceUserId = req.params;
-      console.log(serviceUserId);
 
-      const chats = await Chat.find({ serviceUserId: serviceUserId.id });
-      console.log(chats);
-      res.render("freelancer/chat/view_detail_chat", {
-        title: "Detail Chat | Kerjain",
-        user: req.session.user,
-        alert,
-        unread,
-        chats,
-      });
+      var perPage = 10,
+        page = Math.max(0, req.params.page);
+      await Chat.find({ serviceUserId: serviceUserId.id })
+        .populate({ path: "from", select: "id name" })
+        .limit(perPage)
+        .skip(perPage * page)
+        .sort("time")
+        .exec(function (err, chats) {
+          for (i = 0; i < chats.length; i++) {
+            console.log( chats[i]);
+            chats[i].isRead = true;
+            chats[i].save(function (err) {
+              if (err) {
+                console.error("ERROR!");
+              }
+            });
+          }
+          Chat.count({ serviceUserId: serviceUserId.id }).exec(function (
+            err,
+            count
+          ) {
+            res.render("freelancer/chat/view_detail_chat", {
+              title: "Detail Chat | Kerjain",
+              user: req.session.user,
+              alert,
+              unread,
+              chats,
+              page,
+              pages: count / perPage,
+            });
+          });
+        });
     }
   },
 

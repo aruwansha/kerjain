@@ -27,12 +27,12 @@
                 <% for(i = 0; i < chats.length; i++){ %>
                 <div class="form-group">
                   <div class="row">
-                    <div class="col-md-10">
+                    <div class="col-md-10 col-6">
                       <label for="" class="text-primary font-weight-bold"
-                        ><%= chats[i]._id %>
+                        ><%= chats[i].from.name %>
                       </label>
                     </div>
-                    <div class="col-md-2 text-right">
+                    <div class="col-md-2 col-6 text-right">
                       <p>
                         <%= chats[i].time.toLocaleString('id-ID', 'hour') %>
                       </p>
@@ -47,12 +47,12 @@
                 </div>
                 <% } %>
                 <div class="row">
-                  <div class="col-11 text-left">
-                    <input type="text" class="form-control" name="chat" id="chat">
+                  <div class="col-md-11 col-10 text-left">
+                    <input type="text" class="form-control" placeholder="Tulis pesan..." name="chat" id="chat">
                   </div>
-                  <div class="col-1 text-right">
+                  <div class="col-md-1 col-2 text-right">
                     <a href="/freelancer/chat/" class="btn btn-primary"
-                      ><i class="fas fa-reply"></i
+                      ><i class="far fa-paper-plane"></i
                     ></a>
                   </div>
                 </div>

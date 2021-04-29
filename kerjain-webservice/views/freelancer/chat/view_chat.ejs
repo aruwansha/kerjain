@@ -47,7 +47,7 @@
                       <p><%= chats[i].doc.message %></p>
                     </div>
                     <div class="col-2 text-right">
-                      <a href="/freelancer/chat/<%= chats[i]._id %>"><i class="fas fa-reply"></i></a>
+                      <a href="/freelancer/chat/<%= chats[i].doc.serviceUserId[0]._id %>"><i class="fas fa-reply"></i></a>
                     </div>
                   </div>
                   <hr />
