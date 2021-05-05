@@ -21,7 +21,9 @@ router.get("/service", freelancerController.viewService);
 
 // chat
 router.get("/chat", freelancerController.viewChat);
+router.delete("/chat/:id/delete", freelancerController.actionDeleteChat);
 router.get("/chat/:id", freelancerController.viewDetailChat);
+router.delete("/chat/detail/:id/delete", freelancerController.actionDeleteDetailChat);
 
 // setting
 router.get("/setting/edit-profile", freelancerController.viewEditProfil);

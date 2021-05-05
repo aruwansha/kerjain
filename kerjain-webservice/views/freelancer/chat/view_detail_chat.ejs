@@ -42,6 +42,14 @@
                     <div class="col-10">
                       <p><%= chats[i].message %></p>
                     </div>
+                    <div class="col-2 text-right">
+                      <form
+                        action="/freelancer/chat/detail/<%= chats[i]._id %>/delete?_method=DELETE"
+                        method="POST" id="delete_chat"
+                      >
+                        <a onclick="document.getElementById('delete_chat').submit()" class="text-danger cursor-pointer"><i class="fas fa-trash"></i></a>
+                      </form>
+                    </div>
                   </div>
                   <hr />
                 </div>

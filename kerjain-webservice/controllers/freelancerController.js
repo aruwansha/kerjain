@@ -125,6 +125,20 @@ module.exports = {
     }
   },
 
+  actionDeleteChat: async (req, res) => {
+    try {
+      const {id} = req.params;
+      await Chat.remove({ serviceUserId: id });
+      req.flash("alertMessage", "Chat berhasil dihapus");
+      req.flash("alertStatus", "primary");
+      res.redirect("/freelancer/chat");
+    } catch (error) {
+      req.flash("alertMessage", error);
+      req.flash("alertStatus", "primary");
+      res.redirect("/freelancer/chat");
+    }
+  },
+
   viewDetailChat: async (req, res) => {
     const level = req.session.user.level;
     if (level != "freelancer") {
@@ -168,6 +182,22 @@ module.exports = {
             });
           });
         });
+    }
+  },
+
+  actionDeleteDetailChat: async (req, res) => {
+    try {
+      const {id} = req.params;
+      const chat = await Chat.findOne({ _id: id });
+      const serviceUserId = chat.serviceUserId;
+      await chat.remove();
+      req.flash("alertMessage", "Chat berhasil dihapus");
+      req.flash("alertStatus", "primary");
+      res.redirect(`/freelancer/chat/${serviceUserId}`);
+    } catch (error) {
+      req.flash("alertMessage", error);
+      req.flash("alertStatus", "primary");
+      res.redirect("/freelancer/chat");
     }
   },
 

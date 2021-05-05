@@ -58,6 +58,16 @@
                       ></a>
                     </div>
                   </div>
+                  <div class="row d-flex">
+                    <div class="col-12 text-right">
+                      <form
+                        action="/freelancer/chat/<%= chats[i].doc.serviceUserId[0]._id %>/delete?_method=DELETE"
+                        method="POST" id="delete_chat"
+                      >
+                        <a onclick="document.getElementById('delete_chat').submit()" class="text-danger cursor-pointer"><i class="fas fa-trash"></i></a>
+                      </form>
+                    </div>
+                  </div>
                   <hr />
                 </div>
                 <% } %> <% } %>

@@ -27,7 +27,6 @@ router.delete("/freelancer/:id/delete", adminController.deleteFreelancer);
 router.put("/freelancer/:id", adminController.banFreelancer);
 // service user endpoint
 router.get("/serviceuser", adminController.viewServiceUser);
-// router.post("/serviceuser", adminController.addServiceUser);
 router.get("/serviceuser/:id", adminController.showDetailServiceUser);
 router.delete("/serviceuser/:id/delete", adminController.deleteServiceUser);
 router.put("/serviceuser/:id", adminController.banServiceUser);
