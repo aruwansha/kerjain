@@ -99,6 +99,14 @@ module.exports = {
             as: "serviceUserId",
           },
         },
+        {
+          $lookup: {
+            from: "users",
+            localField: "from",
+            foreignField: "_id",
+            as: "from",
+          },
+        },
         { $sort: { time: -1 } },
         {
           $group: {
@@ -107,7 +115,6 @@ module.exports = {
           },
         },
       ]);
-      console.log(chats);
       res.render("freelancer/chat/view_chat", {
         title: "Chat | Kerjain",
         user: req.session.user,
@@ -138,7 +145,7 @@ module.exports = {
         .sort("time")
         .exec(function (err, chats) {
           for (i = 0; i < chats.length; i++) {
-            console.log( chats[i]);
+            console.log(chats[i]);
             chats[i].isRead = true;
             chats[i].save(function (err) {
               if (err) {

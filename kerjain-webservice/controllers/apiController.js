@@ -4,10 +4,14 @@ const Freelancer = require("../models/freelancer");
 const ServiceUser = require("../models/service_user");
 const Service = require("../models/service");
 
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const config = require("../config");
+
 module.exports = {
-  register_user: async (req, res) => {
+  register: async (req, res) => {
     try {
-      // get request from page
+      // get request body from page
       const {
         name,
         email,
@@ -17,7 +21,7 @@ module.exports = {
         phone,
         categoryId,
       } = req.body;
-      // create user
+      // create user in db
       const createUser = await User.create({
         name,
         email,
@@ -29,25 +33,63 @@ module.exports = {
       });
       // get selected category
       const category = await Category.findOne({ _id: categoryId });
-      console.log(category);
       // create serviceUser
       const createServiceUser = await ServiceUser.create({
         userId: createUser._id,
         categoryId: categoryId,
       });
-      // get selected user
-      const user = await User.findOne({ _id: createUser._id });
-      // insert serviceUserId to user schema
-      // user.serviceUserId = createServiceUser._id;
-      // await user.save();
       // push serviceUserId to category schema
       category.serviceUserId.push({ _id: createServiceUser._id });
       await category.save();
-      res.status(201).json({ message: "Register Success" });
+      const token = jwt.sign({ id: createUser._id }, config.secret, {
+        expiresIn: 3600,
+      });
+      res.status(200).send({ auth: true, token: token });
     } catch (error) {
-      res.status(400).json({ message: "Register Trouble" });
+      res.status(400).json({ message: error });
     }
   },
+
+  login: async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const user = await User.findOne({ email: email.toLowerCase() });
+      const isPasswordMatch = await bcrypt.compare(password, user.password);
+      if (!isPasswordMatch)
+        return res.status(401).send({ auth: false, token: null });
+      const token = jwt.sign({ id: user._id }, config.secret, {
+        expiresIn: 3600,
+      });
+      res.status(200).send({ auth: true, token: token });
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  },
+
+  me: (req, res) => {
+    const token = req.headers["x-access-token"];
+    if (!token) {
+      return res
+        .status(401)
+        .send({ auth: false, message: "No token provided" });
+    }
+
+    jwt.verify(token, config.secret, function (err, decoded) {
+      if (err) {
+        return res
+          .status(500)
+          .send({ auth: false, message: "Failed to authenticate token" });
+      }
+
+      User.findById(decoded.id, function (err, user) {
+        if (err)
+          return res.status(500).send("There was a problem finding the user");
+        if (!user) return res.status(404).send("No user found");
+        res.status(200).send(user);
+      });
+    });
+  },
+
   landingPage: async (req, res) => {
     try {
       const mostPicked = await Freelancer.aggregate([
@@ -122,7 +164,7 @@ module.exports = {
         _id: id,
       })
         .select("id title description rating imgUrl")
-        .populate({path: "userId", select: "name imgUrl"})
+        .populate({ path: "userId", select: "name imgUrl" })
         .populate({
           path: "serviceId._id",
           select: ["title", "description", "price", "imgUrl"],
