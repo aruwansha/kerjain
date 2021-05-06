@@ -18,6 +18,9 @@ router.put("/profile/:id/bank", freelancerController.actionEditBank);
 
 // service
 router.get("/service", freelancerController.viewService);
+router.post("/service/add", freelancerController.actionAddService);
+router.put("/service/edit", freelancerController.actionEditServiceDetail);
+router.delete("/service/delete", freelancerController.actionDeleteServiceDetail);
 
 // chat
 router.get("/chat", freelancerController.viewChat);

@@ -81,6 +81,51 @@ module.exports = {
     }
   },
 
+  actionAddService: async (req, res) => {
+    // try {
+    const { title, description, price } = req.body;
+    const freelancer = await Freelancer.findOne({
+      userId: req.session.user.id,
+    });
+    console.log(freelancer, title, description, price)
+    await Service.create({
+      freelancerId: freelancer._id,
+      title,
+      description,
+      price,
+    });
+    req.flash("alertMessage", "Berhasil menambahkan data");
+    req.flash("alertStatus", "success");
+    res.redirect("/freelancer/service");
+    // } catch (error) {}
+  },
+
+  actionEditServiceDetail: async (req, res) => {
+    try {
+    const { id, title, description, price } = req.body;
+    const service = await Service.findOne({_id: id});
+    console.log( service._id, id ,title, description, price);
+    service.title = title;
+    service.description = description;
+    service.price = price;
+    await service.save()
+    req.flash("alertMessage", "Berhasil mengubah data");
+    req.flash("alertStatus", "success");
+    res.redirect("/freelancer/service");
+    } catch (error) {}
+  },
+
+  actionDeleteServiceDetail: async (req, res) => {
+    try {
+    const { id } = req.body;
+    const service = await Service.findOne({_id: id});
+    await service.remove()
+    req.flash("alertMessage", "Berhasil menghapus data");
+    req.flash("alertStatus", "success");
+    res.redirect("/freelancer/service");
+    } catch (error) {}
+  },
+
   viewChat: async (req, res) => {
     const level = req.session.user.level;
     if (level != "freelancer") {
@@ -127,7 +172,7 @@ module.exports = {
 
   actionDeleteChat: async (req, res) => {
     try {
-      const {id} = req.params;
+      const { id } = req.params;
       await Chat.remove({ serviceUserId: id });
       req.flash("alertMessage", "Chat berhasil dihapus");
       req.flash("alertStatus", "primary");
@@ -187,7 +232,7 @@ module.exports = {
 
   actionDeleteDetailChat: async (req, res) => {
     try {
-      const {id} = req.params;
+      const { id } = req.params;
       const chat = await Chat.findOne({ _id: id });
       const serviceUserId = chat.serviceUserId;
       await chat.remove();
