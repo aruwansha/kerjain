@@ -22,6 +22,9 @@ router.post("/service/add", freelancerController.actionAddService);
 router.put("/service/edit", freelancerController.actionEditServiceDetail);
 router.delete("/service/delete", freelancerController.actionDeleteServiceDetail);
 
+// request
+router.get("/request", freelancerController.viewRequest);
+
 // chat
 router.get("/chat", freelancerController.viewChat);
 router.delete("/chat/:id/delete", freelancerController.actionDeleteChat);
@@ -30,7 +33,6 @@ router.delete("/chat/detail/:id/delete", freelancerController.actionDeleteDetail
 
 // setting
 router.get("/setting/edit-profile", freelancerController.viewEditProfil);
-
 
 // order
 router.get("/order", freelancerController.viewOrder);

@@ -22,6 +22,7 @@ seeder.connect(
       "./models/Freelancer",
       "./models/Service_user",
       "./models/User",
+      "./models/Request",
     ]);
 
     // Clear specified collections
@@ -36,6 +37,7 @@ seeder.connect(
         "Category",
         "Bank",
         "Chat",
+        "Request",
       ],
       function () {
         // Callback to populate DB once collections have been cleared
@@ -535,6 +537,20 @@ var data = [
         to: mongoose.Types.ObjectId("605b5889babfe71e8432d317"),
         message: "Gan pesen logo seperti ini bisa?",
         isRead: false,
+      },
+    ],
+  },
+  {
+    model: "Request",
+    documents: [
+      // Request 1
+      {
+        _id: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
+        serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d321"),
+        requestSubject:
+          "Buat aplikasi kalkulator dengan menggunakan javascript",
+        requestDescription: "Nanti jalannya aplikasi akan seperti ini....",
+        categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4530"),
       },
     ],
   },

@@ -3,10 +3,12 @@ const User = require("../models/user");
 const Freelancer = require("../models/freelancer");
 const ServiceUser = require("../models/service_user");
 const Service = require("../models/service");
+const Request = require("../models/request");
 const Order = require("../models/order");
 const Chat = require("../models/chat");
 const fs = require("fs-extra");
 const path = require("path");
+const { consoleLogEnabled } = require("mongoose-seed");
 
 module.exports = {
   viewDashboard: async (req, res) => {
@@ -82,12 +84,12 @@ module.exports = {
   },
 
   actionAddService: async (req, res) => {
-    // try {
+    try {
     const { title, description, price } = req.body;
     const freelancer = await Freelancer.findOne({
       userId: req.session.user.id,
     });
-    console.log(freelancer, title, description, price)
+    console.log(freelancer, title, description, price);
     await Service.create({
       freelancerId: freelancer._id,
       title,
@@ -97,33 +99,61 @@ module.exports = {
     req.flash("alertMessage", "Berhasil menambahkan data");
     req.flash("alertStatus", "success");
     res.redirect("/freelancer/service");
-    // } catch (error) {}
+    } catch (error) {}
   },
 
   actionEditServiceDetail: async (req, res) => {
     try {
-    const { id, title, description, price } = req.body;
-    const service = await Service.findOne({_id: id});
-    console.log( service._id, id ,title, description, price);
-    service.title = title;
-    service.description = description;
-    service.price = price;
-    await service.save()
-    req.flash("alertMessage", "Berhasil mengubah data");
-    req.flash("alertStatus", "success");
-    res.redirect("/freelancer/service");
+      const { id, title, description, price } = req.body;
+      const service = await Service.findOne({ _id: id });
+      console.log(service._id, id, title, description, price);
+      service.title = title;
+      service.description = description;
+      service.price = price;
+      await service.save();
+      req.flash("alertMessage", "Berhasil mengubah data");
+      req.flash("alertStatus", "success");
+      res.redirect("/freelancer/service");
     } catch (error) {}
   },
 
   actionDeleteServiceDetail: async (req, res) => {
     try {
-    const { id } = req.body;
-    const service = await Service.findOne({_id: id});
-    await service.remove()
-    req.flash("alertMessage", "Berhasil menghapus data");
-    req.flash("alertStatus", "success");
-    res.redirect("/freelancer/service");
+      const { id } = req.body;
+      const service = await Service.findOne({ _id: id });
+      await service.remove();
+      req.flash("alertMessage", "Berhasil menghapus data");
+      req.flash("alertStatus", "success");
+      res.redirect("/freelancer/service");
     } catch (error) {}
+  },
+
+  viewRequest: async (req, res) => {
+    const level = req.session.user.level;
+    if (level != "freelancer") {
+      level == "admin" ? res.redirect("/admin") : res.redirect("/");
+    } else {
+      const alertMessage = req.flash("alertMessage");
+      const alertStatus = req.flash("alertStatus");
+      const alert = { message: alertMessage, status: alertStatus };
+      const id = req.session.user.id;
+      const unread = await Chat.find({ isRead: false }).select("isRead");
+      const request = await Request.find();
+      for (i = 0; i < request.length; i++) {
+        const serviceUser = await ServiceUser.find({
+          _id: request[i].serviceUserId,
+        }).select('id userId').populate({path: 'userId', select: 'name'});
+        console.log(serviceUser);
+        res.render("freelancer/request/view_request", {
+          title: "Dashboard | Profile",
+          user: req.session.user,
+          alert,
+          unread,
+          request,
+          serviceUser
+        });
+      }
+    }
   },
 
   viewChat: async (req, res) => {
