@@ -45,9 +45,14 @@
                     <div class="col-2 text-right">
                       <form
                         action="/freelancer/chat/detail/<%= chats[i]._id %>/delete?_method=DELETE"
-                        method="POST" id="delete_chat"
+                        method="POST"
+                        id="delete_chat"
                       >
-                        <a onclick="document.getElementById('delete_chat').submit()" class="text-danger cursor-pointer"><i class="fas fa-trash"></i></a>
+                        <a
+                          onclick="document.getElementById('delete_chat').submit()"
+                          class="text-danger cursor-pointer"
+                          ><i class="fas fa-trash"></i
+                        ></a>
                       </form>
                     </div>
                   </div>
@@ -56,13 +61,23 @@
                 <% } %>
                 <div class="row">
                   <div class="col-md-11 col-10 text-left">
-                    <input type="text" class="form-control" placeholder="Tulis pesan..." name="chat" id="chat">
+                    <form action="/freelancer/chat/detail/<%= chats[0].serviceUserId %>/reply" method="POST" id="reply_chat">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Tulis pesan..."
+                      name="message"
+                    />
                   </div>
+                  <input type="text" name="serviceUserId" value=" <%= chats[0].serviceUserId %>" hidden>
                   <div class="col-md-1 col-2 text-right">
-                    <a href="/freelancer/chat/" class="btn btn-primary"
+                    <a
+                      onclick="document.getElementById('reply_chat').submit()"
+                      class="btn btn-primary"
                       ><i class="far fa-paper-plane"></i
                     ></a>
                   </div>
+                  </form>
                 </div>
               </div>
             </div>

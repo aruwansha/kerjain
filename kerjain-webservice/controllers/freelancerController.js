@@ -85,20 +85,20 @@ module.exports = {
 
   actionAddService: async (req, res) => {
     try {
-    const { title, description, price } = req.body;
-    const freelancer = await Freelancer.findOne({
-      userId: req.session.user.id,
-    });
-    console.log(freelancer, title, description, price);
-    await Service.create({
-      freelancerId: freelancer._id,
-      title,
-      description,
-      price,
-    });
-    req.flash("alertMessage", "Berhasil menambahkan data");
-    req.flash("alertStatus", "success");
-    res.redirect("/freelancer/service");
+      const { title, description, price } = req.body;
+      const freelancer = await Freelancer.findOne({
+        userId: req.session.user.id,
+      });
+      console.log(freelancer, title, description, price);
+      await Service.create({
+        freelancerId: freelancer._id,
+        title,
+        description,
+        price,
+      });
+      req.flash("alertMessage", "Berhasil menambahkan data");
+      req.flash("alertStatus", "success");
+      res.redirect("/freelancer/service");
     } catch (error) {}
   },
 
@@ -136,21 +136,22 @@ module.exports = {
       const alertMessage = req.flash("alertMessage");
       const alertStatus = req.flash("alertStatus");
       const alert = { message: alertMessage, status: alertStatus };
-      const id = req.session.user.id;
       const unread = await Chat.find({ isRead: false }).select("isRead");
       const request = await Request.find();
       for (i = 0; i < request.length; i++) {
         const serviceUser = await ServiceUser.find({
           _id: request[i].serviceUserId,
-        }).select('id userId').populate({path: 'userId', select: 'name'});
-        console.log(serviceUser);
+        })
+          .select("id userId")
+          .populate({ path: "userId", select: "name" });
+        console.log(request[i].serviceUserId);
         res.render("freelancer/request/view_request", {
-          title: "Dashboard | Profile",
+          title: "Dashboard | Permintaan",
           user: req.session.user,
           alert,
           unread,
           request,
-          serviceUser
+          serviceUser,
         });
       }
     }
@@ -274,6 +275,23 @@ module.exports = {
       req.flash("alertStatus", "primary");
       res.redirect("/freelancer/chat");
     }
+  },
+
+  actionReplyChat: async (req, res) => {
+    const { id } = req.params;
+    const { message } = req.body;
+    console.log(message);
+    await Chat.create({
+      freelancerId: req.session.user.id,
+      serviceUserId: id,
+      from: req.session.user.id,
+      to: id,
+      message: message,
+      isRead: true,
+    });
+    req.flash("alertMessage", "Pesan Terkirim");
+    req.flash("alertStatus", "primary");
+    res.redirect(`/freelancer/chat/${id}`);
   },
 
   viewEditProfil: async (req, res) => {
