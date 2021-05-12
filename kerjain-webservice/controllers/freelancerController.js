@@ -8,7 +8,6 @@ const Order = require("../models/order");
 const Chat = require("../models/chat");
 const fs = require("fs-extra");
 const path = require("path");
-const { consoleLogEnabled } = require("mongoose-seed");
 
 module.exports = {
   viewDashboard: async (req, res) => {

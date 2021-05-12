@@ -4,7 +4,7 @@ const { ObjectId } = mongoose.Schema;
 const orderSchema = new mongoose.Schema({
   orderDate: {
     type: Date,
-    required: true,
+    default: Date.now(),
   },
   freelancerId: {
     type: ObjectId,
@@ -14,40 +14,47 @@ const orderSchema = new mongoose.Schema({
     type: ObjectId,
     ref: "ServiceUser",
   },
-  serviceId: [
-    {
-      _id: {
-        type: ObjectId,
-        ref: "Service",
-      },
-      title: {
-        type: String,
-        required: true,
-      },
-      price: {
-        type: Number,
-        required: true,
-      },
+  invoice: {
+    type: String,
+    required: true,
+  },
+  serviceId: {
+    _id: {
+      type: ObjectId,
+      ref: "Service",
     },
-  ],
+    title: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+  },
   total: {
     type: Number,
   },
-  proofPayment: {
+  detailNote: {
     type: String,
     required: true,
   },
-  bankFrom: {
-    type: String,
-    required: true,
-  },
-  accountHolder: {
-    type: String,
-    required: true,
-  },
-  status: {
-    type: String,
-    required: true,
+  payments: {
+    proofPayment: {
+      type: String,
+      required: true,
+    },
+    bankFrom: {
+      type: String,
+      required: true,
+    },
+    accountHolder: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+    },
   },
 });
 

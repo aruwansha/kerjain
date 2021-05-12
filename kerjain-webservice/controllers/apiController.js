@@ -3,6 +3,7 @@ const User = require("../models/user");
 const Freelancer = require("../models/freelancer");
 const ServiceUser = require("../models/service_user");
 const Service = require("../models/service");
+const Order = require("../models/order");
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -126,11 +127,39 @@ module.exports = {
           $limit: 4,
         },
       ]);
-      // const preference = req.params;
-      // const byPreference = await Freelancer.aggregate({});
-      res.status(200).json({ mostPicked });
+
+      const highRated = await Freelancer.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userId",
+          },
+        },
+        { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
+        {
+          $project: {
+            _id: 1,
+            title: 1,
+            "userId.name": 1,
+            "userId.imgUrl": 1,
+            rating: 1,
+            imgUrl: 1,
+          },
+        },
+        {
+          $sort: { rating: -1 },
+        },
+        {
+          $limit: 4,
+        },
+      ]);
+
+      res.status(200).json({ mostPicked, highRated });
     } catch (error) {}
   },
+
   categoryPage: async (req, res) => {
     const programTech = await Freelancer.find({
       categoryId: "605b580db4a8e60af44d4530",
@@ -157,6 +186,7 @@ module.exports = {
       .status(200)
       .json({ programTech, designGraphic, writeTrans, videoAnimate });
   },
+
   detailPage: async (req, res) => {
     try {
       const { id } = req.params;
@@ -172,5 +202,56 @@ module.exports = {
         .exec();
       res.status(200).json({ freelancer });
     } catch (error) {}
+  },
+
+  bookingPage: async (req, res) => {
+    const {
+      serviceId,
+      freelancerId,
+      serviceUserId,
+      detailNote,
+      accountHolder,
+      bankFrom,
+    } = req.body;
+    if (!req.file) {
+      return res.status(404).json({ message: "image not found" });
+    }
+
+    if (
+      serviceId === undefined ||
+      freelancerId === undefined ||
+      serviceUserId === undefined ||
+      detailNote === undefined ||
+      accountHolder === undefined ||
+      bankFrom === undefined
+    ) {
+      res.status(404).json({ message: "Field is required" });
+    } else {
+      const service = await Service.findOne({ _id: serviceId });
+      const invoice = Math.floor(1000000 + Math.random() * 9000000);
+      const tax = service.price * 0.1;
+
+      const newOrder = {
+        freelancerId,
+        serviceUserId,
+        invoice,
+        serviceId: {
+          _id: service.id,
+          title: service.title,
+          price: service.price,
+        },
+        total: service.price + tax,
+        detailNote,
+        payments: {
+          proofPayment: `images/${req.file.filename}`,
+          accountHolder,
+          bankFrom,
+        },
+      };
+
+      const order = await Order.create(newOrder);
+
+      res.status(201).json({ message: "Success Booking", order });
+    }
   },
 };

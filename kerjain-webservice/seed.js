@@ -441,59 +441,57 @@ var data = [
         freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d312"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
         orderDate: "3-29-2021",
-        serviceId: [
-          {
-            _id: mongoose.Types.ObjectId("605c3f698f15569950d6e562"),
-            title: "Paket Tugas Kuliah",
-            price: 300000,
-          },
-        ],
+        serviceId: {
+          _id: mongoose.Types.ObjectId("605c3f698f15569950d6e562"),
+          title: "Paket Tugas Kuliah",
+          price: 300000,
+        },
         total: 300000,
-        proofPayment: "images/order/p-605c3f698f15569950d6e566.jpg",
-        bankFrom: "BNI",
-        accountHolder: "Dandi",
-        status: "finished",
+        detailNote: "Please make this like this",
+        payments: {
+          proofPayment: "images/order/p-605c3f698f15569950d6e566.jpg",
+          bankFrom: "BNI",
+          accountHolder: "Dandi",
+          status: "finished",
+        },
       },
       {
         _id: mongoose.Types.ObjectId("605c3f698f15569950d6e567"),
         freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d316"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d322"),
         orderDate: "4-1-2021",
-        serviceId: [
-          {
-            _id: mongoose.Types.ObjectId("605c3f698f15569950d6e564"),
-            title: "Paket edit video lucu",
-            price: 50000,
-          },
-          {
-            _id: mongoose.Types.ObjectId("605c3f698f15569950d6e566"),
-            title: "Paket meme Premium",
-            price: 100000,
-          },
-        ],
+        serviceId: {
+          _id: mongoose.Types.ObjectId("605c3f698f15569950d6e564"),
+          title: "Paket edit video lucu",
+          price: 50000,
+        },
         total: 150000,
-        proofPayment: "images/order/p-605c3f698f15569950d6e567.jpg",
-        bankFrom: "BCA",
-        accountHolder: "Krisna Pramana",
-        status: "unpaid",
+        detailNote: "Please make this like this",
+        payments: {
+          proofPayment: "images/order/p-605c3f698f15569950d6e567.jpg",
+          bankFrom: "BCA",
+          accountHolder: "Krisna Pramana",
+          status: "unpaid",
+        },
       },
       {
         _id: mongoose.Types.ObjectId("605c3f698f15569950d6e568"),
         freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d318"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
         orderDate: "4-5-2021",
-        serviceId: [
-          {
-            _id: mongoose.Types.ObjectId("605c3f698f15569950d6e565"),
-            title: "Desain Logo Premium",
-            price: 500000,
-          },
-        ],
+        serviceId: {
+          _id: mongoose.Types.ObjectId("605c3f698f15569950d6e565"),
+          title: "Desain Logo Premium",
+          price: 500000,
+        },
         total: 500000,
-        proofPayment: "images/order/p-605c3f698f15569950d6e568.jpg",
-        bankFrom: "BNI",
-        accountHolder: "Dandi",
-        status: "unpaid",
+        detailNote: "Please make this like this",
+        payments: {
+          proofPayment: "images/order/p-605c3f698f15569950d6e568.jpg",
+          bankFrom: "BNI",
+          accountHolder: "Dandi",
+          status: "unpaid",
+        },
       },
     ],
   },
@@ -510,7 +508,7 @@ var data = [
         to: mongoose.Types.ObjectId("605b5889babfe71e8432d317"),
         message: "Gan saya bisa pesen desain logo dengan estimasi....",
         isRead: true,
-        time: '2021-05-08T13:35:16.048+00:00'
+        time: "2021-05-08T13:35:16.048+00:00",
       },
       {
         _id: mongoose.Types.ObjectId("6082bac5a09b4aab456a8a90"),
@@ -520,7 +518,7 @@ var data = [
         to: mongoose.Types.ObjectId("605b5889babfe71e8432d317"),
         message: "Gan logonya udah jadi gan keren",
         isRead: false,
-        time: '2021-05-16T13:35:16.048+00:00'
+        time: "2021-05-16T13:35:16.048+00:00",
       },
       {
         _id: mongoose.Types.ObjectId("6082bac5a09b4aab456a8a91"),
@@ -530,7 +528,7 @@ var data = [
         to: mongoose.Types.ObjectId("605b5889babfe71e8432d319"),
         message: "Terima kasih feedbacknya",
         isRead: false,
-        time: '2021-05-16T13:36:16.048+00:00'
+        time: "2021-05-16T13:36:16.048+00:00",
       },
       {
         _id: mongoose.Types.ObjectId("6082bac5a09b4aab456a8a94"),
@@ -540,7 +538,7 @@ var data = [
         to: mongoose.Types.ObjectId("605b5889babfe71e8432d317"),
         message: "Gan pesen logo seperti ini bisa?",
         isRead: false,
-        time: '2021-05-16T13:35:16.048+00:00'
+        time: "2021-05-16T13:35:16.048+00:00",
       },
     ],
   },
