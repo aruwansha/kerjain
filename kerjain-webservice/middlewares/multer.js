@@ -1,7 +1,8 @@
 const multer = require("multer");
 const path = require("path");
-const fs = require("fs");
 // import uuid from "uuid/v4";
+
+// admin
 
 // Set storage bank
 const storageBank = multer.diskStorage({
@@ -19,6 +20,26 @@ const uploadBank = multer({
   },
 }).single("image");
 
+// freelancer
+
+// Set storage service
+const storageService = multer.diskStorage({
+  destination: "public/images/service",
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const uploadService = multer({
+  storage: storageService,
+  limits: { fileSize: 1000000 },
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
+}).single("image");
+
+
+// user
 
 // Set storage proofpayment
 const storageProofPayment = multer.diskStorage({
@@ -52,4 +73,4 @@ function checkFileType(file, cb) {
   }
 }
 
-module.exports = { uploadBank, uploadProofPayment };
+module.exports = { uploadBank, uploadService, uploadProofPayment };

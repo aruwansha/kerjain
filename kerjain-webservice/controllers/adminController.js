@@ -436,24 +436,25 @@ module.exports = {
 
   viewOrder: async (req, res) => {
     try {
-    const level = req.session.user.level;
-    if (level != "admin") {
-      level == "freelancer" ? res.redirect("/freelancer") : res.redirect("/");
-    } else {
-      const alertMessage = req.flash("alertMessage");
-      const alertStatus = req.flash("alertStatus");
-      const alert = { message: alertMessage, status: alertStatus };
-      const order = await Order.find()
-        .select("id accountHolder orderDate total status")
-        .sort("orderDate");
-      res.render("admin/order/view_order", {
-        title: "View Order | Admin Kerjain",
-        user: req.session.user,
-        alert,
-        order,
-        action: "view",
-      });
-    }
+      const level = req.session.user.level;
+      if (level != "admin") {
+        level == "freelancer" ? res.redirect("/freelancer") : res.redirect("/");
+      } else {
+        const alertMessage = req.flash("alertMessage");
+        const alertStatus = req.flash("alertStatus");
+        const alert = { message: alertMessage, status: alertStatus };
+        const order = await Order.find()
+          .select("id accountHolder orderDate total payments")
+          .sort("orderDate");
+        console.log(order);
+        res.render("admin/order/view_order", {
+          title: "View Order | Admin Kerjain",
+          user: req.session.user,
+          alert,
+          order,
+          action: "view",
+        });
+      }
     } catch (error) {
       res.redirect("/admin/dashboard");
     }

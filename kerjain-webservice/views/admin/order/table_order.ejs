@@ -24,8 +24,8 @@
           <tr>
             <td><%= i+1 %></td>
             <td><%= order[i].orderDate.toLocaleString().split(',')[0] %></td>
-            <td><%= order[i].accountHolder %></td>
-            <td><%= order[i].status == 'finished' ? 'Selesai' : order[i].status == 'paid' ? 'Menunggu Proses Freelancer' : order[i].status == 'unpaid' ? 'Menunggu Konfirmasi Pembayaran' : 'undefined' %></td>
+            <td><%= order[i].payments.accountHolder %></td>
+            <td><%= order[i].payments.status == 'finished' ? 'Selesai' : order[i].payments.status == 'paid' ? 'Menunggu Proses Freelancer' : order[i].payments.status == 'unpaid' ? 'Menunggu Konfirmasi Pembayaran' : 'undefined' %></td>
             <td>
               <a href="/admin/order/<%= order[i]._id %>" class="btn btn-primary btn-circle btn-sm"><i class="fas fa-eye"></i></a>
             </td>

@@ -207,7 +207,6 @@ module.exports = {
   bookingPage: async (req, res) => {
     const {
       serviceId,
-      freelancerId,
       serviceUserId,
       detailNote,
       accountHolder,
@@ -219,7 +218,6 @@ module.exports = {
 
     if (
       serviceId === undefined ||
-      freelancerId === undefined ||
       serviceUserId === undefined ||
       detailNote === undefined ||
       accountHolder === undefined ||
@@ -232,7 +230,7 @@ module.exports = {
       const tax = service.price * 0.1;
 
       const newOrder = {
-        freelancerId,
+        freelancerId: service.freelancerId,
         serviceUserId,
         invoice,
         serviceId: {
@@ -243,7 +241,7 @@ module.exports = {
         total: service.price + tax,
         detailNote,
         payments: {
-          proofPayment: `images/${req.file.filename}`,
+          proofPayment: `images/order/${req.file.filename}`,
           accountHolder,
           bankFrom,
         },

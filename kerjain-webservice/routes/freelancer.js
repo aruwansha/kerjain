@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const freelancerController = require("../controllers/freelancerController");
-const { upload } = require("../middlewares/multer");
+const { uploadService } = require("../middlewares/multer");
 const auth = require("../middlewares/auth");
 
 // auth
@@ -18,7 +18,7 @@ router.put("/profile/:id/bank", freelancerController.actionEditBank);
 
 // service
 router.get("/service", freelancerController.viewService);
-router.post("/service/add", freelancerController.actionAddService);
+router.post("/service/add", uploadService, freelancerController.actionAddService);
 router.put("/service/edit", freelancerController.actionEditServiceDetail);
 router.delete("/service/delete", freelancerController.actionDeleteServiceDetail);
 
