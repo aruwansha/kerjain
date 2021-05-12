@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const adminController = require("../controllers/adminController");
-const { upload } = require("../middlewares/multer");
+const { uploadBank } = require("../middlewares/multer");
 const auth = require("../middlewares/auth");
 
 // auth
@@ -16,7 +16,7 @@ router.put("/category", adminController.editCategory);
 router.delete("/category", adminController.deleteCategory);
 // bank endpoint
 router.get("/bank", adminController.viewBank);
-router.post("/bank", upload, adminController.addBank);
+router.post("/bank", uploadBank, adminController.addBank);
 router.put("/bank", adminController.editBank);
 router.delete("/bank", adminController.deleteBank);
 // freelancer endpoint

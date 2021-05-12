@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const apiController = require("../controllers/apiController");
-const { upload } = require("../middlewares/multer");
+const { uploadProofPayment } = require("../middlewares/multer");
 
 const bodyParser = require("body-parser");
 
@@ -11,6 +11,6 @@ router.get("/user/category-page", apiController.categoryPage);
 router.post("/user/login", apiController.login);
 router.get("/user/me", apiController.me);
 router.get("/user/:id", apiController.detailPage);
-router.post("/user/booking-page", upload, apiController.bookingPage);
+router.post("/user/booking-page", uploadProofPayment, apiController.bookingPage);
 
 module.exports = router;
