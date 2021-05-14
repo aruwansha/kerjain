@@ -13,15 +13,8 @@ module.exports = {
   register: async (req, res) => {
     try {
       // get request body from page
-      const {
-        name,
-        email,
-        password,
-        birthdate,
-        address,
-        phone,
-        categoryId,
-      } = req.body;
+      const { name, email, password, birthdate, address, phone, categoryId } =
+        req.body;
       // create user in db
       const createUser = await User.create({
         name,
@@ -58,7 +51,7 @@ module.exports = {
       const isPasswordMatch = await bcrypt.compare(password, user.password);
       if (!isPasswordMatch)
         return res.status(401).send({ auth: false, token: null });
-      const token = jwt.sign({ id: user._id }, config.secret, {
+      const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
         expiresIn: 3600,
       });
       res.status(200).send({ auth: true, token: token });
@@ -68,27 +61,7 @@ module.exports = {
   },
 
   me: (req, res) => {
-    const token = req.headers["x-access-token"];
-    if (!token) {
-      return res
-        .status(401)
-        .send({ auth: false, message: "No token provided" });
-    }
-
-    jwt.verify(token, config.secret, function (err, decoded) {
-      if (err) {
-        return res
-          .status(500)
-          .send({ auth: false, message: "Failed to authenticate token" });
-      }
-
-      User.findById(decoded.id, function (err, user) {
-        if (err)
-          return res.status(500).send("There was a problem finding the user");
-        if (!user) return res.status(404).send("No user found");
-        res.status(200).send(user);
-      });
-    });
+    res.status(200).json(req.user);
   },
 
   landingPage: async (req, res) => {
@@ -205,13 +178,8 @@ module.exports = {
   },
 
   bookingPage: async (req, res) => {
-    const {
-      serviceId,
-      serviceUserId,
-      detailNote,
-      accountHolder,
-      bankFrom,
-    } = req.body;
+    const { serviceId, serviceUserId, detailNote, accountHolder, bankFrom } =
+      req.body;
     if (!req.file) {
       return res.status(404).json({ message: "image not found" });
     }

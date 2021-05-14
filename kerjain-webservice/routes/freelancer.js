@@ -1,10 +1,10 @@
 const router = require("express").Router();
 const freelancerController = require("../controllers/freelancerController");
 const { uploadService } = require("../middlewares/multer");
-const auth = require("../middlewares/auth");
+const { isLogin } = require("../middlewares/auth");
 
 // auth
-router.use(auth);
+router.use(isLogin);
 
 // dashboard
 router.get("/", freelancerController.viewDashboard);
@@ -18,9 +18,16 @@ router.put("/profile/:id/bank", freelancerController.actionEditBank);
 
 // service
 router.get("/service", freelancerController.viewService);
-router.post("/service/add", uploadService, freelancerController.actionAddService);
+router.post(
+  "/service/add",
+  uploadService,
+  freelancerController.actionAddService
+);
 router.put("/service/edit", freelancerController.actionEditServiceDetail);
-router.delete("/service/delete", freelancerController.actionDeleteServiceDetail);
+router.delete(
+  "/service/delete",
+  freelancerController.actionDeleteServiceDetail
+);
 
 // request
 router.get("/request", freelancerController.viewRequest);
@@ -29,7 +36,10 @@ router.get("/request", freelancerController.viewRequest);
 router.get("/chat", freelancerController.viewChat);
 router.delete("/chat/:id/delete", freelancerController.actionDeleteChat);
 router.get("/chat/:id", freelancerController.viewDetailChat);
-router.delete("/chat/detail/:id/delete", freelancerController.actionDeleteDetailChat);
+router.delete(
+  "/chat/detail/:id/delete",
+  freelancerController.actionDeleteDetailChat
+);
 router.post("/chat/detail/:id/reply", freelancerController.actionReplyChat);
 
 // setting

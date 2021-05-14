@@ -1,10 +1,10 @@
 const router = require("express").Router();
 const adminController = require("../controllers/adminController");
 const { uploadBank } = require("../middlewares/multer");
-const auth = require("../middlewares/auth");
+const { isLogin } = require("../middlewares/auth");
 
 // auth
-router.use(auth);
+router.use(isLogin);
 
 // dashboard endpoint
 router.get("/", adminController.viewDashboard);
