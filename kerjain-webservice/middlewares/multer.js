@@ -16,7 +16,7 @@ const uploadBank = multer({
   storage: storageBank,
   limits: { fileSize: 1000000 },
   fileFilter: function (req, file, cb) {
-    checkFileType(file, cb);
+    checkImages(file, cb);
   },
 }).single("image");
 
@@ -34,7 +34,7 @@ const uploadService = multer({
   storage: storageService,
   limits: { fileSize: 1000000 },
   fileFilter: function (req, file, cb) {
-    checkFileType(file, cb);
+    checkImages(file, cb);
   },
 }).single("image");
 
@@ -53,12 +53,12 @@ const uploadProofPayment = multer({
   storage: storageProofPayment,
   limits: { fileSize: 1000000 },
   fileFilter: function (req, file, cb) {
-    checkFileType(file, cb);
+    checkImages(file, cb);
   },
 }).single("image");
 
 // // Check file Type
-function checkFileType(file, cb) {
+function checkImages(file, cb) {
   // Allowed ext
   const fileTypes = /jpeg|jpg|png|gif/;
   // Check ext

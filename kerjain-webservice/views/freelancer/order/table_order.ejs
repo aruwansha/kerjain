@@ -28,7 +28,7 @@
               <%= order.orderId[i].orderDate.toLocaleString().split(',')[0] %>
             </td>
             <td><%= user.name %></td>
-            <td><%= order.orderId[i].status == 'finished' ? 'Selesai' : order.orderId[i].status == 'paid' ? 'Menunggu Proses Freelancer' : order.orderId[i].status == 'unpaid' ? 'Menunggu Konfirmasi Admin' : 'undefined' %></td>
+            <td><%= order.orderId[i].payments.status == 'finished' ? 'Selesai' : order.orderId[i].payments.status == 'paid' ? 'Menunggu Proses Freelancer' : order.orderId[i].payments.status == 'unpaid' ? 'Menunggu Konfirmasi Admin' : 'undefined' %></td>
             <td><%=  Intl.NumberFormat('id-ID', {style: 'currency',
               currency: 'IDR'}).format(order.orderId[i].total) %></td>
             <td>

@@ -386,7 +386,7 @@ module.exports = {
           .select("orderId")
           .populate({
             path: "orderId",
-            select: "id orderDate status total",
+            select: "id orderDate payments total",
           });
         const totalOrder = order.orderId.length;
         for (i = 0; i < totalOrder; i++) {
