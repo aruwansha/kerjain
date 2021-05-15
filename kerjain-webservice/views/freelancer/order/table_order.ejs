@@ -13,7 +13,7 @@
           <tr>
             <th>No</th>
             <th>Tanggal Order</th>
-            <th>Nama</th>
+            <th>Nama Pengirim</th>
             <th>Status</th>
             <th>Total</th>
             <th>Action</th>
@@ -27,7 +27,7 @@
             <td>
               <%= order.orderId[i].orderDate.toLocaleString().split(',')[0] %>
             </td>
-            <td><%= serviceUser.name %></td>
+            <td><%= order.orderId[i].payments.accountHolder %></td>
             <td><%= order.orderId[i].payments.status == 'finished' ? 'Selesai' : order.orderId[i].payments.status == 'paid' ? 'Menunggu Proses Freelancer' : order.orderId[i].payments.status == 'unpaid' ? 'Menunggu Konfirmasi Admin' : 'undefined' %></td>
             <td><%=  Intl.NumberFormat('id-ID', {style: 'currency',
               currency: 'IDR'}).format(order.orderId[i].total) %></td>

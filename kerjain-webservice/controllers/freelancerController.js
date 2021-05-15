@@ -389,24 +389,15 @@ module.exports = {
             select: "id orderDate payments total",
           });
         const totalOrder = order.orderId.length;
-        for (i = 0; i < totalOrder; i++) {
-          const orderId = await Order.findOne({ _id: order.orderId[i].id })
-            .select("serviceUserId")
-            .populate({ path: "serviceUserId", select: "userId" });
-          const serviceUser = await User.findOne({
-            _id: orderId.serviceUserId.userId,
-          }).select("name");
-          res.render("freelancer/order/view_order", {
-            title: "View Order | Admin Kerjain",
-            user: req.session.user,
-            alert,
-            unread,
-            order,
-            totalOrder,
-            serviceUser,
-            action: "view",
-          });
-        }
+        res.render("freelancer/order/view_order", {
+          title: "View Order | Admin Kerjain",
+          user: req.session.user,
+          alert,
+          unread,
+          order,
+          totalOrder,
+          action: "view",
+        });
       }
     } catch (error) {
       res.redirect("/freelancer/dashboard");
