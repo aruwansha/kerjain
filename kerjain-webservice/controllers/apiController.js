@@ -81,22 +81,22 @@ module.exports = {
   },
 
   categoryPage: async (req, res) => {
-    const programTech = await Freelancer.find({
+    const Technology = await Freelancer.find({
       categoryId: "605b580db4a8e60af44d4530",
     })
       .select("id rating title imgUrl")
       .populate({ path: "userId", select: "id name imgUrl" });
-    const designGraphic = await Freelancer.find({
+    const Design = await Freelancer.find({
       categoryId: "605b580db4a8e60af44d4531",
     })
       .select("id rating title imgUrl")
       .populate({ path: "userId", select: "id name imgUrl" });
-    const writeTrans = await Freelancer.find({
+    const Writing = await Freelancer.find({
       categoryId: "605b580db4a8e60af44d4532",
     })
       .select("id rating title imgUrl")
       .populate({ path: "userId", select: "id name imgUrl" });
-    const videoAnimate = await Freelancer.find({
+    const Video = await Freelancer.find({
       categoryId: "605b580db4a8e60af44d4533",
     })
       .select("id rating title imgUrl")
@@ -104,7 +104,7 @@ module.exports = {
 
     res
       .status(200)
-      .json({ programTech, designGraphic, writeTrans, videoAnimate });
+      .json({ Technology, Design, Writing, Video });
   },
 
   detailPage: async (req, res) => {
