@@ -32,7 +32,7 @@
             <td><%=  Intl.NumberFormat('id-ID', {style: 'currency',
               currency: 'IDR'}).format(order.orderId[i].total) %></td>
             <td>
-              <a href="#" class="btn btn-primary btn-circle btn-sm"
+              <a href="/freelancer/order/<%=  order.orderId[i]._id %>" class="btn btn-primary btn-circle btn-sm"
                 ><i class="fas fa-eye"></i
               ></a>
             </td>

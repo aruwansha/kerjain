@@ -19,6 +19,7 @@
         <h1 class="h3 mb-4 text-gray-800">Order</h1>
         <%- include('../../partials/message.ejs')%> <% if(action == 'view'){ %>
         <%- include('table_order.ejs') %> <% } else if(action == 'detail') {%>
+          <%- include('show_detail_order.ejs') %>
          <% } %>
         <!-- /.container-fluid -->
       </div>

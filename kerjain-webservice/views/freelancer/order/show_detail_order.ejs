@@ -1,0 +1,115 @@
+<style>
+  .input-disabled {
+    background-color: #ffffff !important;
+  }
+</style>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4 mt-2">
+  <div class="card-header py-3">
+    <a href="/freelancer/order" class="btn btn-secondary">Back</a>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <% if(order.payments.status == 'unpaid') {%>
+
+      <div class="col-md-4">
+        <div class="row ml-1">
+          <form
+            action="/freelancer/order/<%= order.id %>/upload?_method=PUT"
+            method="POST"
+          >
+            <div class="form-group">
+              <label for="">Upload Pekerjaan:</label>
+              <input
+                type="file"
+                name="file"
+                id="file"
+                class="form-control-file"
+              />
+            </div>
+            <button type="submit" class="btn btn-success btn-sm">
+              <i class="fas fa-check"></i>
+              Upload
+            </button>
+          </form>
+        </div>
+      </div>
+      <% } %>
+
+      <div class="col">
+        <div class="form-group">
+          <label for="inputName">Nama Penyewa</label>
+          <input
+            type="text"
+            class="form-control input-disabled"
+            name="name"
+            value="<%= serviceUser.name %>"
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="inputEmail">Email</label>
+          <input
+            type="text"
+            class="form-control input-disabled"
+            name="email"
+            value="<%= serviceUser.email %>"
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="inputPhone">No. HP</label>
+          <input
+            type="text"
+            class="form-control input-disabled"
+            name="phone"
+            value="<%= serviceUser.phone %>"
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="inputService">Pesanan</label>
+          <input
+            type="text"
+            class="form-control input-disabled mb-2"
+            name="service"
+            value="<%= order.serviceId.title %> - <%= Intl.NumberFormat('id-ID', {style: 'currency',
+              currency: 'IDR'}).format(order.serviceId.price) %> "
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="inputService">Detail Pesanan</label>
+          <textarea
+            class="form-control input-disabled mb-2"
+            name="service"
+            rows="3"
+            readonly><%= order.detailNote %>
+          </textarea>
+        </div>
+        <div class="form-group">
+          <label for="inputStatus">Status</label>
+          <input
+            type="text"
+            class="form-control input-disabled"
+            name="status"
+            value="<%= order.payments.status == 'finished' ? 'Selesai' : order.payments.status == 'paid' ? 'Menunggu Konfirmasi Admin' : order.payments.status == 'unpaid' ? 'Menunggu Pembayaran' : 'undefined' %>"
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="inputTotal">Total</label>
+          <input
+            type="text"
+            class="form-control input-disabled"
+            name="total"
+            value="<%=  Intl.NumberFormat('id-ID', {style: 'currency',
+              currency: 'IDR'}).format(order.total) %>"
+            readonly
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

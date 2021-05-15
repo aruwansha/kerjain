@@ -47,5 +47,6 @@ router.get("/setting/edit-profile", freelancerController.viewEditProfil);
 
 // order
 router.get("/order", freelancerController.viewOrder);
+router.get("/order/:id", freelancerController.viewDetailOrder);
 
 module.exports = router;
