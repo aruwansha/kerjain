@@ -70,11 +70,14 @@ module.exports = {
   },
 
   actionLogout: (req, res) => {
-    if (req.session.user.level == "admin") {
-      req.session.destroy();
+    const session = req.session;
+    if (!session.user) return res.redirect("/signin");
+    console.log(session);
+    if (session.user.level == "admin") {
+      session.destroy();
       res.redirect("/signin");
-    } else if (req.session.user.level == "freelancer") {
-      req.session.destroy();
+    } else if (session.user.level == "freelancer") {
+      session.destroy();
       res.redirect("/signin");
     }
   },
