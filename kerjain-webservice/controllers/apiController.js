@@ -196,8 +196,7 @@ module.exports = {
   },
 
   orderPage: async (req, res) => {
-    const { serviceId, detailNote, accountHolder, bankFrom } =
-      req.body;
+    const { serviceId, detailNote, accountHolder, bankFrom } = req.body;
     if (!req.file) {
       return res.status(404).json({ message: "image not found" });
     }
@@ -215,11 +214,13 @@ module.exports = {
       const tax = service.price * 0.1;
 
       // get service user id
-      const serviceUserId = await ServiceUser.findOne({ userId: req.user._id });
+      const serviceUserId = await ServiceUser.findOne({
+        userId: req.user.id,
+      }).select("_id");
 
       const newOrder = {
         freelancerId: service.freelancerId,
-        serviceUserId,
+        serviceUserId: serviceUserId._id,
         invoice,
         serviceId: {
           _id: service.id,
@@ -236,6 +237,13 @@ module.exports = {
       };
 
       const order = await Order.create(newOrder);
+
+      const freelancer = await Freelancer.findOne({
+        _id: service.freelancerId,
+      });
+
+      freelancer.orderId.push({ _id: order._id });
+      freelancer.save();
 
       res.status(201).json({ message: "Success Booking", order });
     }
