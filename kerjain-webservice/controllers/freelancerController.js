@@ -393,10 +393,9 @@ module.exports = {
           const orderId = await Order.findOne({ _id: order.orderId[i].id })
             .select("serviceUserId")
             .populate({ path: "serviceUserId", select: "userId" });
-          const user = await User.findOne({
+          const serviceUser = await User.findOne({
             _id: orderId.serviceUserId.userId,
           }).select("name");
-          console.log(user);
           res.render("freelancer/order/view_order", {
             title: "View Order | Admin Kerjain",
             user: req.session.user,
@@ -404,7 +403,7 @@ module.exports = {
             unread,
             order,
             totalOrder,
-            user,
+            serviceUser,
             action: "view",
           });
         }
