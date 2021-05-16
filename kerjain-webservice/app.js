@@ -62,7 +62,7 @@ app.use("/users", usersRouter);
 // use custom router
 app.use("/admin", adminRouter);
 app.use("/freelancer", freelancerRouter);
-app.use("/api/v1", apiRouter);
+app.use("/api/v1/user", apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

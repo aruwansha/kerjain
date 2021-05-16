@@ -4,6 +4,8 @@ const Freelancer = require("../models/freelancer");
 const ServiceUser = require("../models/service_user");
 const Service = require("../models/service");
 const Order = require("../models/order");
+const Chat = require("../models/chat");
+const mongoose = require("mongoose");
 
 const { registerValidation, loginValidation } = require("../validator.js");
 
@@ -102,9 +104,7 @@ module.exports = {
       .select("id rating title imgUrl")
       .populate({ path: "userId", select: "id name imgUrl" });
 
-    res
-      .status(200)
-      .json({ Technology, Design, Writing, Video });
+    res.status(200).json({ Technology, Design, Writing, Video });
   },
 
   detailPage: async (req, res) => {
@@ -193,6 +193,54 @@ module.exports = {
 
   me: (req, res) => {
     res.status(200).json(req.user);
+  },
+
+  chats: async (req, res) => {
+    const id = req.user.id;
+    const chats = await Chat.aggregate([
+      { $match: { serviceUserId: mongoose.Types.ObjectId(id) } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "freelancerUserId",
+          foreignField: "_id",
+          as: "freelancerUserId",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "from",
+          foreignField: "_id",
+          as: "from",
+        },
+      },
+      { $sort: { time: -1 } },
+      {
+        $group: {
+          _id: "$freelancerUserId",
+          doc: { $first: "$$ROOT" },
+        },
+      },
+      {
+        $project: {
+          "_id._id": 1,
+          "doc._id": 1,
+          "doc.isRead": 1,
+          "doc.time": 1,
+          "doc.freelancerUserId._id": 1,
+          "doc.freelancerUserId.name": 1,
+          "doc.serviceUserId": 1,
+          "doc.from._id": 1,
+          "doc.from.name": 1,
+          "doc.to": 1,
+          "doc.message": 1,
+          "doc.__v": 1,
+        },
+      },
+    ]);
+    if (chats == "") return res.send({ message: "no chat yet" });
+    res.status(200).send({ chats });
   },
 
   orderPage: async (req, res) => {
