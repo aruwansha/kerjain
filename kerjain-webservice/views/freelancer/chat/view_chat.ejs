@@ -35,6 +35,10 @@
                       <label for="" class="text-primary font-weight-bold"
                         ><%= chats[i].doc.serviceUserId[0].name %>
                       </label>
+                      <% if(!chats[i].doc.isRead){ %><span
+                        class="badge badge-danger badge-counter"
+                        ><i class="fa fa-xs fa-circle"></i></span
+                      ><% }%>
                     </div>
                     <div class="col-2 text-right">
                       <p>
@@ -62,9 +66,14 @@
                     <div class="col-12 text-right">
                       <form
                         action="/freelancer/chat/<%= chats[i].doc.serviceUserId[0]._id %>/delete?_method=DELETE"
-                        method="POST" id="delete_chat"
+                        method="POST"
+                        id="delete_chat"
                       >
-                        <a onclick="document.getElementById('delete_chat').submit()" class="text-danger cursor-pointer"><i class="fas fa-trash"></i></a>
+                        <a
+                          onclick="document.getElementById('delete_chat').submit()"
+                          class="text-danger cursor-pointer"
+                          ><i class="fas fa-trash"></i
+                        ></a>
                       </form>
                     </div>
                   </div>

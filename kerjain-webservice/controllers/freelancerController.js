@@ -22,7 +22,10 @@ module.exports = {
       const order = await Freelancer.findOne({ userId: id })
         .select("_id")
         .populate("orderId");
-      const unread = await Chat.find({ isRead: false }).select("isRead");
+      const unread = await Chat.find({
+        freelancerUserId: req.session.user.id,
+        isRead: false,
+      }).select("isRead");
       res.render("freelancer/dashboard/view_dashboard", {
         title: "Dashboard | Freelancer",
         user: req.session.user,
@@ -43,7 +46,10 @@ module.exports = {
       const alertStatus = req.flash("alertStatus");
       const alert = { message: alertMessage, status: alertStatus };
       const id = req.session.user.id;
-      const unread = await Chat.find({ isRead: false }).select("isRead");
+      const unread = await Chat.find({
+        freelancerUserId: req.session.user.id,
+        isRead: false,
+      }).select("isRead");
       const freelancer = await Freelancer.findOne({ userId: id })
         .select(
           "_id title description rating bankName bankAccount accountHolder"
@@ -69,7 +75,10 @@ module.exports = {
       const alertStatus = req.flash("alertStatus");
       const alert = { message: alertMessage, status: alertStatus };
       const id = req.session.user.id;
-      const unread = await Chat.find({ isRead: false }).select("isRead");
+      const unread = await Chat.find({
+        freelancerUserId: req.session.user.id,
+        isRead: false,
+      }).select("isRead");
       const freelancer = await Freelancer.findOne({ userId: id }).select("_id");
       const service = await Service.find({ freelancerId: freelancer._id });
       res.render("freelancer/service/view_service", {
@@ -135,7 +144,10 @@ module.exports = {
       const alertMessage = req.flash("alertMessage");
       const alertStatus = req.flash("alertStatus");
       const alert = { message: alertMessage, status: alertStatus };
-      const unread = await Chat.find({ isRead: false }).select("isRead");
+      const unread = await Chat.find({
+        freelancerUserId: req.session.user.id,
+        isRead: false,
+      }).select("isRead");
       const request = await Request.find();
       for (i = 0; i < request.length; i++) {
         const serviceUser = await ServiceUser.find({
@@ -164,8 +176,17 @@ module.exports = {
       const alertMessage = req.flash("alertMessage");
       const alertStatus = req.flash("alertStatus");
       const alert = { message: alertMessage, status: alertStatus };
-      const unread = await Chat.find({ isRead: false }).select("isRead");
+      const unread = await Chat.find({
+        freelancerUserId: req.session.user.id,
+        isRead: false,
+      }).select("isRead");
+      const mongoose = require("mongoose");
       const chats = await Chat.aggregate([
+        {
+          $match: {
+            freelancerUserId: mongoose.Types.ObjectId(req.session.user.id),
+          },
+        },
         {
           $lookup: {
             from: "users",
@@ -222,7 +243,10 @@ module.exports = {
       const alertMessage = req.flash("alertMessage");
       const alertStatus = req.flash("alertStatus");
       const alert = { message: alertMessage, status: alertStatus };
-      const unread = await Chat.find({ isRead: false }).select("isRead");
+      const unread = await Chat.find({
+        freelancerUserId: req.session.user.id,
+        isRead: false,
+      }).select("isRead");
       const serviceUserId = req.params;
 
       var perPage = 10,
@@ -300,7 +324,10 @@ module.exports = {
         level == "admin" ? res.redirect("/admin") : res.redirect("/");
       } else {
         const id = req.session.user.id;
-        const unread = await Chat.find({ isRead: false }).select("isRead");
+        const unread = await Chat.find({
+          freelancerUserId: req.session.user.id,
+          isRead: false,
+        }).select("isRead");
         const alertMessage = req.flash("alertMessage");
         const alertStatus = req.flash("alertStatus");
         const alert = { message: alertMessage, status: alertStatus };
@@ -333,7 +360,10 @@ module.exports = {
         level == "admin" ? res.redirect("/admin") : res.redirect("/");
       } else {
         const { id } = req.params;
-        const unread = await Chat.find({ isRead: false }).select("isRead");
+        const unread = await Chat.find({
+          freelancerUserId: req.session.user.id,
+          isRead: false,
+        }).select("isRead");
         const alertMessage = req.flash("alertMessage");
         const alertStatus = req.flash("alertStatus");
         const alert = { message: alertMessage, status: alertStatus };
@@ -355,7 +385,7 @@ module.exports = {
         });
       }
     } catch (error) {
-      res.redirect('/freelancer/order')
+      res.redirect("/freelancer/order");
     }
   },
 
@@ -368,7 +398,10 @@ module.exports = {
       const alertStatus = req.flash("alertStatus");
       const alert = { message: alertMessage, status: alertStatus };
       const id = req.session.user.id;
-      const unread = await Chat.find({ isRead: false }).select("isRead");
+      const unread = await Chat.find({
+        freelancerUserId: req.session.user.id,
+        isRead: false,
+      }).select("isRead");
       const freelancer = await Freelancer.findOne({ userId: id })
         .select(
           "_id title description rating bankName bankAccount accountHolder"
