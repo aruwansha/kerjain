@@ -191,8 +191,105 @@ module.exports = {
     }
   },
 
-  me: (req, res) => {
-    res.status(200).json(req.user);
+  me: async (req, res) => {
+    try {
+      const mostPicked = await Freelancer.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userId",
+          },
+        },
+        { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
+        {
+          $project: {
+            _id: 1,
+            title: 1,
+            "userId.name": 1,
+            "userId.imgUrl": 1,
+            totalOrder: {
+              $cond: {
+                if: { $isArray: "$orderId" },
+                then: { $size: "$orderId" },
+                else: "NA",
+              },
+            },
+            rating: 1,
+            imgUrl: 1,
+          },
+        },
+        {
+          $sort: { totalOrder: -1 },
+        },
+        {
+          $limit: 4,
+        },
+      ]);
+
+      const highRated = await Freelancer.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userId",
+          },
+        },
+        { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
+        {
+          $project: {
+            _id: 1,
+            title: 1,
+            "userId.name": 1,
+            "userId.imgUrl": 1,
+            rating: 1,
+            imgUrl: 1,
+          },
+        },
+        {
+          $sort: { rating: -1 },
+        },
+        {
+          $limit: 4,
+        },
+      ]);
+
+      const categoryId = await ServiceUser.findOne({
+        userId: req.user.id,
+      }).select("categoryId");
+      const category = await Freelancer.aggregate([
+        { $match: { categoryId: categoryId.categoryId } },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userId",
+          },
+        },
+        { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
+        {
+          $project: {
+            _id: 1,
+            title: 1,
+            "userId.name": 1,
+            "userId.imgUrl": 1,
+            rating: 1,
+            imgUrl: 1,
+          },
+        },
+        {
+          $sort: { rating: -1 },
+        },
+        {
+          $limit: 4,
+        },
+      ]);
+
+      res.status(200).json({ mostPicked, highRated, category });
+    } catch (error) {}
   },
 
   orderPage: async (req, res) => {
@@ -321,6 +418,4 @@ module.exports = {
     if (!data) return res.send({ message: "Failed to reply!" });
     res.send({ message: "Success Reply", data });
   },
-
-
 };
