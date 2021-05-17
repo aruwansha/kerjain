@@ -17,6 +17,7 @@
       <div class="container-fluid">
         <!-- Page Heading -->
         <h1 class="h3 mb-4 text-gray-800">List Jasa</h1>
+        <%- include('../../partials/message.ejs') %>
         <!-- End of Heading -->
 
         <div class="row mb-4">
@@ -42,10 +43,9 @@
                   <div class="row no-gutters align-items-center">
                     <div class="col-3 mr-2">
                       <img
-                        src=""
+                        src="http://localhost:3000/<%= service[i].imgUrl%> "
                         alt=""
-                        width="200"
-                        height="112.50"
+                        style="object-fit: contain !important; width: 200px !important; height: 112.50px !important;"
                         class="img-fluid"
                       />
                     </div>

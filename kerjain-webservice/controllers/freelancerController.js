@@ -97,43 +97,68 @@ module.exports = {
       const freelancer = await Freelancer.findOne({
         userId: req.session.user.id,
       });
-      console.log(freelancer, title, description, price);
       await Service.create({
         freelancerId: freelancer._id,
         title,
         description,
         price,
+        imgUrl: `images/service/${req.file.filename}`,
       });
       req.flash("alertMessage", "Berhasil menambahkan data");
       req.flash("alertStatus", "success");
       res.redirect("/freelancer/service");
-    } catch (error) {}
+    } catch (error) {
+      req.flash("alertMessage", `${error}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/freelancer/service");
+    }
   },
 
   actionEditServiceDetail: async (req, res) => {
     try {
       const { id, title, description, price } = req.body;
       const service = await Service.findOne({ _id: id });
-      console.log(service._id, id, title, description, price);
-      service.title = title;
-      service.description = description;
-      service.price = price;
-      await service.save();
+      if (req.file == undefined) {
+        service.title = title;
+        service.description = description;
+        service.price = price;
+        await service.save();
+      } else {
+        if (fs.existsSync(path.join(`public/${service.imgUrl}`))) {
+          await fs.unlink(path.join(`public/${service.imgUrl}`));
+        }
+        service.title = title;
+        service.description = description;
+        service.price = price;
+        service.imgUrl = `images/service/${req.file.filename}`;
+        await service.save();
+      }
       req.flash("alertMessage", "Berhasil mengubah data");
       req.flash("alertStatus", "success");
       res.redirect("/freelancer/service");
-    } catch (error) {}
+    } catch (error) {
+      req.flash("alertMessage", `${error}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/freelancer/service");
+    }
   },
 
   actionDeleteServiceDetail: async (req, res) => {
     try {
       const { id } = req.body;
       const service = await Service.findOne({ _id: id });
+      if (fs.existsSync(path.join(`public/${service.imgUrl}`))) {
+        await fs.unlink(path.join(`public/${service.imgUrl}`));
+      }
       await service.remove();
       req.flash("alertMessage", "Berhasil menghapus data");
       req.flash("alertStatus", "success");
       res.redirect("/freelancer/service");
-    } catch (error) {}
+    } catch (error) {
+      req.flash("alertMessage", `${error}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/freelancer/service");
+    }
   },
 
   viewRequest: async (req, res) => {

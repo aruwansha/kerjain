@@ -20,6 +20,7 @@ const serviceSchema = new mongoose.Schema({
   },
   imgUrl: {
     type: String,
+    required: true,
   },
 });
 

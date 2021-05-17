@@ -351,7 +351,7 @@ var data = [
         description:
           "Mengerjakan tugas-tugas seperti membuat logo aplikasi simpel dengan output hanya di dalam console",
         price: 300000,
-        imgUrl: "images/service/p1=605b5889babfe71e8432d312.jpg",
+        imgUrl: "images/service/p1-605b5889babfe71e8432d312.jpg",
       },
       {
         _id: mongoose.Types.ObjectId("605c3f698f15569950d6e563"),
@@ -360,7 +360,7 @@ var data = [
         description:
           "Menerjemahkan bahasa indonesia ke dalam bahasa inggris secara cepat",
         price: 100000,
-        imgUrl: "images/service/p1=605b5889babfe71e8432d314.jpg",
+        imgUrl: "images/service/p1-605b5889babfe71e8432d314.jpg",
       },
       {
         _id: mongoose.Types.ObjectId("605c3f698f15569950d6e564"),
@@ -368,7 +368,7 @@ var data = [
         title: "Paket edit video lucu",
         description: "Mengubah video yang anda kirim menjadi meme",
         price: 50000,
-        imgUrl: "images/service/p1=605b5889babfe71e8432d316.jpg",
+        imgUrl: "images/service/p1-605b5889babfe71e8432d316.jpg",
       },
       {
         _id: mongoose.Types.ObjectId("605c3f698f15569950d6e565"),
@@ -376,7 +376,7 @@ var data = [
         title: "Desain Logo Premium",
         description: "Membuat logo yang menarik dengan kualitas yang tinggi",
         price: 500000,
-        imgUrl: "images/service/p1=605b5889babfe71e8432d318.jpg",
+        imgUrl: "images/service/p1-605b5889babfe71e8432d318.jpg",
       },
       {
         _id: mongoose.Types.ObjectId("605c3f698f15569950d6e566"),
@@ -385,7 +385,7 @@ var data = [
         description:
           "Membuat meme segar yang menarik dengan kualitas yang tinggi",
         price: 1000000,
-        imgUrl: "images/service/p1=605c3f698f15569950d6e566.jpg",
+        imgUrl: "images/service/p1-605c3f698f15569950d6e566.jpg",
       },
     ],
   },

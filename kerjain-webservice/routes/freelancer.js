@@ -23,7 +23,11 @@ router.post(
   uploadService,
   freelancerController.actionAddService
 );
-router.put("/service/edit", freelancerController.actionEditServiceDetail);
+router.put(
+  "/service/edit",
+  uploadService,
+  freelancerController.actionEditServiceDetail
+);
 router.delete(
   "/service/delete",
   freelancerController.actionDeleteServiceDetail
