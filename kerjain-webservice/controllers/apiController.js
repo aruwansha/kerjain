@@ -316,7 +316,7 @@ module.exports = {
       from: serviceUserId,
       to: freelancerId,
       message: req.body.message,
-      isRead: true,
+      isReadServiceUser: true,
     });
     if (!data) return res.send({ message: "Failed to reply!" });
     res.send({ message: "Success Reply", data });
