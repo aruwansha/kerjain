@@ -3,6 +3,7 @@
     <form
       action="/freelancer/profile/<%= freelancer.userId.id %>/personal?_method=PUT"
       method="post"
+      enctype="multipart/form-data"
     >
       <div class="form-group">
         <label for="inputName">Nama</label>
@@ -43,8 +44,8 @@
       <div class="form-group">
         <label for="inputPhone">Foto Profil</label>
         <br />
-        <img src="" alt="" width="200" height="200" class="img-fluid mb-2" />
-        <input type="file" class="form-control-file mt-2" name="profil" />
+        <img src="http://localhost:3000/<%= freelancer.userId.imgUrl %>" alt="" width="200" height="200" class="img-fluid mb-2" />
+        <input type="file" class="form-control-file mt-2" name="image" />
       </div>
       <hr />
       <div class="d-flex justify-content-end">

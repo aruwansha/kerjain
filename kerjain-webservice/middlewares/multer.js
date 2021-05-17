@@ -38,6 +38,22 @@ const uploadService = multer({
   },
 }).single("image");
 
+// set storage user
+const storageUser = multer.diskStorage({
+  destination: "public/images/user",
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const uploadUser = multer({
+  storage: storageUser,
+  limits: { fileSize: 1000000 },
+  fileFilter: function (req, file, cb) {
+    checkImages(file, cb);
+  },
+}).single("image");
+
 
 // user
 
@@ -73,4 +89,4 @@ function checkImages(file, cb) {
   }
 }
 
-module.exports = { uploadBank, uploadService, uploadProofPayment };
+module.exports = { uploadBank, uploadService, uploadUser, uploadProofPayment };

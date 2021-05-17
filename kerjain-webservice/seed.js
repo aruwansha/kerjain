@@ -450,7 +450,7 @@ var data = [
         total: 300000,
         detailNote: "Please make this like this",
         payments: {
-          proofPayment: "images/order/p-605c3f698f15569950d6e566.jpg",
+          proofPayment: "images/order/1621269028794.jpg",
           bankFrom: "BNI",
           accountHolder: "Dandi",
           status: "finished",
@@ -470,7 +470,7 @@ var data = [
         total: 150000,
         detailNote: "Please make this like this",
         payments: {
-          proofPayment: "images/order/p-605c3f698f15569950d6e567.jpg",
+          proofPayment: "images/order/1621266960485.png",
           bankFrom: "BCA",
           accountHolder: "Krisna Pramana",
           status: "unpaid",
@@ -490,7 +490,7 @@ var data = [
         total: 500000,
         detailNote: "Please make this like this",
         payments: {
-          proofPayment: "images/order/p-605c3f698f15569950d6e568.jpg",
+          proofPayment: "images/order/1621269351244.png",
           bankFrom: "BNI",
           accountHolder: "Dandi",
           status: "unpaid",

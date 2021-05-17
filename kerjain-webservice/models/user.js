@@ -3,18 +3,6 @@ const { ObjectId } = mongoose.Schema;
 const bcrypt = require("bcrypt");
 
 const usersSchema = new mongoose.Schema({
-  // adminId: {
-  //   type: ObjectId,
-  //   ref: "Admin",
-  // },
-  // freelancerId: {
-  //   type: ObjectId,
-  //   ref: "Freelancer",
-  // },
-  // serviceUserId: {
-  //   type: ObjectId,
-  //   ref: "ServiceUser",
-  // },
   name: {
     type: String,
     required: true,

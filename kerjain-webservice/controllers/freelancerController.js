@@ -448,11 +448,23 @@ module.exports = {
     try {
       const { name, email, address, phone } = req.body;
       const user = await User.findOne({ _id: req.session.user.id });
-      user.name = name;
-      user.email = email;
-      user.address = address;
-      user.phone = phone;
-      await user.save();
+      if (req.file == undefined) {
+        user.name = name;
+        user.email = email;
+        user.address = address;
+        user.phone = phone;
+        await user.save();
+      } else {
+        if (fs.existsSync(path.join(`public/${user.imgUrl}`))) {
+          await fs.unlink(path.join(`public/${user.imgUrl}`));
+        }
+        user.name = name;
+        user.email = email;
+        user.address = address;
+        user.phone = phone;
+        user.imgUrl = `images/user/${req.file.filename}`;
+        await user.save();
+      }
       req.flash("alertMessage", "Data berhasil disimpan");
       req.flash("alertStatus", "primary");
       res.redirect("/freelancer/profile");
