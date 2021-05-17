@@ -243,6 +243,21 @@ module.exports = {
     res.status(200).send({ chats });
   },
 
+  replyChat: async (req, res) => {
+    const freelancerId = req.params.freelancerId;
+    const serviceUserId = req.user.id;
+    const data = await Chat.create({
+      freelancerUserId: freelancerId,
+      serviceUserId: serviceUserId,
+      from: serviceUserId,
+      to: freelancerId,
+      message: req.body.message,
+      isRead: true,
+    });
+    if (!data) return res.send({ message: "Failed to reply!" });
+    res.send({ message: "Success Reply", data });
+  },
+
   orderPage: async (req, res) => {
     const { serviceId, detailNote, accountHolder, bankFrom } = req.body;
     if (!req.file) {

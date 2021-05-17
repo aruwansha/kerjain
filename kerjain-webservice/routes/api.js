@@ -17,5 +17,6 @@ router.post(
   apiController.orderPage
 );
 router.get("/chats/get", verify, apiController.chats);
+router.post("/chats/reply/:freelancerId", verify, apiController.replyChat);
 
 module.exports = router;
