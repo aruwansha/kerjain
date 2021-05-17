@@ -24,7 +24,7 @@ module.exports = {
         .populate("orderId");
       const unread = await Chat.find({
         freelancerUserId: req.session.user.id,
-        isRead: false,
+        isReadFreelancer: false,
       }).select("isRead");
       res.render("freelancer/dashboard/view_dashboard", {
         title: "Dashboard | Freelancer",
@@ -48,7 +48,7 @@ module.exports = {
       const id = req.session.user.id;
       const unread = await Chat.find({
         freelancerUserId: req.session.user.id,
-        isRead: false,
+        isReadFreelancer: false,
       }).select("isRead");
       const freelancer = await Freelancer.findOne({ userId: id })
         .select(
@@ -77,7 +77,7 @@ module.exports = {
       const id = req.session.user.id;
       const unread = await Chat.find({
         freelancerUserId: req.session.user.id,
-        isRead: false,
+        isReadFreelancer: false,
       }).select("isRead");
       const freelancer = await Freelancer.findOne({ userId: id }).select("_id");
       const service = await Service.find({ freelancerId: freelancer._id });
@@ -146,7 +146,7 @@ module.exports = {
       const alert = { message: alertMessage, status: alertStatus };
       const unread = await Chat.find({
         freelancerUserId: req.session.user.id,
-        isRead: false,
+        isReadFreelancer: false,
       }).select("isRead");
       const request = await Request.find();
       for (i = 0; i < request.length; i++) {
@@ -178,7 +178,7 @@ module.exports = {
       const alert = { message: alertMessage, status: alertStatus };
       const unread = await Chat.find({
         freelancerUserId: req.session.user.id,
-        isRead: false,
+        isReadFreelancer: false,
       }).select("isRead");
       const mongoose = require("mongoose");
       const chats = await Chat.aggregate([
@@ -245,7 +245,7 @@ module.exports = {
       const alert = { message: alertMessage, status: alertStatus };
       const unread = await Chat.find({
         freelancerUserId: req.session.user.id,
-        isRead: false,
+        isReadFreelancer: false,
       }).select("isRead");
       const serviceUserId = req.params;
 
@@ -303,7 +303,6 @@ module.exports = {
   actionReplyChat: async (req, res) => {
     const { id } = req.params;
     const { message } = req.body;
-    console.log(message);
     await Chat.create({
       freelancerId: req.session.user.id,
       serviceUserId: id,
@@ -400,7 +399,7 @@ module.exports = {
       const id = req.session.user.id;
       const unread = await Chat.find({
         freelancerUserId: req.session.user.id,
-        isRead: false,
+        isReadFreelancer: false,
       }).select("isRead");
       const freelancer = await Freelancer.findOne({ userId: id })
         .select(

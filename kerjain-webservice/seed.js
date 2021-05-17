@@ -441,6 +441,7 @@ var data = [
         freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d312"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
         orderDate: "3-29-2021",
+        invoice: "154334",
         serviceId: {
           _id: mongoose.Types.ObjectId("605c3f698f15569950d6e562"),
           title: "Paket Tugas Kuliah",
@@ -460,6 +461,7 @@ var data = [
         freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d316"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d322"),
         orderDate: "4-1-2021",
+        invoice: "154364",
         serviceId: {
           _id: mongoose.Types.ObjectId("605c3f698f15569950d6e564"),
           title: "Paket edit video lucu",
@@ -479,6 +481,7 @@ var data = [
         freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d318"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
         orderDate: "4-5-2021",
+        invoice: "154367",
         serviceId: {
           _id: mongoose.Types.ObjectId("605c3f698f15569950d6e565"),
           title: "Desain Logo Premium",
@@ -507,7 +510,8 @@ var data = [
         from: mongoose.Types.ObjectId("605b5889babfe71e8432d319"),
         to: mongoose.Types.ObjectId("605b5889babfe71e8432d317"),
         message: "Gan saya bisa pesen desain logo dengan estimasi....",
-        isRead: true,
+        isReadFreelancer: true,
+        isReadServiceUser: true,
         time: "2021-05-08T13:35:16.048+00:00",
       },
       {
@@ -517,7 +521,8 @@ var data = [
         from: mongoose.Types.ObjectId("605b5889babfe71e8432d319"),
         to: mongoose.Types.ObjectId("605b5889babfe71e8432d317"),
         message: "Gan logonya udah jadi gan keren",
-        isRead: false,
+        isReadFreelancer: true,
+        isReadServiceUser: true,
         time: "2021-05-16T13:35:16.048+00:00",
       },
       {
@@ -527,7 +532,8 @@ var data = [
         from: mongoose.Types.ObjectId("605b5889babfe71e8432d317"),
         to: mongoose.Types.ObjectId("605b5889babfe71e8432d319"),
         message: "Terima kasih feedbacknya",
-        isRead: false,
+        isReadFreelancer: true,
+        isReadServiceUser: false,
         time: "2021-05-16T13:36:16.048+00:00",
       },
       {
@@ -537,7 +543,8 @@ var data = [
         from: mongoose.Types.ObjectId("605b5889babfe71e8432d321"),
         to: mongoose.Types.ObjectId("605b5889babfe71e8432d317"),
         message: "Gan pesen logo seperti ini bisa?",
-        isRead: false,
+        isReadFreelancer: false,
+        isReadServiceUser: true,
         time: "2021-05-16T13:35:16.048+00:00",
       },
     ],

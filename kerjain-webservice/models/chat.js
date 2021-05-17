@@ -22,7 +22,11 @@ const chatSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  isRead: {
+  isReadFreelancer: {
+    type: Boolean,
+    default: false,
+  },
+  isReadServiceUser: {
     type: Boolean,
     default: false,
   },

@@ -195,6 +195,70 @@ module.exports = {
     res.status(200).json(req.user);
   },
 
+  orderPage: async (req, res) => {
+    const { serviceId, detailNote, accountHolder, bankFrom } = req.body;
+    if (!req.file) {
+      return res.status(404).json({ message: "image not found" });
+    }
+
+    if (
+      serviceId === undefined ||
+      detailNote === undefined ||
+      accountHolder === undefined ||
+      bankFrom === undefined
+    ) {
+      res.status(404).json({ message: "Field is required" });
+    } else {
+      const service = await Service.findOne({ _id: serviceId });
+      const invoice = Math.floor(1000000 + Math.random() * 9000000);
+      const tax = service.price * 0.1;
+
+      // get service user id
+      const serviceUserId = await ServiceUser.findOne({
+        userId: req.user.id,
+      }).select("_id");
+
+      const newOrder = {
+        freelancerId: service.freelancerId,
+        serviceUserId: serviceUserId._id,
+        invoice,
+        serviceId: {
+          _id: service.id,
+          title: service.title,
+          price: service.price,
+        },
+        total: service.price + tax,
+        detailNote,
+        payments: {
+          proofPayment: `images/order/${req.file.filename}`,
+          accountHolder,
+          bankFrom,
+        },
+      };
+
+      const order = await Order.create(newOrder);
+
+      const freelancer = await Freelancer.findOne({
+        _id: service.freelancerId,
+      });
+
+      // send detail to freelancer
+      await Chat.create({
+        freelancerUserId: freelancer.userId,
+        serviceUserId: req.user.id,
+        from: req.user.id,
+        to: freelancer.userId,
+        message: detailNote,
+        isReadServiceUser: true,
+      });
+
+      freelancer.orderId.push({ _id: order._id });
+      freelancer.save();
+
+      res.status(201).json({ message: "Success Booking", order });
+    }
+  },
+
   chats: async (req, res) => {
     const id = req.user.id;
     const chats = await Chat.aggregate([
@@ -258,57 +322,5 @@ module.exports = {
     res.send({ message: "Success Reply", data });
   },
 
-  orderPage: async (req, res) => {
-    const { serviceId, detailNote, accountHolder, bankFrom } = req.body;
-    if (!req.file) {
-      return res.status(404).json({ message: "image not found" });
-    }
 
-    if (
-      serviceId === undefined ||
-      detailNote === undefined ||
-      accountHolder === undefined ||
-      bankFrom === undefined
-    ) {
-      res.status(404).json({ message: "Field is required" });
-    } else {
-      const service = await Service.findOne({ _id: serviceId });
-      const invoice = Math.floor(1000000 + Math.random() * 9000000);
-      const tax = service.price * 0.1;
-
-      // get service user id
-      const serviceUserId = await ServiceUser.findOne({
-        userId: req.user.id,
-      }).select("_id");
-
-      const newOrder = {
-        freelancerId: service.freelancerId,
-        serviceUserId: serviceUserId._id,
-        invoice,
-        serviceId: {
-          _id: service.id,
-          title: service.title,
-          price: service.price,
-        },
-        total: service.price + tax,
-        detailNote,
-        payments: {
-          proofPayment: `images/order/${req.file.filename}`,
-          accountHolder,
-          bankFrom,
-        },
-      };
-
-      const order = await Order.create(newOrder);
-
-      const freelancer = await Freelancer.findOne({
-        _id: service.freelancerId,
-      });
-
-      freelancer.orderId.push({ _id: order._id });
-      freelancer.save();
-
-      res.status(201).json({ message: "Success Booking", order });
-    }
-  },
 };
