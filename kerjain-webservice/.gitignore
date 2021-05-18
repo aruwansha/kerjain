@@ -5,3 +5,7 @@
 .env
 /public/images/order
 /public/images/service
+/public/images/user
+/public/images/freelancer
+/public/images/service_user
+

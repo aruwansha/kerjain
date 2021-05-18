@@ -52,7 +52,7 @@ module.exports = {
       }).select("isReadFreelancer");
       const freelancer = await Freelancer.findOne({ userId: id })
         .select(
-          "_id title description rating bankName bankAccount accountHolder"
+          "_id title description rating bankName bankAccount accountHolder imgUrl"
         )
         .populate("userId")
         .populate({ path: "categoryId", select: "id name" });
@@ -430,7 +430,7 @@ module.exports = {
       }).select("isReadFreelancer");
       const freelancer = await Freelancer.findOne({ userId: id })
         .select(
-          "_id title description rating bankName bankAccount accountHolder"
+          "_id title description rating bankName bankAccount accountHolder imgUrl"
         )
         .populate("userId")
         .populate({ path: "categoryId", select: "id name" });
@@ -475,17 +475,29 @@ module.exports = {
 
   actionEditService: async (req, res) => {
     try {
-      const { title, description, image } = req.body;
+      const { title, description } = req.body;
       const freelancer = await Freelancer.findOne({
         userId: req.session.user.id,
       });
-      freelancer.title = title;
-      freelancer.description = description;
-      await freelancer.save();
+      if (req.file == undefined) {
+        freelancer.title = title;
+        freelancer.description = description;
+        await freelancer.save();
+      } else {
+        if (fs.existsSync(path.join(`public/${freelancer.imgUrl}`))) {
+          await fs.unlink(path.join(`public/${freelancer.imgUrl}`));
+        }
+        freelancer.title = title;
+        freelancer.description = description;
+        freelancer.imgUrl = `images/freelancer/${req.file.filename}`;
+        await freelancer.save();
+      }
       req.flash("alertMessage", "Data berhasil disimpan");
       req.flash("alertStatus", "primary");
       res.redirect("/freelancer/profile");
     } catch (error) {
+      req.flash("alertMessage", `${error}`);
+      req.flash("alertStatus", "primary");
       res.redirect("/freelancer/profile");
     }
   },
