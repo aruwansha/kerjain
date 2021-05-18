@@ -11,13 +11,13 @@
   </div>
   <div class="card-body">
     <div class="row">
-      <% if(order.payments.status == 'unpaid') {%>
+      <% if(order.payments.status == 'paid') {%>
 
       <div class="col-md-4">
         <div class="row ml-1">
           <form
             action="/freelancer/order/<%= order.id %>/upload?_method=PUT"
-            method="POST"
+            method="POST" enctype="multipart/form-data"
           >
             <div class="form-group">
               <label for="">Upload Pekerjaan:</label>
@@ -26,6 +26,7 @@
                 name="file"
                 id="file"
                 class="form-control-file"
+                required
               />
             </div>
             <button type="submit" class="btn btn-success btn-sm">
@@ -85,7 +86,9 @@
             class="form-control input-disabled mb-2"
             name="service"
             rows="3"
-            readonly><%= order.detailNote %>
+            readonly
+          >
+<%= order.detailNote %>
           </textarea>
         </div>
         <div class="form-group">

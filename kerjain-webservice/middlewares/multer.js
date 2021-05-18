@@ -74,7 +74,7 @@ const uploadServiceUser = multer({
 
 // Set storage proofpayment
 const storageProofPayment = multer.diskStorage({
-  destination: "public/images/order",
+  destination: "public/images/order/proof_payment",
   filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname));
   },
@@ -87,6 +87,22 @@ const uploadProofPayment = multer({
     checkImages(file, cb);
   },
 }).single("image");
+
+// Set storage work
+const storageWork = multer.diskStorage({
+  destination: "public/etc/order/work",
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const uploadWork = multer({
+  storage: storageWork,
+  limits: { fileSize: 1000000 },
+  fileFilter: function (req, file, cb) {
+    checkFile(file, cb);
+  },
+}).single("file");
 
 // // Check file Type
 function checkImages(file, cb) {
@@ -104,4 +120,18 @@ function checkImages(file, cb) {
   }
 }
 
-module.exports = { uploadBank, uploadService, uploadUser, uploadServiceUser, uploadProofPayment };
+function checkFile(file, cb) {
+  // Allowed ext
+  const fileTypes = /rar|zip|7z/;
+  // Check ext
+  const extName = fileTypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimeType = fileTypes.test(file.mimetype);
+
+  if (mimeType && extName) {
+    return cb(null, true);
+  } else {
+    cb("Error: Archive Only !!!");
+  }
+}
+module.exports = { uploadBank, uploadService, uploadUser, uploadServiceUser, uploadProofPayment, uploadWork };

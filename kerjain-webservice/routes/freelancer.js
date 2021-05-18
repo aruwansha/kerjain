@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const freelancerController = require("../controllers/freelancerController");
-const { uploadService, uploadUser, uploadServiceUser } = require("../middlewares/multer");
+const { uploadService, uploadUser, uploadServiceUser, uploadWork } = require("../middlewares/multer");
 const { isLogin } = require("../middlewares/auth");
 
 // auth
@@ -52,5 +52,6 @@ router.get("/setting/edit-profile", freelancerController.viewEditProfil);
 // order
 router.get("/order", freelancerController.viewOrder);
 router.get("/order/:id", freelancerController.viewDetailOrder);
+router.put("/order/:id/upload", uploadWork, freelancerController.actionSendWork);
 
 module.exports = router;
