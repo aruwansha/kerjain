@@ -404,6 +404,39 @@ module.exports = {
     res.status(200).send({ chats });
   },
 
+  detailChat: async (req, res) => {
+    const freelancerId = req.params.freelancerId;
+    var perPage = 10;
+    await Chat.find({
+      serviceUserId: req.user.id,
+      freelancerUserId: freelancerId,
+    })
+      .populate({ path: "from", select: "id name" })
+      .limit(perPage)
+      .sort("time")
+      .exec(function (err, chats) {
+        for (i = 0; i < chats.length; i++) {
+          chats[i].isReadServiceUser = true;
+          chats[i].save(function (err) {
+            if (err) {
+              console.error("ERROR!");
+            }
+          });
+        }
+        Chat.count({
+          freelancerUserId: freelancerId,
+          serviceUserId: req.user.id,
+        }).exec(function (err, count) {
+          res.send({
+            title: "Detail Chat | Kerjain",
+            chats,
+            count,
+            perPage,
+          });
+        });
+      });
+  },
+
   replyChat: async (req, res) => {
     const freelancerId = req.params.freelancerId;
     const serviceUserId = req.user.id;
