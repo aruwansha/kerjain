@@ -6,7 +6,7 @@ const { verify } = require("../middlewares/auth");
 
 router.get("/landing-page", apiController.landingPage);
 router.get("/category-page", apiController.categoryPage);
-router.get("/:id", apiController.detailPage);
+router.get("/freelancer/:id", apiController.detailPage);
 router.post("/register", apiController.register);
 router.post("/login", apiController.login);
 router.get("/landing-page/me", verify, apiController.me);

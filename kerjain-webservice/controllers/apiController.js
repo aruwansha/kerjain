@@ -120,7 +120,7 @@ module.exports = {
           select: ["title", "description", "price", "imgUrl"],
         })
         .exec();
-      res.status(200).json({ freelancer });
+      res.status(200).json({ ...freelancer._doc });
     } catch (error) {}
   },
 
@@ -161,7 +161,10 @@ module.exports = {
       const token = jwt.sign({ id: createUser._id }, process.env.TOKEN_SECRET, {
         expiresIn: 3600,
       });
-      res.status(200).send({ auth: true, token: token });
+      res.status(201).send({
+        message: "Success Register",
+        data: { name: createUser.name, email: createUser.email, token: token },
+      });
     } catch (error) {
       res.send({ error });
     }
@@ -185,7 +188,9 @@ module.exports = {
       const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
         expiresIn: 3600,
       });
-      res.status(200).send({ auth: true, token: token });
+      res
+        .status(200)
+        .send({ message: "Success Login", data: { token: token } });
     } catch (error) {
       res.status(500).send(error);
     }
@@ -423,12 +428,11 @@ module.exports = {
             }
           });
         }
-        Chat.count({
+        Chat.countDocuments({
           freelancerUserId: freelancerId,
           serviceUserId: req.user.id,
         }).exec(function (err, count) {
           res.send({
-            title: "Detail Chat | Kerjain",
             chats,
             count,
             perPage,
@@ -449,6 +453,6 @@ module.exports = {
       isReadServiceUser: true,
     });
     if (!data) return res.send({ message: "Failed to reply!" });
-    res.send({ message: "Success Reply", data });
+    res.status(201).send({ message: "Success Reply", data });
   },
 };
