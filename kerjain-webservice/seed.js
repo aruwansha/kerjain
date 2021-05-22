@@ -1,9 +1,13 @@
 var seeder = require("mongoose-seed");
 var mongoose = require("mongoose");
 
+// environment
+const dotenv = require("dotenv");
+dotenv.config();
+
 // Connect to MongoDB via Mongoose
 seeder.connect(
-  "mongodb://127.0.0.1:27017/db_kerjain",
+  process.env.DB_CONNECT,
   {
     useNewUrlParser: true,
     useCreateIndex: true,

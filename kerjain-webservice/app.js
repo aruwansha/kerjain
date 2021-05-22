@@ -9,18 +9,20 @@ const methodOverride = require("method-override");
 const session = require("express-session");
 // connect-flash
 var flash = require("connect-flash");
+
+// environment
+const dotenv = require("dotenv");
+dotenv.config();
+
 // mongoose
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost:27017/db_kerjain", {
+mongoose.connect(process.env.DB_CONNECT, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
   useFindAndModify: false,
 });
-
-const dotenv = require("dotenv");
-dotenv.config();
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
