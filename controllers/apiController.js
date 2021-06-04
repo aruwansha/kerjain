@@ -104,7 +104,15 @@ module.exports = {
       .select("id rating title imgUrl")
       .populate({ path: "userId", select: "id name imgUrl" });
 
-    res.status(200).json({ Technology, Design, Writing, Video });
+    res.status(200).json({
+      categories: [
+        { name: "Teknologi & Pemrograman", data: Technology },
+        { name: "Desain & Grafis", data: Design },
+        { name: "Tulis & Terjemahan", data: Writing },
+        { name: "Video & Animasi", data: Video },
+
+      ],
+    });
   },
 
   detailPage: async (req, res) => {
