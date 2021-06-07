@@ -9,6 +9,8 @@ const methodOverride = require("method-override");
 const session = require("express-session");
 // connect-flash
 var flash = require("connect-flash");
+// cors
+var cors = require('cors')
 
 // environment
 const dotenv = require("dotenv");
@@ -57,6 +59,7 @@ app.use(
   "/sb-admin-2",
   express.static(path.join(__dirname, "node_modules/startbootstrap-sb-admin-2"))
 );
+app.use(cors())
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
