@@ -97,13 +97,16 @@ module.exports = {
       const freelancer = await Freelancer.findOne({
         userId: req.session.user.id,
       });
-      await Service.create({
+      const service = await Service.create({
         freelancerId: freelancer._id,
         title,
         description,
         price,
         imgUrl: `images/service/${req.file.filename}`,
       });
+
+      freelancer.serviceId.push({ _id: service._id });
+      freelancer.save();
       req.flash("alertMessage", "Berhasil menambahkan data");
       req.flash("alertStatus", "success");
       res.redirect("/freelancer/service");
@@ -150,6 +153,15 @@ module.exports = {
       if (fs.existsSync(path.join(`public/${service.imgUrl}`))) {
         await fs.unlink(path.join(`public/${service.imgUrl}`));
       }
+      const freelancer = await Freelancer.findOne({
+        userId: req.session.user.id,
+      });
+
+      await Freelancer.updateOne(
+        { _id: freelancer._id },
+        { $pull: { "serviceId": { _id: service._id } } }
+      );
+
       await service.remove();
       req.flash("alertMessage", "Berhasil menghapus data");
       req.flash("alertStatus", "success");
