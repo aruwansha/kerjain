@@ -5,6 +5,7 @@ const ServiceUser = require("../models/service_user");
 const Service = require("../models/service");
 const Order = require("../models/order");
 const Chat = require("../models/chat");
+const Bank = require("../models/bank");
 const mongoose = require("mongoose");
 
 const { registerValidation, loginValidation } = require("../validator.js");
@@ -24,6 +25,14 @@ module.exports = {
             as: "userId",
           },
         },
+        {
+          $lookup: {
+            from: "services",
+            localField: "serviceId._id",
+            foreignField: "_id",
+            as: "serviceId",
+          },
+        },
         { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
         {
           $project: {
@@ -40,6 +49,13 @@ module.exports = {
             },
             rating: 1,
             imgUrl: 1,
+            startFrom: {
+              $cond: {
+                if: { $isArray: "$serviceId" },
+                then: { $min: "$serviceId.price" },
+                else: "NA",
+              },
+            },
           },
         },
         {
@@ -59,6 +75,14 @@ module.exports = {
             as: "userId",
           },
         },
+        {
+          $lookup: {
+            from: "services",
+            localField: "serviceId._id",
+            foreignField: "_id",
+            as: "serviceId",
+          },
+        },
         { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
         {
           $project: {
@@ -68,6 +92,13 @@ module.exports = {
             "userId.imgUrl": 1,
             rating: 1,
             imgUrl: 1,
+            startFrom: {
+              $cond: {
+                if: { $isArray: "$serviceId" },
+                then: { $min: "$serviceId.price" },
+                else: "NA",
+              },
+            },
           },
         },
         {
@@ -83,26 +114,169 @@ module.exports = {
   },
 
   categoryPage: async (req, res) => {
-    const Technology = await Freelancer.find({
-      categoryId: "605b580db4a8e60af44d4530",
-    })
-      .select("id rating title imgUrl")
-      .populate({ path: "userId", select: "id name imgUrl" });
-    const Design = await Freelancer.find({
-      categoryId: "605b580db4a8e60af44d4531",
-    })
-      .select("id rating title imgUrl")
-      .populate({ path: "userId", select: "id name imgUrl" });
-    const Writing = await Freelancer.find({
-      categoryId: "605b580db4a8e60af44d4532",
-    })
-      .select("id rating title imgUrl")
-      .populate({ path: "userId", select: "id name imgUrl" });
-    const Video = await Freelancer.find({
-      categoryId: "605b580db4a8e60af44d4533",
-    })
-      .select("id rating title imgUrl")
-      .populate({ path: "userId", select: "id name imgUrl" });
+    const Technology = await Freelancer.aggregate([
+      { $match: { categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4530") } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userId",
+        },
+      },
+      {
+        $lookup: {
+          from: "services",
+          localField: "serviceId._id",
+          foreignField: "_id",
+          as: "serviceId",
+        },
+      },
+      { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          "userId.name": 1,
+          "userId.imgUrl": 1,
+          rating: 1,
+          imgUrl: 1,
+          startFrom: {
+            $cond: {
+              if: { $isArray: "$serviceId" },
+              then: { $min: "$serviceId.price" },
+              else: "NA",
+            },
+          },
+        },
+      },
+      {
+        $limit: 4,
+      },
+    ]);
+
+    const Design = await Freelancer.aggregate([
+      { $match: { categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4531") } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userId",
+        },
+      },
+      {
+        $lookup: {
+          from: "services",
+          localField: "serviceId._id",
+          foreignField: "_id",
+          as: "serviceId",
+        },
+      },
+      { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          "userId.name": 1,
+          "userId.imgUrl": 1,
+          rating: 1,
+          imgUrl: 1,
+          startFrom: {
+            $cond: {
+              if: { $isArray: "$serviceId" },
+              then: { $min: "$serviceId.price" },
+              else: "NA",
+            },
+          },
+        },
+      },
+      {
+        $limit: 4,
+      },
+    ]);
+
+    const Writing = await Freelancer.aggregate([
+      { $match: { categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4532") } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userId",
+        },
+      },
+      {
+        $lookup: {
+          from: "services",
+          localField: "serviceId._id",
+          foreignField: "_id",
+          as: "serviceId",
+        },
+      },
+      { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          "userId.name": 1,
+          "userId.imgUrl": 1,
+          rating: 1,
+          imgUrl: 1,
+          startFrom: {
+            $cond: {
+              if: { $isArray: "$serviceId" },
+              then: { $min: "$serviceId.price" },
+              else: "NA",
+            },
+          },
+        },
+      },
+      {
+        $limit: 4,
+      },
+    ]);
+
+    const Video = await Freelancer.aggregate([
+      { $match: { categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4533") } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userId",
+        },
+      },
+      {
+        $lookup: {
+          from: "services",
+          localField: "serviceId._id",
+          foreignField: "_id",
+          as: "serviceId",
+        },
+      },
+      { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          "userId.name": 1,
+          "userId.imgUrl": 1,
+          rating: 1,
+          imgUrl: 1,
+          startFrom: {
+            $cond: {
+              if: { $isArray: "$serviceId" },
+              then: { $min: "$serviceId.price" },
+              else: "NA",
+            },
+          },
+        },
+      },
+      {
+        $limit: 4,
+      },
+    ]);
 
     res.status(200).json({
       categories: [
@@ -110,7 +284,6 @@ module.exports = {
         { name: "Desain & Grafis", data: Design },
         { name: "Tulis & Terjemahan", data: Writing },
         { name: "Video & Animasi", data: Video },
-
       ],
     });
   },
@@ -128,7 +301,8 @@ module.exports = {
           select: ["title", "description", "price", "imgUrl"],
         })
         .exec();
-      res.status(200).json({ ...freelancer._doc });
+      const bank = await Bank.find();
+      res.status(200).json({ ...freelancer._doc, bank });
     } catch (error) {}
   },
 
@@ -215,6 +389,14 @@ module.exports = {
             as: "userId",
           },
         },
+        {
+          $lookup: {
+            from: "services",
+            localField: "serviceId._id",
+            foreignField: "_id",
+            as: "serviceId",
+          },
+        },
         { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
         {
           $project: {
@@ -231,6 +413,13 @@ module.exports = {
             },
             rating: 1,
             imgUrl: 1,
+            startFrom: {
+              $cond: {
+                if: { $isArray: "$serviceId" },
+                then: { $min: "$serviceId.price" },
+                else: "NA",
+              },
+            },
           },
         },
         {
@@ -250,6 +439,14 @@ module.exports = {
             as: "userId",
           },
         },
+        {
+          $lookup: {
+            from: "services",
+            localField: "serviceId._id",
+            foreignField: "_id",
+            as: "serviceId",
+          },
+        },
         { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
         {
           $project: {
@@ -259,6 +456,13 @@ module.exports = {
             "userId.imgUrl": 1,
             rating: 1,
             imgUrl: 1,
+            startFrom: {
+              $cond: {
+                if: { $isArray: "$serviceId" },
+                then: { $min: "$serviceId.price" },
+                else: "NA",
+              },
+            },
           },
         },
         {
@@ -282,6 +486,14 @@ module.exports = {
             as: "userId",
           },
         },
+        {
+          $lookup: {
+            from: "services",
+            localField: "serviceId._id",
+            foreignField: "_id",
+            as: "serviceId",
+          },
+        },
         { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
         {
           $project: {
@@ -291,6 +503,13 @@ module.exports = {
             "userId.imgUrl": 1,
             rating: 1,
             imgUrl: 1,
+            startFrom: {
+              $cond: {
+                if: { $isArray: "$serviceId" },
+                then: { $min: "$serviceId.price" },
+                else: "NA",
+              },
+            },
           },
         },
         {

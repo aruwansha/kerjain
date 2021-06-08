@@ -446,7 +446,6 @@ module.exports = {
         const order = await Order.find()
           .select("id accountHolder orderDate total payments")
           .sort("orderDate");
-        console.log(order);
         res.render("admin/order/view_order", {
           title: "View Order | Admin Kerjain",
           user: req.session.user,

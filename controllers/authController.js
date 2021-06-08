@@ -72,7 +72,6 @@ module.exports = {
   actionLogout: (req, res) => {
     const session = req.session;
     if (!session.user) return res.redirect("/signin");
-    console.log(session);
     if (session.user.level == "admin") {
       session.destroy();
       res.redirect("/signin");

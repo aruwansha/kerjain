@@ -192,7 +192,6 @@ module.exports = {
         })
           .select("id userId")
           .populate({ path: "userId", select: "name" });
-        console.log(request[i].serviceUserId);
         res.render("freelancer/request/view_request", {
           title: "Dashboard | Permintaan",
           user: req.session.user,
@@ -492,9 +491,9 @@ module.exports = {
       }
       req.flash("alertMessage", "Data berhasil disimpan");
       req.flash("alertStatus", "primary");
-      res.redirect("/freelancer/profile");
+      res.redirect("/freelancer/viewEditProfil");
     } catch (error) {
-      res.redirect("/freelancer/profile");
+      res.redirect("/freelancer/viewEditProfil");
     }
   },
 
@@ -519,11 +518,11 @@ module.exports = {
       }
       req.flash("alertMessage", "Data berhasil disimpan");
       req.flash("alertStatus", "primary");
-      res.redirect("/freelancer/profile");
+      res.redirect("/freelancer/viewEditProfil");
     } catch (error) {
       req.flash("alertMessage", `${error}`);
       req.flash("alertStatus", "primary");
-      res.redirect("/freelancer/profile");
+      res.redirect("/freelancer/viewEditProfil");
     }
   },
 
@@ -539,9 +538,9 @@ module.exports = {
       await freelancer.save();
       req.flash("alertMessage", "Data berhasil disimpan");
       req.flash("alertStatus", "primary");
-      res.redirect("/freelancer/profile");
+      res.redirect("/freelancer/viewEditProfil");
     } catch (error) {
-      res.redirect("/freelancer/profile");
+      res.redirect("/freelancer/viewEditProfil");
     }
   },
 };

@@ -11,6 +11,9 @@ const session = require("express-session");
 var flash = require("connect-flash");
 // cors
 var cors = require('cors')
+// favicon
+var favicon = require('serve-favicon')
+
 
 // environment
 const dotenv = require("dotenv");
@@ -60,6 +63,7 @@ app.use(
   express.static(path.join(__dirname, "node_modules/startbootstrap-sb-admin-2"))
 );
 app.use(cors())
+app.use(favicon(path.join(__dirname, 'assets/images', 'favicon.ico')))
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);

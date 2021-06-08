@@ -51,7 +51,6 @@ include('delete_modal.ejs') %> <%- include('../../partials/js.ejs') %>
 
   $("#dataTable").on("click", ".button-delete", function () {
     let id = $(this).data("id");
-    console.log(id);
     $("#deleteModal").modal("show");
     $(".id").val(id);
   });
