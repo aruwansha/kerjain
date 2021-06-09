@@ -115,7 +115,11 @@ module.exports = {
 
   categoryPage: async (req, res) => {
     const Technology = await Freelancer.aggregate([
-      { $match: { categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4530") } },
+      {
+        $match: {
+          categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4530"),
+        },
+      },
       {
         $lookup: {
           from: "users",
@@ -156,7 +160,11 @@ module.exports = {
     ]);
 
     const Design = await Freelancer.aggregate([
-      { $match: { categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4531") } },
+      {
+        $match: {
+          categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4531"),
+        },
+      },
       {
         $lookup: {
           from: "users",
@@ -197,7 +205,11 @@ module.exports = {
     ]);
 
     const Writing = await Freelancer.aggregate([
-      { $match: { categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4532") } },
+      {
+        $match: {
+          categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4532"),
+        },
+      },
       {
         $lookup: {
           from: "users",
@@ -238,7 +250,11 @@ module.exports = {
     ]);
 
     const Video = await Freelancer.aggregate([
-      { $match: { categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4533") } },
+      {
+        $match: {
+          categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4533"),
+        },
+      },
       {
         $lookup: {
           from: "users",
@@ -361,14 +377,16 @@ module.exports = {
 
       if (!user) return res.status(400).send("Email or password is wrong");
 
-      if(user.level != 'service_user') return res.status(400).send("You are not service user");
-
       const isPasswordMatch = await bcrypt.compare(
         req.body.password,
         user.password
       );
       if (!isPasswordMatch)
         return res.status(400).send("Email or password is wrong");
+        
+      if (user.level != "service_user")
+        return res.status(400).send("You are not service user");
+
       const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
         expiresIn: 3600,
       });
