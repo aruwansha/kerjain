@@ -383,7 +383,7 @@ module.exports = {
       );
       if (!isPasswordMatch)
         return res.status(400).send("Email or password is wrong");
-        
+
       if (user.level != "service_user")
         return res.status(400).send("You are not service user");
 
@@ -392,7 +392,10 @@ module.exports = {
       });
       res
         .status(200)
-        .send({ message: "Success Login", data: { token: token } });
+        .send({
+          message: "Success Login",
+          data: { name: user.name, token: token },
+        });
     } catch (error) {
       res.status(500).send(error);
     }

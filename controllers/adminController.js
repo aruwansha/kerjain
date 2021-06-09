@@ -491,7 +491,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const order = await Order.findOne({ _id: id });
-      order.status = "paid";
+      order.payments.status = "paid";
       await order.save();
       req.flash("alertMessage", "Order Confirmed");
       req.flash("alertStatus", "success");
@@ -505,7 +505,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const order = await Order.findOne({ _id: id });
-      order.status = "rejected";
+      order.payments.status = "rejected";
       req.flash("alertMessage", "Order Rejected");
       req.flash("alertStatus", "success");
       await order.save();
