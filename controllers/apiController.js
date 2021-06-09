@@ -355,7 +355,7 @@ module.exports = {
   login: async (req, res) => {
     try {
       const error = loginValidation(req.body).error;
-      if (error) return res.send(error.details[0].message);
+      if (error) return res.status(400).send(error.details[0].message);
 
       const user = await User.findOne({ email: req.body.email.toLowerCase() });
 
