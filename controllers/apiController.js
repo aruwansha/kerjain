@@ -361,6 +361,8 @@ module.exports = {
 
       if (!user) return res.status(400).send("Email or password is wrong");
 
+      if(user.level != 'service_user') return res.status(400).send("You are not service user");
+
       const isPasswordMatch = await bcrypt.compare(
         req.body.password,
         user.password
