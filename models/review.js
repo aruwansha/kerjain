@@ -1,13 +1,14 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 
 const reviewSchema = new mongoose.Schema({
-  freelancerId: {
-    type: ObjectId,
-    ref: "Freelancer",
-  },
   serviceUserId: {
     type: ObjectId,
     ref: "ServiceUser",
+  },
+  freelancerId: {
+    type: ObjectId,
+    ref: "Freelancer",
   },
   rating: {
     type: Number,

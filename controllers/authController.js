@@ -35,6 +35,12 @@ module.exports = {
         res.redirect("back");
       }
 
+      if (user.level == "service_user") {
+        req.flash("alertMessage", "You are not belong here!");
+        req.flash("alertStatus", "danger");
+        res.redirect("http://localhost:3001/login");
+      }
+
       const isPasswordMatch = await bcrypt.compare(password, user.password);
       if (!isPasswordMatch) {
         req.flash("alertMessage", "Password is not correct!");

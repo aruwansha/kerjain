@@ -160,6 +160,9 @@ describe("API ENDPOINT TESTING", () => {
         const order = {
           image,
           serviceId: "605c3f698f15569950d6e564",
+          name: "Febri Putra",
+          email: "febriputray@gmail.com",
+          phone: "084654681",
           detailNote: "Tolong buatkan aplikasi dengan detail sebagai berikut",
           accountHolder: "Febri Putra Yulianto",
           bankFrom: "BRI",

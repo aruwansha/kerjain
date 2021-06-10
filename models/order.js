@@ -35,6 +35,18 @@ const orderSchema = new mongoose.Schema({
   total: {
     type: Number,
   },
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  phone: {
+    type: String,
+    required: true,
+  },
   detailNote: {
     type: String,
     required: true,

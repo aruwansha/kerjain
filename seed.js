@@ -27,6 +27,7 @@ seeder.connect(
       "./models/Service_user",
       "./models/User",
       "./models/Request",
+      "./models/Review",
     ]);
 
     // Clear specified collections
@@ -42,6 +43,7 @@ seeder.connect(
         "Bank",
         "Chat",
         "Request",
+        "Review",
       ],
       function () {
         // Callback to populate DB once collections have been cleared
@@ -258,7 +260,6 @@ var data = [
         bankAccount: "425332453",
         accountHolder: "Adi Prasetyo",
         isBanned: false,
-        rating: 4,
         title: "Adis Code",
         description: "Sedia Jasa Coding Mahasiswa",
         imgUrl: "images/freelancer/flc-605b5889babfe71e8432d312.jpg",
@@ -277,7 +278,6 @@ var data = [
         bankAccount: "231541231",
         accountHolder: "Galeh Desena Ramadhian",
         isBanned: false,
-        rating: 3,
         title: "Desenas Write & Translate",
         description:
           "Menyediakan paket2 Jasa terjemah bahasa inggris sesuai kebutuan anda",
@@ -304,7 +304,6 @@ var data = [
         bankAccount: "214215123",
         accountHolder: "Alfiyan",
         isBanned: false,
-        rating: 5,
         title: "Alfis memes",
         description: "Membuat meme untuk anda",
         imgUrl: "images/freelancer/flc-605b5889babfe71e8432d316.jpg",
@@ -330,7 +329,6 @@ var data = [
         bankAccount: "3214123",
         accountHolder: "Rizky Aulia",
         isBanned: false,
-        rating: 4,
         title: "Riss Design",
         description: "Make premium design",
         imgUrl: "images/freelancer/flc-605b5889babfe71e8432d318.jpg",
@@ -415,7 +413,6 @@ var data = [
           },
         ],
         isBanned: false,
-        rating: 4,
       },
       // service user 2
       {
@@ -430,7 +427,6 @@ var data = [
           },
         ],
         isBanned: false,
-        rating: 4,
       },
     ],
   },
@@ -452,6 +448,9 @@ var data = [
           price: 300000,
         },
         total: 300000,
+        name: "tester",
+        email: "tester@gmail.com",
+        phone: "432652342",
         detailNote: "Please make this like this",
         payments: {
           proofPayment: "images/order/proof_payment/1621269028794.jpg",
@@ -472,6 +471,9 @@ var data = [
           price: 50000,
         },
         total: 150000,
+        name: "tester",
+        email: "tester@gmail.com",
+        phone: "432652342",
         detailNote: "Please make this like this",
         payments: {
           proofPayment: "images/order/proof_payment/1621266960485.png",
@@ -492,6 +494,9 @@ var data = [
           price: 500000,
         },
         total: 500000,
+        name: "tester",
+        email: "tester@gmail.com",
+        phone: "432652342",
         detailNote: "Please make this like this",
         payments: {
           proofPayment: "images/order/proof_payment/1621269351244.png",
@@ -564,6 +569,54 @@ var data = [
           "Buat aplikasi kalkulator dengan menggunakan javascript",
         requestDescription: "Nanti jalannya aplikasi akan seperti ini....",
         categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4530"),
+      },
+    ],
+  },
+  {
+    model: "Review",
+    documents: [
+      // Review 1
+      {
+        _id: mongoose.Types.ObjectId("60c0f9c37936c1cccde480b0"),
+        freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d318"),
+        serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
+        description: "Pesanlah odading gasopan wwkwkkw",
+      },
+      {
+        _id: mongoose.Types.ObjectId("60c0f9c37936c1cccde480b1"),
+        freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d314"),
+        serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d322"),
+        description: "Pesanlah odading gasopan wwkwkkw",
+      },
+      {
+        _id: mongoose.Types.ObjectId("60c0f9c37936c1cccde480b2"),
+        freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d312"),
+        serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
+        description: "Pesanlah odading gasopan wwkwkkw",
+      },
+      {
+        _id: mongoose.Types.ObjectId("60c0f9c37936c1cccde480b3"),
+        freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d316"),
+        serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
+        description: "Pesanlah odading gasopan wwkwkkw",
+      },
+      {
+        _id: mongoose.Types.ObjectId("60c0f9c37936c1cccde480b4"),
+        freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d318"),
+        serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
+        description: "Pesanlah odading gasopan wwkwkkw",
+      },
+      {
+        _id: mongoose.Types.ObjectId("60c0f9c37936c1cccde480b5"),
+        freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d312"),
+        serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d322"),
+        description: "Pesanlah odading gasopan wwkwkkw",
+      },
+      {
+        _id: mongoose.Types.ObjectId("60c0f9c37936c1cccde480b6"),
+        freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d318"),
+        serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
+        description: "Pesanlah odading gasopan wwkwkkw",
       },
     ],
   },

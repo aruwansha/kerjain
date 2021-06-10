@@ -16,6 +16,11 @@ router.post(
   uploadProofPayment,
   apiController.orderPage
 );
+router.post(
+  "/reviews/add",
+  verify,
+  apiController.addReview
+);
 router.get("/chats/get", verify, apiController.chats);
 router.get("/chats/get/:freelancerId", verify, apiController.detailChat);
 router.post("/chats/reply/:freelancerId", verify, apiController.replyChat);

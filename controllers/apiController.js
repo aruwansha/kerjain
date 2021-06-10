@@ -6,6 +6,8 @@ const Service = require("../models/service");
 const Order = require("../models/order");
 const Chat = require("../models/chat");
 const Bank = require("../models/bank");
+const Review = require("../models/review");
+
 const mongoose = require("mongoose");
 
 const { registerValidation, loginValidation } = require("../validator.js");
@@ -33,10 +35,21 @@ module.exports = {
             as: "serviceId",
           },
         },
+        {
+          $lookup: {
+            from: "reviews",
+            localField: "_id",
+            foreignField: "freelancerId",
+            as: "reviews",
+          },
+        },
         { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
         {
           $project: {
+            ratingLength: { $size: "$reviews" },
+            ratingTotal: { $sum: "$reviews.rating" },
             _id: 1,
+            tes: 1,
             title: 1,
             "userId.name": 1,
             "userId.imgUrl": 1,
@@ -47,7 +60,6 @@ module.exports = {
                 else: "NA",
               },
             },
-            rating: 1,
             imgUrl: 1,
             startFrom: {
               $cond: {
@@ -55,6 +67,21 @@ module.exports = {
                 then: { $min: "$serviceId.price" },
                 else: "NA",
               },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            tes: 1,
+            title: 1,
+            "userId.name": 1,
+            "userId.imgUrl": 1,
+            totalOrder: 1,
+            imgUrl: 1,
+            startFrom: 1,
+            rating: {
+              $divide: ["$ratingTotal", "$ratingLength"],
             },
           },
         },
@@ -83,9 +110,19 @@ module.exports = {
             as: "serviceId",
           },
         },
+        {
+          $lookup: {
+            from: "reviews",
+            localField: "_id",
+            foreignField: "freelancerId",
+            as: "reviews",
+          },
+        },
         { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
         {
           $project: {
+            ratingLength: { $size: "$reviews" },
+            ratingTotal: { $sum: "$reviews.rating" },
             _id: 1,
             title: 1,
             "userId.name": 1,
@@ -98,6 +135,21 @@ module.exports = {
                 then: { $min: "$serviceId.price" },
                 else: "NA",
               },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            tes: 1,
+            title: 1,
+            "userId.name": 1,
+            "userId.imgUrl": 1,
+            totalOrder: 1,
+            imgUrl: 1,
+            startFrom: 1,
+            rating: {
+              $divide: ["$ratingTotal", "$ratingLength"],
             },
           },
         },
@@ -136,9 +188,19 @@ module.exports = {
           as: "serviceId",
         },
       },
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "_id",
+          foreignField: "freelancerId",
+          as: "reviews",
+        },
+      },
       { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
       {
         $project: {
+          ratingLength: { $size: "$reviews" },
+          ratingTotal: { $sum: "$reviews.rating" },
           _id: 1,
           title: 1,
           "userId.name": 1,
@@ -151,6 +213,21 @@ module.exports = {
               then: { $min: "$serviceId.price" },
               else: "NA",
             },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          tes: 1,
+          title: 1,
+          "userId.name": 1,
+          "userId.imgUrl": 1,
+          totalOrder: 1,
+          imgUrl: 1,
+          startFrom: 1,
+          rating: {
+            $divide: ["$ratingTotal", "$ratingLength"],
           },
         },
       },
@@ -181,9 +258,20 @@ module.exports = {
           as: "serviceId",
         },
       },
+
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "_id",
+          foreignField: "freelancerId",
+          as: "reviews",
+        },
+      },
       { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
       {
         $project: {
+          ratingLength: { $size: "$reviews" },
+          ratingTotal: { $sum: "$reviews.rating" },
           _id: 1,
           title: 1,
           "userId.name": 1,
@@ -196,6 +284,21 @@ module.exports = {
               then: { $min: "$serviceId.price" },
               else: "NA",
             },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          tes: 1,
+          title: 1,
+          "userId.name": 1,
+          "userId.imgUrl": 1,
+          totalOrder: 1,
+          imgUrl: 1,
+          startFrom: 1,
+          rating: {
+            $divide: ["$ratingTotal", "$ratingLength"],
           },
         },
       },
@@ -226,9 +329,20 @@ module.exports = {
           as: "serviceId",
         },
       },
+
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "_id",
+          foreignField: "freelancerId",
+          as: "reviews",
+        },
+      },
       { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
       {
         $project: {
+          ratingLength: { $size: "$reviews" },
+          ratingTotal: { $sum: "$reviews.rating" },
           _id: 1,
           title: 1,
           "userId.name": 1,
@@ -241,6 +355,21 @@ module.exports = {
               then: { $min: "$serviceId.price" },
               else: "NA",
             },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          tes: 1,
+          title: 1,
+          "userId.name": 1,
+          "userId.imgUrl": 1,
+          totalOrder: 1,
+          imgUrl: 1,
+          startFrom: 1,
+          rating: {
+            $divide: ["$ratingTotal", "$ratingLength"],
           },
         },
       },
@@ -271,9 +400,20 @@ module.exports = {
           as: "serviceId",
         },
       },
+
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "_id",
+          foreignField: "freelancerId",
+          as: "reviews",
+        },
+      },
       { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
       {
         $project: {
+          ratingLength: { $size: "$reviews" },
+          ratingTotal: { $sum: "$reviews.rating" },
           _id: 1,
           title: 1,
           "userId.name": 1,
@@ -286,6 +426,21 @@ module.exports = {
               then: { $min: "$serviceId.price" },
               else: "NA",
             },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          tes: 1,
+          title: 1,
+          "userId.name": 1,
+          "userId.imgUrl": 1,
+          totalOrder: 1,
+          imgUrl: 1,
+          startFrom: 1,
+          rating: {
+            $divide: ["$ratingTotal", "$ratingLength"],
           },
         },
       },
@@ -390,12 +545,10 @@ module.exports = {
       const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
         expiresIn: 3600,
       });
-      res
-        .status(200)
-        .send({
-          message: "Success Login",
-          data: { name: user.name, token: token },
-        });
+      res.status(200).send({
+        message: "Success Login",
+        data: { name: user.name, token: token },
+      });
     } catch (error) {
       res.status(500).send(error);
     }
@@ -420,10 +573,21 @@ module.exports = {
             as: "serviceId",
           },
         },
+        {
+          $lookup: {
+            from: "reviews",
+            localField: "_id",
+            foreignField: "freelancerId",
+            as: "reviews",
+          },
+        },
         { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
         {
           $project: {
+            ratingLength: { $size: "$reviews" },
+            ratingTotal: { $sum: "$reviews.rating" },
             _id: 1,
+            tes: 1,
             title: 1,
             "userId.name": 1,
             "userId.imgUrl": 1,
@@ -434,7 +598,6 @@ module.exports = {
                 else: "NA",
               },
             },
-            rating: 1,
             imgUrl: 1,
             startFrom: {
               $cond: {
@@ -442,6 +605,21 @@ module.exports = {
                 then: { $min: "$serviceId.price" },
                 else: "NA",
               },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            tes: 1,
+            title: 1,
+            "userId.name": 1,
+            "userId.imgUrl": 1,
+            totalOrder: 1,
+            imgUrl: 1,
+            startFrom: 1,
+            rating: {
+              $divide: ["$ratingTotal", "$ratingLength"],
             },
           },
         },
@@ -470,9 +648,19 @@ module.exports = {
             as: "serviceId",
           },
         },
+        {
+          $lookup: {
+            from: "reviews",
+            localField: "_id",
+            foreignField: "freelancerId",
+            as: "reviews",
+          },
+        },
         { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
         {
           $project: {
+            ratingLength: { $size: "$reviews" },
+            ratingTotal: { $sum: "$reviews.rating" },
             _id: 1,
             title: 1,
             "userId.name": 1,
@@ -485,6 +673,21 @@ module.exports = {
                 then: { $min: "$serviceId.price" },
                 else: "NA",
               },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            tes: 1,
+            title: 1,
+            "userId.name": 1,
+            "userId.imgUrl": 1,
+            totalOrder: 1,
+            imgUrl: 1,
+            startFrom: 1,
+            rating: {
+              $divide: ["$ratingTotal", "$ratingLength"],
             },
           },
         },
@@ -517,9 +720,19 @@ module.exports = {
             as: "serviceId",
           },
         },
+        {
+          $lookup: {
+            from: "reviews",
+            localField: "_id",
+            foreignField: "freelancerId",
+            as: "reviews",
+          },
+        },
         { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
         {
           $project: {
+            ratingLength: { $size: "$reviews" },
+            ratingTotal: { $sum: "$reviews.rating" },
             _id: 1,
             title: 1,
             "userId.name": 1,
@@ -536,6 +749,21 @@ module.exports = {
           },
         },
         {
+          $project: {
+            _id: 1,
+            tes: 1,
+            title: 1,
+            "userId.name": 1,
+            "userId.imgUrl": 1,
+            totalOrder: 1,
+            imgUrl: 1,
+            startFrom: 1,
+            rating: {
+              $divide: ["$ratingTotal", "$ratingLength"],
+            },
+          },
+        },
+        {
           $sort: { rating: -1 },
         },
         {
@@ -548,13 +776,24 @@ module.exports = {
   },
 
   orderPage: async (req, res) => {
-    const { serviceId, detailNote, accountHolder, bankFrom } = req.body;
+    const {
+      serviceId,
+      name,
+      email,
+      phone,
+      detailNote,
+      accountHolder,
+      bankFrom,
+    } = req.body;
     if (!req.file) {
       return res.status(404).json({ message: "image not found" });
     }
 
     if (
       serviceId === undefined ||
+      name === undefined ||
+      email === undefined ||
+      phone === undefined ||
       detailNote === undefined ||
       accountHolder === undefined ||
       bankFrom === undefined
@@ -580,6 +819,9 @@ module.exports = {
           price: service.price,
         },
         total: service.price + tax,
+        name,
+        email,
+        phone,
         detailNote,
         payments: {
           proofPayment: `images/order/${req.file.filename}`,
@@ -609,6 +851,23 @@ module.exports = {
 
       res.status(201).json({ message: "Success Booking", order });
     }
+  },
+
+  addReview: async (req, res) => {
+    const { freelancerId, rating, description } = req.body;
+
+    const serviceUserId = await ServiceUser.findOne({
+      userId: req.user.id,
+    }).select("_id");
+
+    const review = await Review.create({
+      serviceUserId: serviceUserId._id,
+      freelancerId: freelancerId,
+      rating: rating,
+      description: description,
+    });
+
+    res.status(201).json({ message: "Success Add Review", review });
   },
 
   chats: async (req, res) => {
