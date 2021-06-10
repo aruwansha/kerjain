@@ -17,8 +17,10 @@
       <div class="container-fluid">
         <!-- Page Heading -->
         <h1 class="h3 mb-4 text-gray-800">Permintaan</h1>
-        <%- include('../../partials/message.ejs')%>
-        <%- include('table_request.ejs') %> 
+        <%- include('../../partials/message.ejs')%> <% if(action == 'view'){ %>
+        <%- include('table_request.ejs') %> <% } else if(action == 'detail') {%>
+        <%- include('show_detail_request.ejs') %> <% } %>
+
         <!-- /.container-fluid -->
       </div>
       <!-- End of Main Content -->
@@ -35,6 +37,13 @@
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
-
-  <%- include('../../partials/js.ejs') %>
+  <%- include('add_modal.ejs') %> <%- include('../../partials/js.ejs') %>
 </div>
+
+<script>
+  $("#card").on("click", ".button-add", function () {
+    let id = $(this).data("id");
+    $("#addModal").modal("show");
+    $(".id").val(id);
+  });
+</script>

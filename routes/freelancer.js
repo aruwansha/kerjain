@@ -35,6 +35,8 @@ router.delete(
 
 // request
 router.get("/request", freelancerController.viewRequest);
+router.get("/request/:id", freelancerController.viewRequestDetail);
+router.post("/request/bid", freelancerController.actionRequestBid);
 
 // chat
 router.get("/chat", freelancerController.viewChat);

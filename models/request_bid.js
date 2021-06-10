@@ -6,18 +6,14 @@ const requestSchema = new mongoose.Schema({
     type: ObjectId,
     ref: "Request",
   },
-  requestSubject: {
+  freelancerId: {
     type: String,
     required: true,
   },
-  requestDescription: {
-    type: String,
+  bid: {
+    type: Number,
     required: true,
-  },
-  categoryId: {
-    type: ObjectId,
-    ref: "Category",
   },
 });
 
-module.exports = mongoose.model("Request", requestSchema);
+module.exports = mongoose.model("RequestBid", requestSchema);

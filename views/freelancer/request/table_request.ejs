@@ -14,23 +14,30 @@
             <th>No</th>
             <th>Nama Pemesan</th>
             <th>Subyek</th>
+            <th>Budget Maksimal</th>
             <th>Aksi</th>
           </tr>
         </thead>
 
         <tbody>
-          <% for( i = 0; i < request.length; i++){ %>
+          <% for( i = 0; i < request.length; i++){ console.log(serviceUser) %>
           <tr>
-            <td><%= i+1 %> </td>
-            <td><%= serviceUser[i].userId.name %></td>
-            <td><%= request[i].requestSubject %> </td>
+            <td><%= i+1 %></td>
+            <td><%=  %> </td>
+            <td><%= request[i].requestSubject %></td>
             <td>
-              <a href="/freelancer/request/<%= serviceUser[i]._id %>" class="btn btn-primary btn-circle btn-sm"
+              <%= Intl.NumberFormat('id-ID', {style: 'currency', currency:
+              'IDR'}).format(request[i].requestBudget) %>
+            </td>
+            <td>
+              <a
+                href="/freelancer/request/<%= request[i]._id %>"
+                class="btn btn-primary btn-circle btn-sm"
                 ><i class="fas fa-eye"></i
               ></a>
             </td>
           </tr>
-          <% } %> 
+          <% } %>
         </tbody>
       </table>
     </div>

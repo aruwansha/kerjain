@@ -27,6 +27,7 @@ seeder.connect(
       "./models/Service_user",
       "./models/User",
       "./models/Request",
+      "./models/Request_bid",
       "./models/Review",
     ]);
 
@@ -43,6 +44,7 @@ seeder.connect(
         "Bank",
         "Chat",
         "Request",
+        "RequestBid",
         "Review",
       ],
       function () {
@@ -558,17 +560,43 @@ var data = [
       },
     ],
   },
+
   {
     model: "Request",
     documents: [
       // Request 1
       {
-        _id: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
+        _id: mongoose.Types.ObjectId("60c1840e7936c1cccde480b7"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d322"),
+        categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4530"),
         requestSubject:
           "Buat aplikasi kalkulator dengan menggunakan javascript",
         requestDescription: "Nanti jalannya aplikasi akan seperti ini....",
+        requestBudget: 60000,
+        freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d318"),
+      },
+      // Request 2
+      {
+        _id: mongoose.Types.ObjectId("60c1840e7936c1cccde480b8"),
+        serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
         categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4530"),
+        requestSubject:
+          "Buat aplikasi kalkulator dengan menggunakan javascript",
+        requestDescription: "Nanti jalannya aplikasi akan seperti ini....",
+        requestBudget: 40000,
+      },
+    ],
+  },
+  
+  {
+    model: "RequestBid",
+    documents: [
+      // Request 1
+      {
+        _id: mongoose.Types.ObjectId("60c1840e7936c1cccde480b8"),
+        requestId: mongoose.Types.ObjectId("60c1840e7936c1cccde480b7"),
+        freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d312"),
+        bid: 60000,
       },
     ],
   },
@@ -580,42 +608,49 @@ var data = [
         _id: mongoose.Types.ObjectId("60c0f9c37936c1cccde480b0"),
         freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d318"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
+        rating: 2,
         description: "Pesanlah odading gasopan wwkwkkw",
       },
       {
         _id: mongoose.Types.ObjectId("60c0f9c37936c1cccde480b1"),
         freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d314"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d322"),
+        rating: 4,
         description: "Pesanlah odading gasopan wwkwkkw",
       },
       {
         _id: mongoose.Types.ObjectId("60c0f9c37936c1cccde480b2"),
         freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d312"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
+        rating: 2,
         description: "Pesanlah odading gasopan wwkwkkw",
       },
       {
         _id: mongoose.Types.ObjectId("60c0f9c37936c1cccde480b3"),
         freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d316"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
+        rating: 3,
         description: "Pesanlah odading gasopan wwkwkkw",
       },
       {
         _id: mongoose.Types.ObjectId("60c0f9c37936c1cccde480b4"),
         freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d318"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
+        rating: 4,
         description: "Pesanlah odading gasopan wwkwkkw",
       },
       {
         _id: mongoose.Types.ObjectId("60c0f9c37936c1cccde480b5"),
         freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d312"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d322"),
+        rating: 3,
         description: "Pesanlah odading gasopan wwkwkkw",
       },
       {
         _id: mongoose.Types.ObjectId("60c0f9c37936c1cccde480b6"),
         freelancerId: mongoose.Types.ObjectId("605b5889babfe71e8432d318"),
         serviceUserId: mongoose.Types.ObjectId("605b5889babfe71e8432d320"),
+        rating: 5,
         description: "Pesanlah odading gasopan wwkwkkw",
       },
     ],

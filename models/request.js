@@ -14,9 +14,17 @@ const requestSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  requestBudget: {
+    type: String,
+    required: true,
+  },
   categoryId: {
     type: ObjectId,
     ref: "Category",
+  },
+  freelancerId: {
+    type: ObjectId,
+    ref: "FreelancerId",
   },
 });
 

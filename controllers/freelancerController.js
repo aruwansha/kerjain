@@ -4,8 +4,10 @@ const Freelancer = require("../models/freelancer");
 const ServiceUser = require("../models/service_user");
 const Service = require("../models/service");
 const Request = require("../models/request");
+const RequestBid = require("../models/request_bid");
 const Order = require("../models/order");
 const Chat = require("../models/chat");
+
 const fs = require("fs-extra");
 const path = require("path");
 
@@ -159,7 +161,7 @@ module.exports = {
 
       await Freelancer.updateOne(
         { _id: freelancer._id },
-        { $pull: { "serviceId": { _id: service._id } } }
+        { $pull: { serviceId: { _id: service._id } } }
       );
 
       await service.remove();
@@ -186,9 +188,9 @@ module.exports = {
         isReadFreelancer: false,
       }).select("isReadFreelancer");
       const request = await Request.find();
-      for (i = 0; i < request.length; i++) {
+      request.map( async(user, index) => {
         const serviceUser = await ServiceUser.find({
-          _id: request[i].serviceUserId,
+          _id: user.serviceUserId,
         })
           .select("id userId")
           .populate({ path: "userId", select: "name" });
@@ -199,9 +201,62 @@ module.exports = {
           unread,
           request,
           serviceUser,
+          action: "view",
         });
-      }
+      });
     }
+  },
+
+  viewRequestDetail: async (req, res) => {
+    const level = req.session.user.level;
+    if (level != "freelancer") {
+      level == "admin" ? res.redirect("/admin") : res.redirect("/");
+    } else {
+      const alertMessage = req.flash("alertMessage");
+      const alertStatus = req.flash("alertStatus");
+      const alert = { message: alertMessage, status: alertStatus };
+      const unread = await Chat.find({
+        freelancerUserId: req.session.user.id,
+        isReadFreelancer: false,
+      }).select("isReadFreelancer");
+      const { id } = req.params;
+      const request = await Request.findOne({ _id: id });
+      const serviceUser = await ServiceUser.findOne({
+        _id: request.serviceUserId,
+      })
+        .select("id")
+        .populate({ path: "userId", select: "name email phone" });
+        
+      const requestBid = await RequestBid.findOne({
+        requestId: request._id,
+      });
+
+      res.render("freelancer/request/view_request", {
+        title: "Dashboard | Permintaan",
+        user: req.session.user,
+        alert,
+        unread,
+        request,
+        serviceUser,
+        requestBid,
+        action: "detail",
+      });
+    }
+  },
+
+  actionRequestBid: async (req, res) => {
+    const { nominal, id } = req.body;
+
+    const freelancerId = await Freelancer.findOne({
+      userId: req.session.user.id,
+    }).select("_id");
+
+    const newRequestBid = await RequestBid.create({
+      requestId: id,
+      freelancerId: freelancerId._id,
+      bid: nominal,
+    });
+    res.send(newRequestBid);
   },
 
   viewChat: async (req, res) => {
