@@ -480,7 +480,7 @@ module.exports = {
   register: async (req, res) => {
     try {
       const error = registerValidation(req.body).error;
-      if (error) return res.send(error.details[0].message);
+      if (error) return res.status(400).send(error.details[0].message);
 
       const emailExists = await User.findOne({
         email: req.body.email.toLowerCase(),
