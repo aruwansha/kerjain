@@ -10,7 +10,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalLabel">Tambah Jasa</h5>
+        <h5 class="modal-title" id="modalLabel">Tambah layanan</h5>
         <button
           type="button"
           class="close"
@@ -20,15 +20,20 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="/freelancer/service/add" method="POST" enctype="multipart/form-data">
+      <form
+        action="/freelancer/service/add"
+        method="POST"
+        enctype="multipart/form-data"
+      >
         <div class="modal-body">
           <div class="form-group">
-            <label for="inputServiceTitle">Nama</label>
+            <label for="inputServiceTitle">Judul</label>
             <input
               type="text"
               class="form-control"
               name="title"
-              placeholder="Masukkan Nama Jasa"
+              placeholder="Masukkan nama layanan..."
+              autocomplete="off"
               required
             />
           </div>
@@ -38,7 +43,8 @@
               type="text"
               class="form-control"
               name="description"
-              placeholder="Masukkan Deskripsi Jasa"
+              placeholder="Masukkan deskripsi layanan..."
+              autocomplete="off"
               required
             />
           </div>
@@ -48,7 +54,8 @@
               type="number"
               class="form-control"
               name="price"
-              placeholder="Masukkan Harga Jasa"
+              placeholder="Masukkan harga layanan..."
+              autocomplete="off"
               required
             />
           </div>

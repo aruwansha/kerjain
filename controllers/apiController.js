@@ -7,10 +7,16 @@ const Order = require("../models/order");
 const Chat = require("../models/chat");
 const Bank = require("../models/bank");
 const Review = require("../models/review");
+const Request = require("../models/request");
 
 const mongoose = require("mongoose");
 
-const { registerValidation, loginValidation } = require("../validator.js");
+const {
+  registerValidation,
+  loginValidation,
+  requestValidation,
+  reviewValidation,
+} = require("../validator.js");
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -487,8 +493,7 @@ module.exports = {
       });
       if (emailExists) return res.status(400).send("Email already taken");
 
-      const { name, email, password, categoryId } =
-        req.body;
+      const { name, email, password, categoryId } = req.body;
       const createUser = await User.create({
         name,
         email: email.toLowerCase(),
@@ -850,7 +855,34 @@ module.exports = {
     }
   },
 
+  addRequest: async (req, res) => {
+    const error = requestValidation(req.body).error;
+    if (error) return res.status(400).send(error.details[0].message);
+
+    const { categoryId, requestSubject, requestDescription, requestBudget } =
+      req.body;
+
+    const serviceUserId = await ServiceUser.findOne({
+      userId: req.user.id,
+    }).select("_id");
+
+    const newRequest = await Request.create({
+      serviceUserId: serviceUserId._id,
+      categoryId: categoryId,
+      requestSubject: requestSubject,
+      requestDescription: requestDescription,
+      requestBudget: requestBudget,
+    });
+
+    res
+      .status(201)
+      .send({ messages: "Successfully made request", data: newRequest });
+  },
+
   addReview: async (req, res) => {
+    const error = reviewValidation(req.body).error;
+    if (error) return res.status(400).send(error.details[0].message);
+
     const { freelancerId, rating, description } = req.body;
 
     const serviceUserId = await ServiceUser.findOne({

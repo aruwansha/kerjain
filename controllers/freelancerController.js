@@ -99,18 +99,27 @@ module.exports = {
       const freelancer = await Freelancer.findOne({
         userId: req.session.user.id,
       });
-      const service = await Service.create({
-        freelancerId: freelancer._id,
-        title,
-        description,
-        price,
-        imgUrl: `images/service/${req.file.filename}`,
-      });
 
-      freelancer.serviceId.push({ _id: service._id });
-      freelancer.save();
-      req.flash("alertMessage", "Berhasil menambahkan data");
-      req.flash("alertStatus", "success");
+      const service = await Service.find({ freelancerId: freelancer._id });
+
+      if (service.length < 3) {
+        const newService = await Service.create({
+          freelancerId: freelancer._id,
+          title,
+          description,
+          price,
+          imgUrl: `images/service/${req.file.filename}`,
+        });
+
+        freelancer.serviceId.push({ _id: newService._id });
+        freelancer.save();
+        req.flash("alertMessage", "Berhasil menambahkan data");
+        req.flash("alertStatus", "success");
+      } else {
+        req.flash("alertMessage", "Layanan sudah penuh, silakan hapus atau edit salah satu layanan");
+        req.flash("alertStatus", "danger");
+      }
+
       res.redirect("/freelancer/service");
     } catch (error) {
       req.flash("alertMessage", `${error}`);
@@ -188,7 +197,7 @@ module.exports = {
         isReadFreelancer: false,
       }).select("isReadFreelancer");
       const request = await Request.find();
-      request.map( async(user, index) => {
+      request.map(async (user, index) => {
         const serviceUser = await ServiceUser.find({
           _id: user.serviceUserId,
         })
@@ -226,7 +235,7 @@ module.exports = {
       })
         .select("id")
         .populate({ path: "userId", select: "name email phone" });
-        
+
       const requestBid = await RequestBid.findOne({
         requestId: request._id,
       });

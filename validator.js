@@ -14,11 +14,37 @@ const registerValidation = (data) => {
 
 // login validation
 const loginValidation = (data) => {
-    const schema = Joi.object({
-      email: Joi.string().min(6).max(100).required().email(),
-      password: Joi.required(),
-    });
-    return schema.validate(data);
-  };
+  const schema = Joi.object({
+    email: Joi.string().min(6).max(100).required().email(),
+    password: Joi.required(),
+  });
+  return schema.validate(data);
+};
 
-module.exports = { registerValidation, loginValidation };
+// request validation
+const requestValidation = (data) => {
+  const schema = Joi.object({
+    categoryId: Joi.required(),
+    requestSubject: Joi.required(),
+    requestDescription: Joi.required(),
+    requestBudget: Joi.required(),
+  });
+  return schema.validate(data);
+};
+
+// review validation
+const reviewValidation = (data) => {
+  const schema = Joi.object({
+    freelancerId: Joi.required(),
+    rating: Joi.required(),
+    description: Joi.required(),
+  });
+  return schema.validate(data);
+};
+
+module.exports = {
+  registerValidation,
+  loginValidation,
+  requestValidation,
+  reviewValidation,
+};
