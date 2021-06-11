@@ -19,8 +19,7 @@
         <h1 class="h3 mb-4 text-gray-800">Order</h1>
         <%- include('../../partials/message.ejs')%> <% if(action == 'view'){ %>
         <%- include('table_order.ejs') %> <% } else if(action == 'detail') {%>
-          <%- include('show_detail_order.ejs') %>
-         <% } %>
+        <%- include('show_detail_order.ejs') %> <% } %>
         <!-- /.container-fluid -->
       </div>
       <!-- End of Main Content -->
@@ -32,11 +31,10 @@
     <!-- End of Content Wrapper -->
   </div>
   <!-- End of Page Wrapper -->
-
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
-
-  <%- include('../../partials/js.ejs') %>
 </div>
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
+
+<%- include('../../partials/js.ejs') %>

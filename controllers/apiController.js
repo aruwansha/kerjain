@@ -87,7 +87,11 @@ module.exports = {
             imgUrl: 1,
             startFrom: 1,
             rating: {
-              $divide: ["$ratingTotal", "$ratingLength"],
+              $cond: {
+                if: { $eq: ["$ratingTotal", 0] },
+                then: 0,
+                else: { $divide: ["$ratingTotal", "$ratingLength"] },
+              },
             },
           },
         },
@@ -155,7 +159,11 @@ module.exports = {
             imgUrl: 1,
             startFrom: 1,
             rating: {
-              $divide: ["$ratingTotal", "$ratingLength"],
+              $cond: {
+                if: { $eq: ["$ratingTotal", 0] },
+                then: 0,
+                else: { $divide: ["$ratingTotal", "$ratingLength"] },
+              },
             },
           },
         },
@@ -233,7 +241,11 @@ module.exports = {
           imgUrl: 1,
           startFrom: 1,
           rating: {
-            $divide: ["$ratingTotal", "$ratingLength"],
+            $cond: {
+              if: { $eq: ["$ratingTotal", 0] },
+              then: 0,
+              else: { $divide: ["$ratingTotal", "$ratingLength"] },
+            },
           },
         },
       },
@@ -304,7 +316,11 @@ module.exports = {
           imgUrl: 1,
           startFrom: 1,
           rating: {
-            $divide: ["$ratingTotal", "$ratingLength"],
+            $cond: {
+              if: { $eq: ["$ratingTotal", 0] },
+              then: 0,
+              else: { $divide: ["$ratingTotal", "$ratingLength"] },
+            },
           },
         },
       },
@@ -375,7 +391,11 @@ module.exports = {
           imgUrl: 1,
           startFrom: 1,
           rating: {
-            $divide: ["$ratingTotal", "$ratingLength"],
+            $cond: {
+              if: { $eq: ["$ratingTotal", 0] },
+              then: 0,
+              else: { $divide: ["$ratingTotal", "$ratingLength"] },
+            },
           },
         },
       },
@@ -446,7 +466,11 @@ module.exports = {
           imgUrl: 1,
           startFrom: 1,
           rating: {
-            $divide: ["$ratingTotal", "$ratingLength"],
+            $cond: {
+              if: { $eq: ["$ratingTotal", 0] },
+              then: 0,
+              else: { $divide: ["$ratingTotal", "$ratingLength"] },
+            },
           },
         },
       },
@@ -621,7 +645,11 @@ module.exports = {
             imgUrl: 1,
             startFrom: 1,
             rating: {
-              $divide: ["$ratingTotal", "$ratingLength"],
+              $cond: {
+                if: { $eq: ["$ratingTotal", 0] },
+                then: 0,
+                else: { $divide: ["$ratingTotal", "$ratingLength"] },
+              },
             },
           },
         },
@@ -689,7 +717,11 @@ module.exports = {
             imgUrl: 1,
             startFrom: 1,
             rating: {
-              $divide: ["$ratingTotal", "$ratingLength"],
+              $cond: {
+                if: { $eq: ["$ratingTotal", 0] },
+                then: 0,
+                else: { $divide: ["$ratingTotal", "$ratingLength"] },
+              },
             },
           },
         },
@@ -761,7 +793,11 @@ module.exports = {
             imgUrl: 1,
             startFrom: 1,
             rating: {
-              $divide: ["$ratingTotal", "$ratingLength"],
+              $cond: {
+                if: { $eq: ["$ratingTotal", 0] },
+                then: 0,
+                else: { $divide: ["$ratingTotal", "$ratingLength"] },
+              },
             },
           },
         },
