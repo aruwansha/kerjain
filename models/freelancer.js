@@ -25,10 +25,6 @@ const freelancerSchema = new mongoose.Schema({
   accountHolder: {
     type: String,
   },
-  isBanned: {
-    type: Boolean,
-    default: false,
-  },
   title: {
     type: String,
   },

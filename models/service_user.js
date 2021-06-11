@@ -13,10 +13,6 @@ const serviceUserSchema = new mongoose.Schema({
   imgUrl: {
     type: String,
   },
-  isBanned: {
-    type: Boolean,
-    default: false,
-  },
   orderId: [{
     type: ObjectId,
     ref: "Order",

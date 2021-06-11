@@ -26,8 +26,8 @@
               <td><%= freelancer[i].userId.name %></td>
               <td><%=freelancer[i].userId.email %></td>
               <td>
-                <% if( freelancer[i].isBanned == false) { %> Active <% } else{
-                %> Banned <% } %>
+                <% if( freelancer[i].userId.isBanned == false) { %> Active <% } else{
+                %> Unactive <% } %>
               </td>
               <td>
                 <a

@@ -1,0 +1,71 @@
+<%- include('header.ejs') %>
+<div class="container">
+  <!-- Outer Row -->
+  <div class="row justify-content-center">
+    <div class="col-xl-6 col-lg-12 col-md-9" style="margin: 130px auto">
+      <%- include('../partials/message.ejs') %>
+      <div class="card o-hidden border-0 shadow-lg">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-11">
+              <div class="text-center">
+                <h1 class="h3 text-gray-900 my-2 brand-text-icon ml-5">
+                  Kerja<span style="color: #313f72">In</span>
+                </h1>
+              </div>
+            </div>
+            <div class="col" style="border-left: 1px solid #c4c4c4">
+              <a href="http://localhost:3001/"
+                ><i
+                  class="fas fa-sign-out-alt mt-3"
+                  style="font-size: 1.1rem"
+                ></i
+              ></a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <!-- Nested Row within Card Body -->
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="p-5">
+                <form class="user" action="/login" method="POST">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      class="form-control form-control-user"
+                      name="email"
+                      placeholder="Masukkan email..."
+                    />
+                  </div>
+                  <div class="form-group">
+                    <input
+                      type="password"
+                      class="form-control form-control-user"
+                      name="password"
+                      placeholder="Masukkan pasword..."
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-user btn-block"
+                  >
+                    Login
+                  </button>
+                  <a
+                    type="button"
+                    class="btn btn-secondary btn-user btn-block"
+                    href="/register"
+                  >
+                    Register
+                  </a>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('footer.ejs') %>

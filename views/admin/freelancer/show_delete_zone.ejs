@@ -7,34 +7,38 @@
   <!-- DataTales Example -->
   <div class="card mt-2 mb-4">
     <div class="card-body">
-      <div class="row">
+      <div class="row mb-4">
         <div class="col">
           <!-- Ban Form -->
           <form
             action="/admin/freelancer/<%= freelancer._id %>?_method=PUT"
             method="POST"
           >
-            <% if( freelancer.isBanned == false) { %>
+            <% if( freelancer.userId.isBanned == false) { %>
             <button type="submit" class="btn btn-warning btn-sm">
               <i class="fas fa-lock"></i>
+              <span class="ml-2">This action will ban this user</span>
             </button>
-            <span class="ml-2">This action will ban this user</span>
             <% } else{ %>
             <button type="submit" class="btn btn-success btn-sm">
               <i class="fas fa-unlock-alt"></i>
+              <span class="ml-2">This action will activate this user</span>
             </button>
-            <span class="ml-2">This action will unban this user</span>
             <% } %>
           </form>
         </div>
+      </div>
+      <div class="row">
         <div class="col">
           <!-- Delete Form -->
           <form
             action="/admin/freelancer/<%= freelancer._id %>/delete?_method=DELETE"
             method="POST"
           >
-            <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-            <span class="ml-2">This action will delete this user</span>
+            <button type="submit" class="btn btn-danger btn-sm">
+              <i class="fas fa-trash"></i>
+              <span class="ml-2">This action will delete this user</span>
+            </button>
           </form>
         </div>
       </div>

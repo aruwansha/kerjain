@@ -1,3 +1,35 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&display=swap");
+
+html,
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+.brand-text-icon {
+  font-weight: 500;
+  color: #3A5EDE !important;
+}
+
+.brand-text-icon:hover {
+  color: #313F72;
+  text-decoration: none;
+}
+
+.selectWrapper {
+  border-radius: 36px;
+  overflow: hidden;
+  background: #cccccc;
+  border: 1px solid #cccccc;
+}
+
+.selectBox {
+  font-size: .8rem;
+  height: 48px;
+  border: 0px;
+  outline: none;
+  padding-right: 30px;
+}
+
 .input-disabled {
   background-color: #ffffff !important;
 }
@@ -44,6 +76,8 @@ a.text-secondary:focus {
 .cursor-pointer {
   cursor: pointer;
 }
+
+
 
 .noselect {
   -webkit-touch-callout: none;

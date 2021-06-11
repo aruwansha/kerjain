@@ -27,8 +27,8 @@
               <td><%= serviceUser[i].userId.name %></td>
               <td><%= serviceUser[i].userId.email %></td>
               <td>
-                <% if( serviceUser[i].isBanned == false) { %> Active <% } else{
-                %> Banned <% } %>
+                <% if( serviceUser[i].userId.isBanned == false) { %> Active <% } else{
+                %> Unactive <% } %>
               </td>
 
               <td>

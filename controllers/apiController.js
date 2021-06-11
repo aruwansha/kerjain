@@ -487,16 +487,13 @@ module.exports = {
       });
       if (emailExists) return res.status(400).send("Email already taken");
 
-      const { name, email, password, birthdate, address, phone, categoryId } =
+      const { name, email, password, categoryId } =
         req.body;
       const createUser = await User.create({
         name,
-        email,
+        email: email.toLowerCase(),
         password,
         level: "service_user",
-        birthdate,
-        address,
-        phone,
       });
 
       // get selected category

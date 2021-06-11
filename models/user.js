@@ -26,18 +26,19 @@ const usersSchema = new mongoose.Schema({
   },
   birthdate: {
     type: Date,
-    required: true,
   },
   address: {
     type: String,
-    required: true,
   },
   phone: {
     type: String,
-    required: true,
   },
   imgUrl: {
     type: String,
+  },
+  isBanned: {
+    type: Boolean,
+    default: false,
   },
 });
 

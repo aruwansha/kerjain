@@ -231,7 +231,7 @@ module.exports = {
           })
           .populate({
             path: "userId",
-            select: "id name email address phone",
+            select: "id name email address phone isBanned",
           });
         const category = await Category.find();
         res.render("admin/freelancer/view_freelancer", {
@@ -249,16 +249,17 @@ module.exports = {
   banFreelancer: async (req, res) => {
     try {
       const { id } = req.params;
-      const filter = { _id: id };
       const freelancer = await Freelancer.findOne({ _id: id }).populate({
         path: "userId",
-        select: "id name",
+        select: "id name isBanned",
       });
-      if (freelancer.isBanned == false) {
-        await Freelancer.updateOne(filter, { isBanned: true });
+
+      const filter = { _id: freelancer.userId._id };
+      if (freelancer.userId.isBanned == false) {
+        await User.updateOne(filter, { isBanned: true });
         req.flash("alertMessage", `${freelancer.userId.name} has been banned`);
       } else {
-        await Freelancer.updateOne(filter, { isBanned: false });
+        await User.updateOne(filter, { isBanned: false });
         req.flash(
           "alertMessage",
           `${freelancer.userId.name} has been unbanned`
@@ -370,16 +371,17 @@ module.exports = {
   banServiceUser: async (req, res) => {
     try {
       const { id } = req.params;
-      const filter = { _id: id };
       const serviceUser = await ServiceUser.findOne({ _id: id }).populate({
         path: "userId",
-        select: "id name",
+        select: "id name isBanned",
       });
-      if (serviceUser.isBanned == false) {
-        await ServiceUser.updateOne(filter, { isBanned: true });
+      const filter = { _id: serviceUser.userId._id };
+
+      if (serviceUser.userId.isBanned == false) {
+        await User.updateOne(filter, { isBanned: true });
         req.flash("alertMessage", `${serviceUser.userId.name} has been banned`);
       } else {
-        await ServiceUser.updateOne(filter, { isBanned: false });
+        await User.updateOne(filter, { isBanned: false });
         req.flash(
           "alertMessage",
           `${serviceUser.userId.name} has been unbanned`
@@ -406,7 +408,7 @@ module.exports = {
         const alert = { message: alertMessage, status: alertStatus };
         const serviceUser = await ServiceUser.findOne({ _id: id }).populate({
           path: "userId",
-          select: "id name email address phone",
+          select: "id name email address phone isBanned",
         });
         res.render("admin/service_user/view_service_user", {
           title: "Detail Service User | Admin Kerjain",

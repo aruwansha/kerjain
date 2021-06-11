@@ -1,3 +1,12 @@
+<style>
+  .sidebar-brand-icon img {
+    width: 120px;
+  }
+
+  .sidebar-brand-icon-mini {
+    width: 80px !important;
+  }
+</style>
 <!-- Sidebar -->
 <ul
   class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
@@ -8,10 +17,9 @@
     class="sidebar-brand d-flex align-items-center justify-content-center"
     href="/admin/dashboard"
   >
-    <div class="sidebar-brand-icon rotate-n-15">
-      <img src="" alt="">
+    <div class="sidebar-brand-icon">
+      <img src="<%= `http://localhost:3000/images/logo.svg` %>" alt="" />
     </div>
-    <div class="sidebar-brand-text mx-3">kerjain</div>
   </a>
 
   <!-- Divider -->
@@ -30,7 +38,6 @@
 
   <!-- Heading -->
   <div class="sidebar-heading">Master</div>
-
 
   <!-- Nav Item - Tables -->
   <!-- <li class="nav-item">
@@ -78,3 +85,17 @@
   </div>
 </ul>
 <!-- End of Sidebar -->
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"
+></script>
+<script>
+  $("#sidebarToggle").click(function () {
+    if ($(".sidebar-brand-icon-mini")[0]) {
+      $("img").removeClass("sidebar-brand-icon-mini");
+    } else {
+      $("img").addClass("sidebar-brand-icon-mini");
+    }
+  });
+</script>
