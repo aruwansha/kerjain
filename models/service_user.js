@@ -10,9 +10,6 @@ const serviceUserSchema = new mongoose.Schema({
     type: ObjectId,
     ref: "Category",
   },
-  imgUrl: {
-    type: String,
-  },
   orderId: [{
     type: ObjectId,
     ref: "Order",

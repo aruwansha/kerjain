@@ -966,7 +966,8 @@ module.exports = {
         $project: {
           "_id._id": 1,
           "doc._id": 1,
-          "doc.isRead": 1,
+          "doc.isReadFreelancer": 1,
+          "doc.isReadServiceUser": 1,
           "doc.time": 1,
           "doc.freelancerUserId._id": 1,
           "doc.freelancerUserId.name": 1,
