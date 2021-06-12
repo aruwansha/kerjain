@@ -90,7 +90,7 @@ const uploadProofPayment = multer({
 
 // Set storage work
 const storageWork = multer.diskStorage({
-  destination: "public/etc/order/work",
+  destination: "public/images/order/proof_work",
   filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname));
   },

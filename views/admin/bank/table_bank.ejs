@@ -38,7 +38,7 @@
             <td><%= bank[i].bankAccount %></td>
             <td><%= bank[i].accountHolder %></td>
             <td>
-              <img src="https://kerjain-webservice.herokuapp.com/<%= bank[i].imgUrl%>" height="50" alt="Image Url">
+              <img src="<%= process.env.URL %><%= bank[i].imgUrl%>" height="50" alt="Image Url">
             </td>
             <td>
               <a

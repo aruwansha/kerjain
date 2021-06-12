@@ -155,7 +155,7 @@ var data = [
         birthdate: "2000-02-06",
         address: "Kediri",
         phone: "085854270625",
-        imgUrl: "images/user/pp-605b5889babfe71e8432d311.jpg",
+        imgUrl: "images/user/adis.jpg",
       },
       // freelancer 2
       {
@@ -168,7 +168,7 @@ var data = [
         birthdate: "2000-02-06",
         address: "Kediri",
         phone: "085854270625",
-        imgUrl: "images/user/pp-605b5889babfe71e8432d313.jpg",
+        imgUrl: "images/user/desenas.jpg",
       },
       // freelancer 3
       {
@@ -181,7 +181,7 @@ var data = [
         birthdate: "2000-02-06",
         address: "Malang",
         phone: "085854270625",
-        imgUrl: "images/user/pp-605b5889babfe71e8432d315.jpg",
+        imgUrl: "images/user/alfiyan.jpg",
       },
       // freelancer 4
       {
@@ -194,7 +194,7 @@ var data = [
         birthdate: "2000-02-06",
         address: "Malang",
         phone: "085854270625",
-        imgUrl: "images/user/pp-605b5889babfe71e8432d317.jpg",
+        imgUrl: "images/user/rizky.jpg",
       },
       // service user 1
       {
@@ -264,7 +264,7 @@ var data = [
         isBanned: false,
         title: "Adis Code",
         description: "Sedia Jasa Coding Mahasiswa",
-        imgUrl: "images/freelancer/flc-605b5889babfe71e8432d312.jpg",
+        imgUrl: "images/freelancer/thumbnail-1.jpg",
         serviceId: [
           { _id: mongoose.Types.ObjectId("605c3f698f15569950d6e562") },
         ],
@@ -283,7 +283,7 @@ var data = [
         title: "Desenas Write & Translate",
         description:
           "Menyediakan paket2 Jasa terjemah bahasa inggris sesuai kebutuan anda",
-        imgUrl: "images/freelancer/flc-605b5889babfe71e8432d314.jpg",
+        imgUrl: "images/freelancer/thumbnail-3.jpg",
         serviceId: [
           {
             _id: mongoose.Types.ObjectId("605c3f698f15569950d6e563"),
@@ -308,7 +308,7 @@ var data = [
         isBanned: false,
         title: "Alfis memes",
         description: "Membuat meme untuk anda",
-        imgUrl: "images/freelancer/flc-605b5889babfe71e8432d316.jpg",
+        imgUrl: "images/freelancer/thumbnail-2.jpeg",
         serviceId: [
           {
             _id: mongoose.Types.ObjectId("605c3f698f15569950d6e564"),
@@ -333,7 +333,7 @@ var data = [
         isBanned: false,
         title: "Riss Design",
         description: "Make premium design",
-        imgUrl: "images/freelancer/flc-605b5889babfe71e8432d318.jpg",
+        imgUrl: "images/freelancer/thumbnail-3.jpg",
         serviceId: [
           {
             _id: mongoose.Types.ObjectId("605c3f698f15569950d6e565"),
@@ -455,7 +455,7 @@ var data = [
         phone: "432652342",
         detailNote: "Please make this like this",
         payments: {
-          proofPayment: "images/order/proof_payment/1621269028794.jpg",
+          proofPayment: "images/order/proof_payment/proof_default.jpeg",
           bankFrom: "BNI",
           accountHolder: "Dandi",
           status: "finished",
@@ -478,7 +478,7 @@ var data = [
         phone: "432652342",
         detailNote: "Please make this like this",
         payments: {
-          proofPayment: "images/order/proof_payment/1621266960485.png",
+          proofPayment: "images/order/proof_payment/proof_default.jpeg",
           bankFrom: "BCA",
           accountHolder: "Krisna Pramana",
           status: "unpaid",
@@ -501,7 +501,7 @@ var data = [
         phone: "432652342",
         detailNote: "Please make this like this",
         payments: {
-          proofPayment: "images/order/proof_payment/1621269351244.png",
+          proofPayment: "images/order/proof_payment/proof_default.jpeg",
           bankFrom: "BNI",
           accountHolder: "Dandi",
           status: "unpaid",

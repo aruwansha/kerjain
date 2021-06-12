@@ -13,7 +13,7 @@
     <div class="row">
       <div class="col-md-4">
         <img
-          src="https://kerjain-webservice.herokuapp.com/<%= order.payments.proofPayment %>"
+          src="<%= process.env.URL %><%= order.payments.proofPayment %>"
           alt="image"
           style="width: 100%; display: block"
         />

@@ -862,7 +862,7 @@ module.exports = {
         phone,
         detailNote,
         payments: {
-          proofPayment: `images/order/${req.file.filename}`,
+          proofPayment: `images/order/proof_payment/${req.file.filename}`,
           accountHolder,
           bankFrom,
         },
