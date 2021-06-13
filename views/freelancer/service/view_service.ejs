@@ -43,7 +43,8 @@
                   <div class="row no-gutters align-items-center">
                     <div class="col-3 mr-2">
                       <img
-                        src="<%= process.env.URL %><%= service[i].imgUrl%> "
+                        src="<%= process.env.URL %><%= service[i].imgUrl%>"
+                        onerror="this.onerror=null; this.src='<%= process.env.URL %>thumbnail-default.svg'"
                         alt=""
                         style="object-fit: contain !important; width: 100% !important; max-width: 200px; height: 112.50px !important;"
                         class="img-fluid"

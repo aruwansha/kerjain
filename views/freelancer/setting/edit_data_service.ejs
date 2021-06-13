@@ -39,7 +39,7 @@
       <div class="form-group">
         <label for="image">Gambar</label>
         <br />
-        <img src="<%= process.env.URL %><%= freelancer.imgUrl %>" alt="" width="200" height="200" class="img-fluid mb-2" />
+        <img src="<%= process.env.URL %>" onerror="this.onerror=null; this.src='<%= process.env.URL %>thumbnail-default.svg'" alt="" width="200" height="200" class="img-fluid mb-2" />
         <input type="file" class="form-control-file mt-2" name="image" />
       </div>
       <hr />

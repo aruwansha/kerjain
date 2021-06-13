@@ -116,7 +116,10 @@ module.exports = {
         req.flash("alertMessage", "Berhasil menambahkan data");
         req.flash("alertStatus", "success");
       } else {
-        req.flash("alertMessage", "Layanan sudah penuh, silakan hapus atau edit salah satu layanan");
+        req.flash(
+          "alertMessage",
+          "Layanan sudah penuh, silakan hapus atau edit salah satu layanan"
+        );
         req.flash("alertStatus", "danger");
       }
 
@@ -555,9 +558,9 @@ module.exports = {
       }
       req.flash("alertMessage", "Data berhasil disimpan");
       req.flash("alertStatus", "primary");
-      res.redirect("/freelancer/edit-profile");
+      res.redirect("/freelancer/setting/edit-profile");
     } catch (error) {
-      res.redirect("/freelancer/edit-profile");
+      res.redirect("/freelancer/setting/edit-profile");
     }
   },
 
@@ -567,7 +570,11 @@ module.exports = {
       const freelancer = await Freelancer.findOne({
         userId: req.session.user.id,
       });
-      if (req.file == undefined) {
+      if (title === "" || description === "") {
+        req.flash("alertMessage", "Field tidak boleh kosong!");
+        req.flash("alertStatus", "danger");
+        res.redirect("back");
+      } else if (req.file == undefined) {
         freelancer.title = title;
         freelancer.description = description;
         await freelancer.save();
@@ -578,15 +585,16 @@ module.exports = {
         freelancer.title = title;
         freelancer.description = description;
         freelancer.imgUrl = `images/freelancer/${req.file.filename}`;
+        freelancer.isActive = true;
         await freelancer.save();
+        req.flash("alertMessage", "Data berhasil disimpan");
+        req.flash("alertStatus", "primary");
+        res.redirect("/freelancer/setting/edit-profile");
       }
-      req.flash("alertMessage", "Data berhasil disimpan");
-      req.flash("alertStatus", "primary");
-      res.redirect("/freelancer/edit-profile");
     } catch (error) {
       req.flash("alertMessage", `${error}`);
       req.flash("alertStatus", "primary");
-      res.redirect("/freelancer/edit-profile");
+      res.redirect("/freelancer/setting/edit-profile");
     }
   },
 
@@ -602,9 +610,9 @@ module.exports = {
       await freelancer.save();
       req.flash("alertMessage", "Data berhasil disimpan");
       req.flash("alertStatus", "primary");
-      res.redirect("/freelancer/edit-profile");
+      res.redirect("/freelancer/setting/edit-profile");
     } catch (error) {
-      res.redirect("/freelancer/edit-profile");
+      res.redirect("/freelancer/setting/edit-profile");
     }
   },
 };
