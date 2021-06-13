@@ -16,6 +16,10 @@ const freelancerSchema = new mongoose.Schema({
       ref: "Order",
     },
   ],
+  isActive: {
+    type: Boolean,
+    default: false,
+  },
   bankName: {
     type: String,
   },

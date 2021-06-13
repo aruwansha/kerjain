@@ -283,7 +283,7 @@ var data = [
         title: "Desenas Write & Translate",
         description:
           "Menyediakan paket2 Jasa terjemah bahasa inggris sesuai kebutuan anda",
-        imgUrl: "images/freelancer/thumbnail-3.jpg",
+        imgUrl: "images/freelancer/thumbnail-4.jpg",
         serviceId: [
           {
             _id: mongoose.Types.ObjectId("605c3f698f15569950d6e563"),

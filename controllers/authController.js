@@ -114,15 +114,15 @@ module.exports = {
         const isPasswordMatch = await bcrypt.compare(password, user.password);
 
         if (!user) {
-          req.flash("alertMessage", "User is not registered!");
+          req.flash("alertMessage", "Email belum terdaftar! Silakan mendaftar");
           req.flash("alertStatus", "danger");
           res.redirect("back");
         } else if (user.level == "service_user") {
           req.flash("alertMessage", "You are not belong here!");
           req.flash("alertStatus", "danger");
-          res.redirect("http://localhost:3001/login");
+          res.redirect("https://kerjain.herokuapp.com/login");
         } else if (!isPasswordMatch) {
-          req.flash("alertMessage", "Password is not correct!");
+          req.flash("alertMessage", "Password salah!");
           req.flash("alertStatus", "danger");
           if (user.level == "admin") {
             res.redirect("back");
@@ -131,7 +131,7 @@ module.exports = {
             res.redirect("back");
           }
         } else if (user.isBanned == true) {
-          req.flash("alertMessage", "You are banned go away!");
+          req.flash("alertMessage", "Akun anda belum aktif");
           req.flash("alertStatus", "danger");
           res.redirect("back");
         } else {
@@ -142,7 +142,7 @@ module.exports = {
           };
 
           if (user.level == "admin") {
-            req.flash("alertMessage", "Login Successfull");
+            req.flash("alertMessage", "Login Berhasil");
             req.flash("alertStatus", "primary");
             res.redirect("/admin/dashboard");
           }

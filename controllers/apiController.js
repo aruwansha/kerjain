@@ -26,6 +26,11 @@ module.exports = {
     try {
       const mostPicked = await Freelancer.aggregate([
         {
+          $match: {
+            isActive: true,
+          },
+        },
+        {
           $lookup: {
             from: "users",
             localField: "userId",
@@ -105,6 +110,11 @@ module.exports = {
 
       const highRated = await Freelancer.aggregate([
         {
+          $match: {
+            isActive: true,
+          },
+        },
+        {
           $lookup: {
             from: "users",
             localField: "userId",
@@ -183,6 +193,7 @@ module.exports = {
     const Technology = await Freelancer.aggregate([
       {
         $match: {
+          isActive: true,
           categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4530"),
         },
       },
@@ -257,6 +268,7 @@ module.exports = {
     const Design = await Freelancer.aggregate([
       {
         $match: {
+          isActive: true,
           categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4531"),
         },
       },
@@ -332,6 +344,7 @@ module.exports = {
     const Writing = await Freelancer.aggregate([
       {
         $match: {
+          isActive: true,
           categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4532"),
         },
       },
@@ -407,6 +420,7 @@ module.exports = {
     const Video = await Freelancer.aggregate([
       {
         $match: {
+          isActive: true,
           categoryId: mongoose.Types.ObjectId("605b580db4a8e60af44d4533"),
         },
       },
@@ -584,6 +598,11 @@ module.exports = {
     try {
       const mostPicked = await Freelancer.aggregate([
         {
+          $match: {
+            isActive: true,
+          },
+        },
+        {
           $lookup: {
             from: "users",
             localField: "userId",
@@ -663,6 +682,11 @@ module.exports = {
 
       const highRated = await Freelancer.aggregate([
         {
+          $match: {
+            isActive: true,
+          },
+        },
+        {
           $lookup: {
             from: "users",
             localField: "userId",
@@ -737,7 +761,12 @@ module.exports = {
         userId: req.user.id,
       }).select("categoryId");
       const category = await Freelancer.aggregate([
-        { $match: { categoryId: categoryId.categoryId } },
+        {
+          $match: {
+            isActive: true,
+            categoryId: categoryId.categoryId,
+          },
+        },
         {
           $lookup: {
             from: "users",
