@@ -88,7 +88,7 @@ const uploadProofPayment = multer({
   },
 }).single("image");
 
-// Set storage work
+// Set storage Work
 const storageWork = multer.diskStorage({
   destination: "public/images/order/proof_work",
   filename: function (req, file, cb) {
@@ -100,9 +100,9 @@ const uploadWork = multer({
   storage: storageWork,
   limits: { fileSize: 1000000 },
   fileFilter: function (req, file, cb) {
-    checkFile(file, cb);
+    checkImages(file, cb);
   },
-}).single("file");
+}).single("image");
 
 // // Check file Type
 function checkImages(file, cb) {

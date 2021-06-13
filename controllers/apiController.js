@@ -20,6 +20,7 @@ const {
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { findOne } = require("../models/category");
 
 module.exports = {
   landingPage: async (req, res) => {
@@ -517,7 +518,38 @@ module.exports = {
         })
         .exec();
       const bank = await Bank.find();
-      res.status(200).json({ ...freelancer._doc, bank });
+      const review = await Review.aggregate([
+        {
+          $match: {
+            freelancerId: mongoose.Types.ObjectId(id),
+          },
+        },
+        {
+          $lookup: {
+            from: "freelancers",
+            localField: "freelancerId",
+            foreignField: "_id",
+            as: "freelancerId",
+          }
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "freelancerId.userId",
+            foreignField: "_id",
+            as: "userId",
+          }
+        },
+        {
+          $project: {
+            'userId.name': 1,
+            description: 1,
+            rating: 1,
+          },
+        },
+      ]);
+
+      res.status(200).json({ ...freelancer._doc, bank, review });
     } catch (error) {}
   },
 
@@ -920,6 +952,17 @@ module.exports = {
     }
   },
 
+  getOrder: async (req, res) => {
+    const userId = req.user.id;
+    const serviceUserId = await ServiceUser.findOne({ userId: userId }).select(
+      "_id"
+    );
+
+    const order = await Order.find({ serviceUserId: serviceUserId._id });
+
+    res.send(order);
+  },
+
   addRequest: async (req, res) => {
     const error = requestValidation(req.body).error;
     if (error) return res.status(400).send(error.details[0].message);
@@ -942,6 +985,28 @@ module.exports = {
     res
       .status(201)
       .send({ messages: "Successfully made request", data: newRequest });
+  },
+
+  getRequest: async (req, res) => {
+    const userId = req.user.id;
+    const serviceUserId = await ServiceUser.findOne({ userId: userId }).select(
+      "_id"
+    );
+
+    const request = await Request.find({ serviceUserId: serviceUserId._id });
+
+    res.send(request);
+  },
+
+  getReview: async (req, res) => {
+    const userId = req.user.id;
+    const serviceUserId = await ServiceUser.findOne({ userId: userId }).select(
+      "_id"
+    );
+
+    const review = await Review.find({ serviceUserId: serviceUserId._id });
+
+    res.send(review);
   },
 
   addReview: async (req, res) => {

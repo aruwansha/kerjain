@@ -130,7 +130,7 @@ module.exports = {
         bankName,
         bankAccount,
         accountHolder,
-        imgUrl: `images/${req.file.filename}`,
+        imgUrl: `images/bank/${req.file.filename}`,
       });
       req.flash("alertMessage", "Succesfully Added bank");
       req.flash("alertStatus", "success");

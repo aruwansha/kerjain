@@ -10,14 +10,17 @@ router.get("/freelancer/:id", apiController.detailPage);
 router.post("/register", apiController.register);
 router.post("/login", apiController.login);
 router.get("/landing-page/me", verify, apiController.me);
+router.get("/order/get", verify, apiController.getOrder);
 router.post(
   "/service/order",
   verify,
   uploadProofPayment,
   apiController.orderPage
 );
+router.get("/request/get", verify, apiController.getRequest);
 router.post("/request/add", verify, apiController.addRequest);
-router.post("/reviews/add", verify, apiController.addReview);
+router.get("/review/get", verify, apiController.getReview);
+router.post("/review/add", verify, apiController.addReview);
 router.get("/chats/get", verify, apiController.chats);
 router.get("/chats/get/:freelancerId", verify, apiController.detailChat);
 router.post("/chats/reply/:freelancerId", verify, apiController.replyChat);

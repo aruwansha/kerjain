@@ -71,7 +71,6 @@ const orderSchema = new mongoose.Schema({
   },
   work: {
     type: String,
-    default: "",
   },
 });
 

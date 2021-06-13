@@ -10,6 +10,7 @@ const Chat = require("../models/chat");
 
 const fs = require("fs-extra");
 const path = require("path");
+const { getOrder } = require("./apiController");
 
 module.exports = {
   viewDashboard: async (req, res) => {
@@ -496,10 +497,10 @@ module.exports = {
   actionSendWork: async (req, res) => {
     const { id } = req.params;
     const order = await Order.findOne({ _id: id }).select("work");
-    if (fs.existsSync(path.join(`public/${order.work}`))) {
-      await fs.unlink(path.join(`public/${order.work}`));
+    if (fs.existsSync(path.join(`public/${order.imgUrl}`))) {
+      await fs.unlink(path.join(`public/${order.imgUrl}`));
     }
-    order.work = `etc/order/work/${req.file.filename}`;
+    order.work = `images/order/proof_work/${req.file.filename}`;
     await order.save();
     req.flash("alertMessage", "Pekerjaan berhasil dikirim");
     req.flash("alertStatus", "primary");
