@@ -264,12 +264,26 @@ module.exports = {
       userId: req.session.user.id,
     }).select("_id");
 
-    const newRequestBid = await RequestBid.create({
+    await RequestBid.create({
       requestId: id,
       freelancerId: freelancerId._id,
       bid: nominal,
     });
-    res.send(newRequestBid);
+
+    req.flash("alertMessage", "Berhasil Mengikuti Lelang");
+    req.flash("alertStatus", "success");
+    res.redirect(`/freelancer/request/${id}`);
+  },
+
+  actionChangeBid: async (req, res) => {
+    const { nominal, id } = req.body;
+
+    const newRequestBid = await RequestBid.findOne({ _id: id });
+    newRequestBid.bid = nominal;
+    newRequestBid.save();
+    req.flash("alertMessage", "Berhasil Mengikuti Lelang");
+    req.flash("alertStatus", "success");
+    res.redirect(`/freelancer/request/${newRequestBid.requestId}`);
   },
 
   viewChat: async (req, res) => {

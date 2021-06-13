@@ -307,7 +307,7 @@ var data = [
         isActive: true,
         bankName: "BTN",
         bankAccount: "214215123",
-        accountHolder: "Alfiyan",
+        accountHolder: "Alfiyan Rohman",
         isBanned: false,
         title: "Alfis memes",
         description: "Membuat meme untuk anda",

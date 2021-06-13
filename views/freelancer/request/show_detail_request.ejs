@@ -73,9 +73,9 @@
           />
         </div>
         <hr />
-        <h5>Status Bid Saya</h5>
         <% if(requestBid){ %>
-        <form action="/freelancer/request/bid" method="POST">
+        <h5>Status Bid Saya</h5>
+        <form action="/freelancer/request/bid?_method=PUT" method="POST">
           <div class="modal-body">
             <div class="form-group">
               <label for="inputServiceTitle">Nominal</label>
@@ -88,18 +88,17 @@
               />
             </div>
             <div class="modal-footer">
-              <input type="hidden" name="id" class="id" />
+              <input type="hidden" name="id" value="<%= requestBid._id %>" class="id" />
               <a href="/freelancer/request" class="btn btn-secondary mr-2"
-                >Back</a
+                >Kembali</a
               >
               <button type="submit" class="btn btn-primary">Ubah</button>
             </div>
           </div>
         </form>
-        <% } %>
-
+        <% } else { %>
         <div id="button" class="d-flex justify-content-end">
-          <a href="/freelancer/request" class="btn btn-secondary mr-2">Back</a>
+          <a href="/freelancer/request" class="btn btn-secondary mr-2">Kembali</a>
           <a
             type="button"
             href="javascript:void(0)"
@@ -109,6 +108,7 @@
             Ikut
           </a>
         </div>
+        <% } %>
       </div>
     </div>
   </div>
