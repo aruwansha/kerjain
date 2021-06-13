@@ -30,8 +30,9 @@
                 </div>
                 <% } else { %> <% for(i = 0; i < chats.length; i++){ %>
                 <div class="form-group">
-                  <div class="row">
-                    <div class="col-10">
+                  <div class="row d-flex justify-content-between">
+                    <!-- jajal edit -->
+                    <div class="col-4">
                       <label for="" class="text-primary font-weight-bold"
                         ><%= chats[i].doc.serviceUserId[0].name %>
                       </label>
@@ -40,30 +41,14 @@
                         ><i class="fa fa-xs fa-circle"></i></span
                       ><% }%>
                     </div>
-                    <div class="col-2 text-right">
+                    <!-- jajal edit -->
+                    <div class="col-7 text-right">
                       <p>
                         <%= chats[i].doc.time.toLocaleString('id-ID', 'hour') %>
                       </p>
                     </div>
-                  </div>
-                  <div class="row d-flex justify-content-between">
-                    <div class="col-10">
-                      <p>
-                        <span class="font-weight-bold">
-                          <%= chats[i].doc.from[0].name %></span
-                        >
-                        : <%= chats[i].doc.message %>
-                      </p>
-                    </div>
-                    <div class="col-2 text-right">
-                      <a
-                        href="/freelancer/chat/<%= chats[i].doc.serviceUserId[0]._id %>"
-                        ><i class="fas fa-reply"></i
-                      ></a>
-                    </div>
-                  </div>
-                  <div class="row d-flex">
-                    <div class="col-12 text-right">
+                    <!-- pindahan del -->
+                    <div class="col-1 text-right">
                       <form
                         action="/freelancer/chat/<%= chats[i].doc.serviceUserId[0]._id %>/delete?_method=DELETE"
                         method="POST"
@@ -76,6 +61,26 @@
                         ></a>
                       </form>
                     </div>
+                  </div>
+                  <div class="row d-flex justify-content-between">
+                    <div class="col-11">
+                      <p>
+                        <span class="font-weight-bold">
+                          <%= chats[i].doc.from[0].name %></span
+                        >
+                        : <%= chats[i].doc.message %>
+                      </p>
+                    </div>
+                    <div class="col-1 text-right">
+                      <a
+                        href="/freelancer/chat/<%= chats[i].doc.serviceUserId[0]._id %>"
+                        ><i class="fas fa-reply"></i
+                      ></a>
+                    </div>
+                  </div>
+                  <!-- nggon e del sing asli -->
+                  <div class="row d-flex">
+                    
                   </div>
                   <hr />
                 </div>
