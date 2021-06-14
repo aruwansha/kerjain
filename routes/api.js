@@ -19,10 +19,12 @@ router.post(
 );
 router.get("/request/get", verify, apiController.getRequest);
 router.post("/request/add", verify, apiController.addRequest);
+router.get("/request/:id", verify, apiController.getDetailRequest);
+router.put("/request/:id", verify, apiController.chooseFreelancer);
 router.get("/review/get", verify, apiController.getReview);
 router.post("/review/add", verify, apiController.addReview);
-router.get("/chats/get", verify, apiController.chats);
-router.get("/chats/get/:freelancerId", verify, apiController.detailChat);
-router.post("/chats/reply/:freelancerId", verify, apiController.replyChat);
+router.get("/chat/get", verify, apiController.chats);
+router.get("/chat/get/:freelancerId", verify, apiController.detailChat);
+router.post("/chat/add/:freelancerId", verify, apiController.addChat);
 
 module.exports = router;

@@ -408,11 +408,20 @@ module.exports = {
     try {
       const { id } = req.params;
       const chat = await Chat.findOne({ _id: id });
-      const serviceUserId = chat.serviceUserId;
       await chat.remove();
-      req.flash("alertMessage", "Chat berhasil dihapus");
-      req.flash("alertStatus", "primary");
-      res.redirect(`/freelancer/chat/${serviceUserId}`);
+
+      const check = await Chat.find();
+
+      if (check.length = 1) {
+        req.flash("alertMessage", "Chat berhasil dihapus");
+        req.flash("alertStatus", "primary");
+        res.redirect(`/freelancer/chat`);
+      } else {
+        const serviceUserId = chat.serviceUserId;
+        req.flash("alertMessage", "Chat berhasil dihapus");
+        req.flash("alertStatus", "primary");
+        res.redirect(`/freelancer/chat/${serviceUserId}`);
+      }
     } catch (error) {
       req.flash("alertMessage", error);
       req.flash("alertStatus", "primary");

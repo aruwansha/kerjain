@@ -530,7 +530,7 @@ module.exports = {
             localField: "freelancerId",
             foreignField: "_id",
             as: "freelancerId",
-          }
+          },
         },
         {
           $lookup: {
@@ -538,11 +538,11 @@ module.exports = {
             localField: "freelancerId.userId",
             foreignField: "_id",
             as: "userId",
-          }
+          },
         },
         {
           $project: {
-            'userId.name': 1,
+            "userId.name": 1,
             description: 1,
             rating: 1,
           },
@@ -998,6 +998,53 @@ module.exports = {
     res.send(request);
   },
 
+  getDetailRequest: async (req, res) => {
+    const id = req.params.id;
+
+    const request = await Request.aggregate([
+      {
+        $match: { _id: mongoose.Types.ObjectId(id) },
+      },
+      {
+        $lookup: {
+          from: "serviceusers",
+          localField: "serviceUserId",
+          foreignField: "_id",
+          as: "serviceUserId",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "serviceUserId.userId",
+          foreignField: "_id",
+          as: "userId",
+        },
+      },
+      {
+        $project: {
+          requestSubject: 1,
+          requestDescription: 1,
+          requestBudget: 1,
+          "userId.name": 1,
+        },
+      },
+    ]);
+
+    res.send(request);
+  },
+
+  chooseFreelancer: async (req, res) => {
+    const id = req.params.id;
+
+    const request = await Request.findOne({ _id: id });
+
+    request.freelancerId = req.body.freelancerId;
+    request.save();
+
+    res.send(request);
+  },
+  
   getReview: async (req, res) => {
     const userId = req.user.id;
     const serviceUserId = await ServiceUser.findOne({ userId: userId }).select(
@@ -1080,37 +1127,17 @@ module.exports = {
 
   detailChat: async (req, res) => {
     const freelancerId = req.params.freelancerId;
-    var perPage = 10;
-    await Chat.find({
+    const chat = await Chat.find({
       serviceUserId: req.user.id,
       freelancerUserId: freelancerId,
     })
       .populate({ path: "from", select: "id name" })
-      .limit(perPage)
-      .sort("time")
-      .exec(function (err, chats) {
-        for (i = 0; i < chats.length; i++) {
-          chats[i].isReadServiceUser = true;
-          chats[i].save(function (err) {
-            if (err) {
-              console.error("ERROR!");
-            }
-          });
-        }
-        Chat.countDocuments({
-          freelancerUserId: freelancerId,
-          serviceUserId: req.user.id,
-        }).exec(function (err, count) {
-          res.send({
-            chats,
-            count,
-            perPage,
-          });
-        });
-      });
+      .sort("time");
+    console.log(chat);
+    res.send(chat);
   },
 
-  replyChat: async (req, res) => {
+  addChat: async (req, res) => {
     const freelancerId = req.params.freelancerId;
     const serviceUserId = req.user.id;
     const data = await Chat.create({
@@ -1121,7 +1148,7 @@ module.exports = {
       message: req.body.message,
       isReadServiceUser: true,
     });
-    if (!data) return res.send({ message: "Failed to reply!" });
+    if (!data) return res.send({ message: "Failed to add chat!" });
     res.status(201).send({ message: "Success Reply", data });
   },
 };
