@@ -901,7 +901,6 @@ module.exports = {
     } else {
       const service = await Service.findOne({ _id: serviceId });
       const invoice = Math.floor(1000000 + Math.random() * 9000000);
-      const tax = service.price * 0.1;
 
       // get service user id
       const serviceUserId = await ServiceUser.findOne({
@@ -917,7 +916,7 @@ module.exports = {
           title: service.title,
           price: service.price,
         },
-        total: service.price + tax,
+        total: service.price,
         name,
         email,
         phone,
@@ -959,6 +958,50 @@ module.exports = {
     );
 
     const order = await Order.find({ serviceUserId: serviceUserId._id });
+
+    res.send(order);
+  },
+
+  getOrderDetail: async (req, res) => {
+    const id = req.params.id;
+
+    const order = await Order.aggregate([
+      {
+        $match: { _id: mongoose.Types.ObjectId(id) },
+      },
+      {
+        $lookup: {
+          from: "serviceusers",
+          localField: "serviceUserId",
+          foreignField: "_id",
+          as: "serviceUserId",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "serviceUserId.userId",
+          foreignField: "_id",
+          as: "userId",
+        },
+      },
+      {
+        $project: {
+          freelancerId: 1,
+          payments: 1,
+          orderDate: 1,
+          invoice: 1,
+          "userId.name": 1,
+          serviceId: 1,
+          name: 1,
+          email: 1,
+          phone: 1,
+          detailNote: 1,
+          total: 1,
+          isReviewed: 1,
+        },
+      },
+    ]);
 
     res.send(order);
   },
@@ -1044,7 +1087,7 @@ module.exports = {
 
     res.send(request);
   },
-  
+
   getReview: async (req, res) => {
     const userId = req.user.id;
     const serviceUserId = await ServiceUser.findOne({ userId: userId }).select(
@@ -1060,7 +1103,9 @@ module.exports = {
     const error = reviewValidation(req.body).error;
     if (error) return res.status(400).send(error.details[0].message);
 
-    const { freelancerId, rating, description } = req.body;
+    const freelancerId = req.params.id;
+
+    const { orderId, rating, description } = req.body;
 
     const serviceUserId = await ServiceUser.findOne({
       userId: req.user.id,
@@ -1072,6 +1117,9 @@ module.exports = {
       rating: rating,
       description: description,
     });
+
+    const filter = { _id: orderId };
+    await Order.updateOne(filter, { isReviewed: true });
 
     res.status(201).json({ message: "Success Add Review", review });
   },
@@ -1126,19 +1174,18 @@ module.exports = {
   },
 
   detailChat: async (req, res) => {
-    const freelancerId = req.params.freelancerId;
+    const freelancerId = req.params.id;
     const chat = await Chat.find({
       serviceUserId: req.user.id,
       freelancerUserId: freelancerId,
     })
       .populate({ path: "from", select: "id name" })
       .sort("time");
-    console.log(chat);
     res.send(chat);
   },
 
   addChat: async (req, res) => {
-    const freelancerId = req.params.freelancerId;
+    const freelancerId = req.params.id;
     const serviceUserId = req.user.id;
     const data = await Chat.create({
       freelancerUserId: freelancerId,

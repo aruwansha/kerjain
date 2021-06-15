@@ -11,6 +11,7 @@ router.post("/register", apiController.register);
 router.post("/login", apiController.login);
 router.get("/landing-page/me", verify, apiController.me);
 router.get("/order/get", verify, apiController.getOrder);
+router.get("/order/get/:id", verify, apiController.getOrderDetail);
 router.post(
   "/service/order",
   verify,
@@ -22,9 +23,9 @@ router.post("/request/add", verify, apiController.addRequest);
 router.get("/request/:id", verify, apiController.getDetailRequest);
 router.put("/request/:id", verify, apiController.chooseFreelancer);
 router.get("/review/get", verify, apiController.getReview);
-router.post("/review/add", verify, apiController.addReview);
+router.post("/review/add/:id", verify, apiController.addReview);
 router.get("/chat/get", verify, apiController.chats);
-router.get("/chat/get/:freelancerId", verify, apiController.detailChat);
-router.post("/chat/add/:freelancerId", verify, apiController.addChat);
+router.get("/chat/get/:id", verify, apiController.detailChat);
+router.post("/chat/add/:id", verify, apiController.addChat);
 
 module.exports = router;

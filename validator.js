@@ -35,7 +35,7 @@ const requestValidation = (data) => {
 // review validation
 const reviewValidation = (data) => {
   const schema = Joi.object({
-    freelancerId: Joi.required(),
+    orderId: Joi.required(),
     rating: Joi.required(),
     description: Joi.required(),
   });

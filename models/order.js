@@ -72,6 +72,10 @@ const orderSchema = new mongoose.Schema({
   work: {
     type: String,
   },
+  isReviewed: {
+    type: Boolean,
+    default: false
+  }
 });
 
 module.exports = mongoose.model("Order", orderSchema);
