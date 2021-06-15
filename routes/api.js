@@ -16,7 +16,7 @@ router.post(
   "/service/order",
   verify,
   uploadProofPayment,
-  apiController.orderPage
+  apiController.orderService
 );
 router.get("/request/get", verify, apiController.getRequest);
 router.post("/request/add", verify, apiController.addRequest);

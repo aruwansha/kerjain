@@ -25,11 +25,15 @@ const orderSchema = new mongoose.Schema({
     },
     title: {
       type: String,
-      required: true,
     },
     price: {
       type: Number,
-      required: true,
+    },
+  },
+  requestId: {
+    _id: {
+      type: ObjectId,
+      ref: "Request",
     },
   },
   total: {
@@ -74,8 +78,8 @@ const orderSchema = new mongoose.Schema({
   },
   isReviewed: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("Order", orderSchema);

@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 
 const requestSchema = new mongoose.Schema({
+  requestDate: {
+    type: Date,
+    default: Date.now(),
+  },
   serviceUserId: {
     type: ObjectId,
     ref: "ServiceUser",

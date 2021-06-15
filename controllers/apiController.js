@@ -526,16 +526,16 @@ module.exports = {
         },
         {
           $lookup: {
-            from: "freelancers",
-            localField: "freelancerId",
+            from: "serviceusers",
+            localField: "serviceUserId",
             foreignField: "_id",
-            as: "freelancerId",
+            as: "serviceUserId",
           },
         },
         {
           $lookup: {
             from: "users",
-            localField: "freelancerId.userId",
+            localField: "serviceUserId.userId",
             foreignField: "_id",
             as: "userId",
           },
@@ -874,13 +874,14 @@ module.exports = {
     } catch (error) {}
   },
 
-  orderPage: async (req, res) => {
+  orderService: async (req, res) => {
     const {
       serviceId,
       name,
       email,
       phone,
       detailNote,
+      total,
       accountHolder,
       bankFrom,
     } = req.body;
@@ -894,6 +895,7 @@ module.exports = {
       email === undefined ||
       phone === undefined ||
       detailNote === undefined ||
+      total === undefined ||
       accountHolder === undefined ||
       bankFrom === undefined
     ) {
@@ -916,7 +918,82 @@ module.exports = {
           title: service.title,
           price: service.price,
         },
-        total: service.price,
+        total,
+        name,
+        email,
+        phone,
+        detailNote,
+        payments: {
+          proofPayment: `images/order/proof_payment/${req.file.filename}`,
+          accountHolder,
+          bankFrom,
+        },
+      };
+
+      const order = await Order.create(newOrder);
+
+      const freelancer = await Freelancer.findOne({
+        _id: service.freelancerId,
+      });
+
+      // send detail to freelancer
+      await Chat.create({
+        freelancerUserId: freelancer.userId,
+        serviceUserId: req.user.id,
+        from: req.user.id,
+        to: freelancer.userId,
+        message: detailNote,
+        isReadServiceUser: true,
+      });
+
+      freelancer.orderId.push({ _id: order._id });
+      freelancer.save();
+
+      res.status(201).json({ message: "Success Booking", order });
+    }
+  },
+
+  orderRequest: async (req, res) => {
+    const {
+      requestId,
+      name,
+      email,
+      phone,
+      detailNote,
+      total,
+      accountHolder,
+      bankFrom,
+    } = req.body;
+    if (!req.file) {
+      return res.status(404).json({ message: "image not found" });
+    }
+
+    if (
+      requestId === undefined ||
+      name === undefined ||
+      email === undefined ||
+      phone === undefined ||
+      detailNote === undefined ||
+      total === undefined ||
+      accountHolder === undefined ||
+      bankFrom === undefined
+    ) {
+      res.status(404).json({ message: "Field is required" });
+    } else {
+      const request = await Request.findOne({ _id: requestId });
+      const invoice = Math.floor(1000000 + Math.random() * 9000000);
+
+      // get service user id
+      const serviceUserId = await ServiceUser.findOne({
+        userId: req.user.id,
+      }).select("_id");
+
+      const newOrder = {
+        freelancerId: service.freelancerId,
+        serviceUserId: serviceUserId._id,
+        invoice,
+        requestId: request.id,
+        total,
         name,
         email,
         phone,
@@ -1065,11 +1142,68 @@ module.exports = {
         },
       },
       {
+        $lookup: {
+          from: "requestbids",
+          localField: "_id",
+          foreignField: "requestId",
+          as: "requestBidId",
+        },
+      },
+      {
+        $lookup: {
+          from: "freelancers",
+          localField: "requestBidId.freelancerId",
+          foreignField: "_id",
+          as: "freelancers",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "freelancers.userId",
+          foreignField: "_id",
+          as: "freelancer",
+        },
+      },
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "freelancerId._id",
+          foreignField: "freelancerId",
+          as: "reviews",
+        },
+      },
+      {
         $project: {
+          freelancerId: 1,
+          requestDate: 1,
           requestSubject: 1,
           requestDescription: 1,
           requestBudget: 1,
           "userId.name": 1,
+          requestBidId: 1,
+          "freelancer.name": 1,
+          ratingLength: { $size: "$reviews" },
+          ratingTotal: { $sum: "$reviews.rating" },
+        },
+      },
+      {
+        $project: {
+          freelancerId: 1,
+          requestDate: 1,
+          requestSubject: 1,
+          requestDescription: 1,
+          requestBudget: 1,
+          "userId.name": 1,
+          requestBidId: 1,
+          "freelancer.name": 1,
+          rating: {
+            $cond: {
+              if: { $eq: ["$ratingTotal", 0] },
+              then: 0,
+              else: { $divide: ["$ratingTotal", "$ratingLength"] },
+            },
+          },
         },
       },
     ]);

@@ -7,8 +7,8 @@ const requestSchema = new mongoose.Schema({
     ref: "Request",
   },
   freelancerId: {
-    type: String,
-    required: true,
+    type: ObjectId,
+    ref: "Freelancer",
   },
   bid: {
     type: Number,
