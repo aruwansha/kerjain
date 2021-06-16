@@ -1086,6 +1086,7 @@ module.exports = {
           payments: 1,
           orderDate: 1,
           invoice: 1,
+          work: 1,
           "userId.name": 1,
           "service.title": 1,
           "request.requestSubject": 1,
@@ -1101,6 +1102,14 @@ module.exports = {
     ]);
 
     res.send(order);
+  },
+
+  confirmOrder: async (req, res) => {
+    const { orderId } = req.body;
+    const order = await Order.findOne({ _id: orderId });
+    order.payments.status = "finished";
+    await order.save();
+    res.send({ message: "order is done, thank's for your confirmation" });
   },
 
   addRequest: async (req, res) => {

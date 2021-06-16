@@ -13,17 +13,18 @@ router.get("/landing-page/me", verify, apiController.me);
 router.get("/order/get", verify, apiController.getOrder);
 router.get("/order/get/:id", verify, apiController.getOrderDetail);
 router.post(
-  "/service/order",
+  "/order/service",
   verify,
   uploadProofPayment,
   apiController.orderService
 );
 router.post(
-  "/request/order",
+  "/order/request",
   verify,
   uploadProofPayment,
   apiController.orderRequest
 );
+router.put("/order/confirm", verify, apiController.confirmOrder);
 router.get("/request/get", verify, apiController.getRequest);
 router.post("/request/add", verify, apiController.addRequest);
 router.get("/request/:id", verify, apiController.getDetailRequest);
