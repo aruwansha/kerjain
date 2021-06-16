@@ -1034,7 +1034,9 @@ module.exports = {
       "_id"
     );
 
-    const order = await Order.find({ serviceUserId: serviceUserId._id });
+    const order = await Order.find({ serviceUserId: serviceUserId._id })
+      .populate({ path: "serviceId", select: "title" })
+      .populate({ path: "requestId", select: "requestSubject" });
 
     res.send(order);
   },
@@ -1063,12 +1065,30 @@ module.exports = {
         },
       },
       {
+        $lookup: {
+          from: "services",
+          localField: "serviceId",
+          foreignField: "_id",
+          as: "service",
+        },
+      },
+      {
+        $lookup: {
+          from: "requests",
+          localField: "requestId",
+          foreignField: "_id",
+          as: "request",
+        },
+      },
+      {
         $project: {
           freelancerId: 1,
           payments: 1,
           orderDate: 1,
           invoice: 1,
           "userId.name": 1,
+          "service.title": 1,
+          "request.requestSubject": 1,
           serviceId: 1,
           name: 1,
           email: 1,
@@ -1209,10 +1229,10 @@ module.exports = {
         },
       },
     ]);
-    
+
     const bank = await Bank.find();
 
-    res.send({request, bank});
+    res.send({ request, bank });
   },
 
   chooseFreelancer: async (req, res) => {
