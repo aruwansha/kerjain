@@ -19,22 +19,12 @@ const orderSchema = new mongoose.Schema({
     required: true,
   },
   serviceId: {
-    _id: {
-      type: ObjectId,
-      ref: "Service",
-    },
-    title: {
-      type: String,
-    },
-    price: {
-      type: Number,
-    },
+    type: ObjectId,
+    ref: "Service",
   },
   requestId: {
-    _id: {
-      type: ObjectId,
-      ref: "Request",
-    },
+    type: ObjectId,
+    ref: "Request",
   },
   total: {
     type: Number,

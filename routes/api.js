@@ -18,6 +18,12 @@ router.post(
   uploadProofPayment,
   apiController.orderService
 );
+router.post(
+  "/request/order",
+  verify,
+  uploadProofPayment,
+  apiController.orderRequest
+);
 router.get("/request/get", verify, apiController.getRequest);
 router.post("/request/add", verify, apiController.addRequest);
 router.get("/request/:id", verify, apiController.getDetailRequest);

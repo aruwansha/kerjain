@@ -989,7 +989,7 @@ module.exports = {
       }).select("_id");
 
       const newOrder = {
-        freelancerId: service.freelancerId,
+        freelancerId: request.freelancerId,
         serviceUserId: serviceUserId._id,
         invoice,
         requestId: request.id,
@@ -1008,7 +1008,7 @@ module.exports = {
       const order = await Order.create(newOrder);
 
       const freelancer = await Freelancer.findOne({
-        _id: service.freelancerId,
+        _id: request.freelancerId,
       });
 
       // send detail to freelancer
@@ -1180,6 +1180,7 @@ module.exports = {
           requestSubject: 1,
           requestDescription: 1,
           requestBudget: 1,
+          finalBudget: 1,
           "userId.name": 1,
           requestBidId: 1,
           "freelancer.name": 1,
@@ -1194,6 +1195,7 @@ module.exports = {
           requestSubject: 1,
           requestDescription: 1,
           requestBudget: 1,
+          finalBudget: 1,
           "userId.name": 1,
           requestBidId: 1,
           "freelancer.name": 1,
@@ -1207,8 +1209,10 @@ module.exports = {
         },
       },
     ]);
+    
+    const bank = await Bank.find();
 
-    res.send(request);
+    res.send({request, bank});
   },
 
   chooseFreelancer: async (req, res) => {
@@ -1217,6 +1221,7 @@ module.exports = {
     const request = await Request.findOne({ _id: id });
 
     request.freelancerId = req.body.freelancerId;
+    request.finalBudget = req.body.finalBudget;
     request.save();
 
     res.send(request);
