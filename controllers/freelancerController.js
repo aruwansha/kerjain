@@ -200,22 +200,51 @@ module.exports = {
         freelancerUserId: req.session.user.id,
         isReadFreelancer: false,
       }).select("isReadFreelancer");
-      const request = await Request.find();
-      request.map(async (user, index) => {
-        const serviceUser = await ServiceUser.find({
-          _id: user.serviceUserId,
-        })
-          .select("id userId")
-          .populate({ path: "userId", select: "name" });
-        res.render("freelancer/request/view_request", {
-          title: "Dashboard | Permintaan",
-          user: req.session.user,
-          alert,
-          unread,
-          request,
-          serviceUser,
-          action: "view",
-        });
+
+      const freelancer = await Freelancer.findOne({
+        userId: req.session.user.id,
+      }).select("categoryId");
+      const mongoose = require("mongoose");
+      const request = await Request.aggregate([
+        {
+          $match: {
+            categoryId: mongoose.Types.ObjectId(freelancer.categoryId),
+          },
+        },
+        {
+          $lookup: {
+            from: "serviceusers",
+            localField: "serviceUserId",
+            foreignField: "_id",
+            as: "serviceUserId",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "serviceUserId.userId",
+            foreignField: "_id",
+            as: "userId",
+          },
+        },
+        {
+          $project: {
+            "userId.name": 1,
+            requestSubject: 1,
+            requestDescription: 1,
+            requestBudget: 1,
+            finalBudget: 1,
+            freelancerId: 1,
+          },
+        },
+      ]);
+      res.render("freelancer/request/view_request", {
+        title: "Dashboard | Permintaan",
+        user: req.session.user,
+        alert,
+        unread,
+        request,
+        action: "view",
       });
     }
   },
@@ -412,7 +441,7 @@ module.exports = {
 
       const check = await Chat.find();
 
-      if (check.length = 1) {
+      if ((check.length = 1)) {
         req.flash("alertMessage", "Chat berhasil dihapus");
         req.flash("alertStatus", "primary");
         res.redirect(`/freelancer/chat`);
@@ -495,10 +524,19 @@ module.exports = {
         const alertMessage = req.flash("alertMessage");
         const alertStatus = req.flash("alertStatus");
         const alert = { message: alertMessage, status: alertStatus };
-        const order = await Order.findOne({ _id: id }).populate({
-          path: "serviceUserId",
-          select: "userId",
-        });
+        const order = await Order.findOne({ _id: id })
+          .populate({
+            path: "serviceUserId",
+            select: "userId",
+          })
+          .populate({
+            path: "serviceId",
+            select: "title price description",
+          })
+          .populate({
+            path: "requestId",
+            select: "requestSubject requestDescription finalBudget",
+          });
         const serviceUser = await User.findOne({
           _id: order.serviceUserId.userId,
         });

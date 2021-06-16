@@ -29,8 +29,7 @@
             </td>
             <td><%= order.orderId[i].payments.accountHolder %></td>
             <td><%= order.orderId[i].payments.status == 'finished' ? 'Selesai' : order.orderId[i].payments.status == 'paid' ? 'Menunggu Proses Freelancer' : order.orderId[i].payments.status == 'unpaid' ? 'Menunggu Konfirmasi Admin' : 'undefined' %></td>
-            <td><%=  Intl.NumberFormat('id-ID', {style: 'currency',
-              currency: 'IDR'}).format(order.orderId[i].total) %></td>
+            <td>Rp <%=  Intl.NumberFormat('id-ID').format(order.orderId[i].total) %></td>
             <td>
               <a href="/freelancer/order/<%=  order.orderId[i]._id %>" class="btn btn-primary btn-circle btn-sm"
                 ><i class="fas fa-eye"></i

@@ -67,8 +67,7 @@
             type="text"
             class="form-control input-disabled"
             name="phone"
-            value=" <%= Intl.NumberFormat('id-ID', {style: 'currency', currency:
-            'IDR'}).format(request.requestBudget) %>"
+            value="Rp <%= Intl.NumberFormat('id-ID').format(request.requestBudget) %>"
             readonly
           />
         </div>

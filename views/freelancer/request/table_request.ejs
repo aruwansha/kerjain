@@ -23,11 +23,10 @@
           <% for( i = 0; i < request.length; i++){ %>
           <tr>
             <td><%= i+1 %></td>
-            <td><%=  %> </td>
+            <td><%= request[i].userId[0].name %> </td>
             <td><%= request[i].requestSubject %></td>
             <td>
-              <%= Intl.NumberFormat('id-ID', {style: 'currency', currency:
-              'IDR'}).format(request[i].requestBudget) %>
+              Rp <%= Intl.NumberFormat('id-ID').format(request[i].requestBudget) %>
             </td>
             <td>
               <a

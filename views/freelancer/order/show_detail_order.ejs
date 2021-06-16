@@ -17,7 +17,8 @@
         <div class="row ml-1">
           <form
             action="/freelancer/order/<%= order.id %>/upload?_method=PUT"
-            method="POST" enctype="multipart/form-data"
+            method="POST"
+            enctype="multipart/form-data"
           >
             <div class="form-group">
               <label for="">Upload Bukti Pengerjaan:</label>
@@ -75,8 +76,7 @@
             type="text"
             class="form-control input-disabled mb-2"
             name="service"
-            value="<%= order.serviceId.title %> - <%= Intl.NumberFormat('id-ID', {style: 'currency',
-              currency: 'IDR'}).format(order.serviceId.price) %> "
+            value="<%= order.serviceId ? order.serviceId.title : order.requestId.requestSubject %> - Rp <%= Intl.NumberFormat('id-ID').format(order.serviceId ? order.serviceId.price : order.requestId.finalBudget) %> "
             readonly
           />
         </div>
@@ -107,8 +107,7 @@
             type="text"
             class="form-control input-disabled"
             name="total"
-            value="<%=  Intl.NumberFormat('id-ID', {style: 'currency',
-              currency: 'IDR'}).format(order.total) %>"
+            value="Rp <%=  Intl.NumberFormat('id-ID').format(order.total) %>"
             readonly
           />
         </div>

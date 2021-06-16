@@ -60,8 +60,7 @@
                         <%= service[i].description %>
                       </div>
                       <div class="h6 mb-0">
-                        <%= Intl.NumberFormat('id-ID', {style: 'currency',
-                        currency: 'IDR'}).format(service[i].price) %>
+                       Rp <%= Intl.NumberFormat('id-ID').format(service[i].price) %>
                       </div>
                     </div>
                     <div class="col-auto">

@@ -80,7 +80,7 @@
             type="text"
             class="form-control input-disabled mb-2"
             name="service"
-            value="<%= order.serviceId.title %> - <%= Intl.NumberFormat('id-ID', {style: 'currency',
+            value="<%= order.serviceId.title %> - <%= Format('id-ID', {style: 'currency',
             currency: 'IDR'}).format(order.serviceId.price) %> "
             readonly
           />
@@ -101,8 +101,7 @@
             type="text"
             class="form-control input-disabled"
             name="total"
-            value="<%=  Intl.NumberFormat('id-ID', {style: 'currency',
-            currency: 'IDR'}).format(order.total) %>"
+            value="Rp <%=  Intl.NumberFormat('id-ID').format(order.total) %>"
             readonly
           />
         </div>
