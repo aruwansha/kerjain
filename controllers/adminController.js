@@ -471,9 +471,18 @@ module.exports = {
         const alertMessage = req.flash("alertMessage");
         const alertStatus = req.flash("alertStatus");
         const alert = { message: alertMessage, status: alertStatus };
-        const order = await Order.findOne({ _id: id }).populate({
+        const order = await Order.findOne({ _id: id })
+        .populate({
           path: "serviceUserId",
-          select: "id userId",
+          select: "userId",
+        })
+        .populate({
+          path: "serviceId",
+          select: "title price description",
+        })
+        .populate({
+          path: "requestId",
+          select: "requestSubject requestDescription finalBudget",
         });
         const user = await User.findOne({ _id: order.serviceUserId.userId });
         res.render("admin/order/view_order", {
@@ -489,6 +498,7 @@ module.exports = {
       res.redirect("/admin/order");
     }
   },
+
   actionConfirmOrder: async (req, res) => {
     try {
       const { id } = req.params;
