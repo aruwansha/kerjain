@@ -34,5 +34,7 @@ router.post("/review/add/:id", verify, apiController.addReview);
 router.get("/chat/get", verify, apiController.chats);
 router.get("/chat/get/:id", verify, apiController.detailChat);
 router.post("/chat/add/:id", verify, apiController.addChat);
+router.delete("/chat/delete/:id", verify, apiController.deleteAllChat);
+router.delete("/chat/get/delete/:id", verify, apiController.deleteChat);
 
 module.exports = router;

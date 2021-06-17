@@ -371,7 +371,8 @@ module.exports = {
   actionDeleteChat: async (req, res) => {
     try {
       const { id } = req.params;
-      await Chat.remove({ serviceUserId: id });
+      const filter = { serviceUserId: id, freelancerUserId: req.session.user.id };
+      await Chat.deleteMany(filter);
       req.flash("alertMessage", "Chat berhasil dihapus");
       req.flash("alertStatus", "primary");
       res.redirect("/freelancer/chat");

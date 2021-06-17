@@ -1203,6 +1203,14 @@ module.exports = {
         },
       },
       {
+        $lookup: {
+          from: "orders",
+          localField: "_id",
+          foreignField: "requestId",
+          as: "request",
+        },
+      },
+      {
         $project: {
           freelancerId: 1,
           requestDate: 1,
@@ -1211,6 +1219,7 @@ module.exports = {
           requestBudget: 1,
           finalBudget: 1,
           "userId.name": 1,
+          "request.requestId": 1,
           requestBidId: 1,
           "freelancer.name": 1,
           ratingLength: { $size: "$reviews" },
@@ -1226,6 +1235,7 @@ module.exports = {
           requestBudget: 1,
           finalBudget: 1,
           "userId.name": 1,
+          "request.requestId": 1,
           requestBidId: 1,
           "freelancer.name": 1,
           rating: {
@@ -1341,6 +1351,13 @@ module.exports = {
     res.status(200).send({ chats });
   },
 
+  deleteAllChat: async (req, res) => {
+    const { id } = req.params;
+    const filter = { serviceUserId: res.user.id, freelancerUserId: id };
+    await Chat.deleteMany(filter);
+    res.status.send({ message: "all chats deleted successfully" });
+  },
+
   detailChat: async (req, res) => {
     const freelancerId = req.params.id;
     const chat = await Chat.find({
@@ -1350,6 +1367,13 @@ module.exports = {
       .populate({ path: "from", select: "id name" })
       .sort("time");
     res.send(chat);
+  },
+
+  deleteChat: async (req, res) => {
+    const { id } = req.params;
+    const chat = await Chat.findOne({ _id: id });
+    await chat.remove();
+    res.status.send({ message: "chat deleted successfully" });
   },
 
   addChat: async (req, res) => {
