@@ -1197,7 +1197,7 @@ module.exports = {
       {
         $lookup: {
           from: "reviews",
-          localField: "freelancerId._id",
+          localField: "freelancers._id",
           foreignField: "freelancerId",
           as: "reviews",
         },
