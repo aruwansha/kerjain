@@ -1352,10 +1352,11 @@ module.exports = {
   },
 
   deleteAllChat: async (req, res) => {
-    const { id } = req.params;
-    const filter = { serviceUserId: res.user.id, freelancerUserId: id };
+    const serviceUserId = req.user.id;
+    const freelancerUserId = req.params.id;
+    const filter = { serviceUserId: serviceUserId, freelancerUserId: freelancerUserId };
     await Chat.deleteMany(filter);
-    res.status.send({ message: "all chats deleted successfully" });
+    res.status(202).send({ message: "all chats deleted successfully" });
   },
 
   detailChat: async (req, res) => {
