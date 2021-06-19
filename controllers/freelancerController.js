@@ -228,7 +228,16 @@ module.exports = {
           },
         },
         {
+          $lookup: {
+            from: "orders",
+            localField: "serviceUserId._id",
+            foreignField: "serviceUserId",
+            as: "orderer",
+          },
+        },
+        {
           $project: {
+            status: "$orderer.payments" ,
             "userId.name": 1,
             requestSubject: 1,
             requestDescription: 1,
@@ -371,7 +380,10 @@ module.exports = {
   actionDeleteChat: async (req, res) => {
     try {
       const { id } = req.params;
-      const filter = { serviceUserId: id, freelancerUserId: req.session.user.id };
+      const filter = {
+        serviceUserId: id,
+        freelancerUserId: req.session.user.id,
+      };
       await Chat.deleteMany(filter);
       req.flash("alertMessage", "Chat berhasil dihapus");
       req.flash("alertStatus", "primary");

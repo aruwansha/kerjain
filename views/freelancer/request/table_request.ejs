@@ -15,12 +15,21 @@
             <th>Nama Pemesan</th>
             <th>Subyek</th>
             <th>Budget Maksimal</th>
+            <th>Rating Pemesan</th>
             <th>Aksi</th>
           </tr>
         </thead>
 
         <tbody>
-          <% for( i = 0; i < request.length; i++){ %>
+          <% for( i = 0; i < request.length; i++){ 
+            var option = {
+              style: "percent",
+            };
+           const res = request[i].status.find(element => element.status === 'finished') 
+           const totalOrder = request[i].status.length
+             const totalFinished = res ? res.status.length : 0;
+             const rating = totalOrder / totalFinished
+          %>
           <tr>
             <td><%= i+1 %></td>
             <td><%= request[i].userId[0].name %> </td>
@@ -28,6 +37,7 @@
             <td>
               Rp <%= Intl.NumberFormat('id-ID').format(request[i].requestBudget) %>
             </td>
+            <td><%= rating === Infinity ? Intl.NumberFormat("en-US", option).format(0) : Intl.NumberFormat("en-US", option).format(rating)  %> </td>
             <td>
               <a
                 href="/freelancer/request/<%= request[i]._id %>"
@@ -36,7 +46,8 @@
               ></a>
             </td>
           </tr>
-          <% } %>
+          <% } 
+%>
         </tbody>
       </table>
     </div>

@@ -20,7 +20,6 @@ const {
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { findOne } = require("../models/category");
 
 module.exports = {
   landingPage: async (req, res) => {
