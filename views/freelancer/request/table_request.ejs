@@ -15,7 +15,6 @@
             <th>Nama Pemesan</th>
             <th>Subyek</th>
             <th>Budget Maksimal</th>
-            <th>Rating Pemesan</th>
             <th>Aksi</th>
           </tr>
         </thead>
@@ -27,8 +26,11 @@
             };
            const res = request[i].status.find(element => element.status === 'finished') 
            const totalOrder = request[i].status.length
-             const totalFinished = res ? res.status.length : 0;
-             const rating = totalOrder / totalFinished
+             const totalFinished = res ? res.status : 0;
+             const rating =  totalFinished / totalOrder
+             const arar = Object.keys(totalFinished)
+             let result = request[0].status
+             console.log(result)
           %>
           <tr>
             <td><%= i+1 %></td>
@@ -37,7 +39,6 @@
             <td>
               Rp <%= Intl.NumberFormat('id-ID').format(request[i].requestBudget) %>
             </td>
-            <td><%= rating === Infinity ? Intl.NumberFormat("en-US", option).format(0) : Intl.NumberFormat("en-US", option).format(rating)  %> </td>
             <td>
               <a
                 href="/freelancer/request/<%= request[i]._id %>"
