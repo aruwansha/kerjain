@@ -6,12 +6,21 @@
       enctype="multipart/form-data"
     >
       <div class="form-group">
-        <label for="inputName">Nama</label>
+        <label for="inputName">Nama Depan</label>
+        <input 
+          type="text"
+          class="form-control"
+          name="firstname"
+          value="<%= freelancer.userId.name.split(" ")[0] %>"
+        />
+      </div>
+      <div class="form-group">
+        <label for="inputName">Nama Belakang</label>
         <input
           type="text"
           class="form-control"
-          name="name"
-          value="<%= freelancer.userId.name %>"
+          name="lastname"
+          value="<%= freelancer.userId.name.split(" ")[1] %>"
         />
       </div>
       <div class="form-group">

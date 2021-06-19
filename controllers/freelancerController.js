@@ -10,7 +10,6 @@ const Chat = require("../models/chat");
 
 const fs = require("fs-extra");
 const path = require("path");
-const { getOrder } = require("./apiController");
 
 module.exports = {
   viewDashboard: async (req, res) => {
@@ -25,6 +24,8 @@ module.exports = {
       const order = await Freelancer.findOne({ userId: id })
         .select("_id")
         .populate("orderId");
+      const freelancer = await Freelancer.findOne({ userId: req.session.user.id }).select('_id');
+      const service = await Service.find({freelancerId: freelancer._id});
       const unread = await Chat.find({
         freelancerUserId: req.session.user.id,
         isReadFreelancer: false,
@@ -35,6 +36,7 @@ module.exports = {
         alert,
         unread,
         order,
+        service,
         unread,
       });
     }
@@ -237,7 +239,7 @@ module.exports = {
         },
         {
           $project: {
-            status: "$orderer.payments" ,
+            status: "$orderer.payments",
             "userId.name": 1,
             requestSubject: 1,
             requestDescription: 1,
@@ -612,10 +614,10 @@ module.exports = {
 
   actionEditPersonal: async (req, res) => {
     try {
-      const { name, email, address, phone } = req.body;
+      const { firstname, lastname, email, address, phone } = req.body;
       const user = await User.findOne({ _id: req.session.user.id });
       if (req.file == undefined) {
-        user.name = name;
+        user.name = `${firstname} ${lastname}`;
         user.email = email;
         user.address = address;
         user.phone = phone;
@@ -624,7 +626,7 @@ module.exports = {
         if (fs.existsSync(path.join(`public/${user.imgUrl}`))) {
           await fs.unlink(path.join(`public/${user.imgUrl}`));
         }
-        user.name = name;
+        user.name = `${firstname} ${lastname}`;
         user.email = email;
         user.address = address;
         user.phone = phone;
