@@ -7,7 +7,7 @@ router.post("/register", authController.actionSignup);
 router.get("/", authController.viewSignin);
 router.get("/login", authController.viewSignin);
 router.post("/login", authController.actionSignin);
-
 router.get("/logout", authController.actionLogout);
+router.put("/change-password", authController.actionChangePassword);
 
 module.exports = router;

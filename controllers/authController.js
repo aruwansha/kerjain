@@ -111,7 +111,8 @@ module.exports = {
         res.redirect("back");
       } else {
         const user = await User.findOne({ email: email.toLowerCase() });
-        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        const userPassword = user ? user.password : "";
+        const isPasswordMatch = await bcrypt.compare(password, userPassword);
 
         if (!user) {
           req.flash("alertMessage", "Email belum terdaftar! Silakan mendaftar");
@@ -168,6 +169,38 @@ module.exports = {
     } else if (session.user.level == "freelancer") {
       session.destroy();
       res.redirect("/login");
+    }
+  },
+
+  actionChangePassword: async (req, res) => {
+    const { old_password, password1, password2 } = req.body;
+    if (
+      old_password === undefined ||
+      password1 === undefined ||
+      password2 === undefined
+    ) {
+      req.flash("alertMessage", "Tolong lengkapi field!");
+      req.flash("alertStatus", "danger");
+      res.redirect("back");
+    } else if (password1 !== password2) {
+      req.flash("alertMessage", "password dan ulangi password harus sama");
+      req.flash("alertStatus", "danger");
+      res.redirect("back");
+    } else {
+      const user = await User.findOne({ _id: req.session.user.id });
+      const isPasswordMatch = await bcrypt.compare(old_password, user.password);
+
+      if (!isPasswordMatch) {
+        req.flash("alertMessage", "password lama salah");
+        req.flash("alertStatus", "danger");
+        res.redirect("back");
+      } else {
+        user.password = password1
+        await user.save()
+        req.flash("alertMessage", "password berhasil diubah");
+        req.flash("alertStatus", "success");
+        res.redirect("back");
+      }
     }
   },
 };
