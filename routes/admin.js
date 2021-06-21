@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const adminController = require("../controllers/adminController");
-const { uploadBank } = require("../middlewares/multer");
+const { uploadBank, uploadProofSalary } = require("../middlewares/multer");
 const { isLogin } = require("../middlewares/auth");
 
 // auth
@@ -35,5 +35,6 @@ router.get("/order", adminController.viewOrder);
 router.get("/order/:id", adminController.viewDetailOrder);
 router.put("/order/:id/confirm", adminController.actionConfirmOrder);
 router.put("/order/:id/reject", adminController.actionRejectOrder);
+router.put("/order/:id/send-salary", uploadProofSalary, adminController.actionSendSalary);
 
 module.exports = router;

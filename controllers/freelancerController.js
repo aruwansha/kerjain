@@ -578,7 +578,7 @@ module.exports = {
     }
     order.work = `images/order/proof_work/${req.file.filename}`;
     await order.save();
-    req.flash("alertMessage", "Pekerjaan berhasil dikirim");
+    req.flash("alertMessage", "Bukti pekerjaan berhasil dikirim");
     req.flash("alertStatus", "primary");
     res.redirect(`/freelancer/order`);
   },

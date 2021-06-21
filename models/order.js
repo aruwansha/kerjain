@@ -70,6 +70,9 @@ const orderSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  proofSalary: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("Order", orderSchema);

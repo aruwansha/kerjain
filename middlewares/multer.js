@@ -104,6 +104,23 @@ const uploadWork = multer({
   },
 }).single("image");
 
+// Set storage Work
+const storageProofSalary = multer.diskStorage({
+  destination: "public/images/order/proof_salary",
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const uploadProofSalary = multer({
+  storage: storageProofSalary,
+  limits: { fileSize: 1000000 },
+  fileFilter: function (req, file, cb) {
+    checkImages(file, cb);
+  },
+}).single("image");
+
+
 // // Check file Type
 function checkImages(file, cb) {
   // Allowed ext
@@ -134,4 +151,4 @@ function checkFile(file, cb) {
     cb("Error: Archive Only !!!");
   }
 }
-module.exports = { uploadBank, uploadService, uploadUser, uploadServiceUser, uploadProofPayment, uploadWork };
+module.exports = { uploadBank, uploadService, uploadUser, uploadServiceUser, uploadProofPayment, uploadWork, uploadProofSalary };

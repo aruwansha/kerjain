@@ -132,7 +132,7 @@ module.exports = {
         accountHolder,
         imgUrl: `images/bank/${req.file.filename}`,
       });
-      req.flash("alertMessage", "Succesfully Added bank");
+      req.flash("alertMessage", "Data bank berhasil ditambahkan");
       req.flash("alertStatus", "success");
       res.redirect("bank");
     } catch (error) {
@@ -151,7 +151,7 @@ module.exports = {
         bank.bankAccount = bankAccount;
         bank.accountHolder = accountHolder;
         await bank.save();
-        req.flash("alertMessage", "Succesfully Edited bank");
+        req.flash("alertMessage", "Data bank berhasil diedit");
         req.flash("alertStatus", "success");
         res.redirect("bank");
       } else {
@@ -161,7 +161,7 @@ module.exports = {
         bank.accountHolder = accountHolder;
         bank.imgUrl = `images/bank/${req.file.filename}`;
         await bank.save();
-        req.flash("alertMessage", "Succesfully Edited bank");
+        req.flash("alertMessage", "Data bank berhasil diedit");
         req.flash("alertStatus", "success");
         res.redirect("bank");
       }
@@ -177,7 +177,7 @@ module.exports = {
       const { id } = req.body;
       const bank = await Bank.findOne({ _id: id });
       await bank.remove();
-      req.flash("alertMessage", "Succesfully Deleted bank");
+      req.flash("alertMessage", "Data bank berhasil dihapus");
       req.flash("alertStatus", "success");
       res.redirect("bank");
     } catch (error) {
@@ -257,12 +257,12 @@ module.exports = {
       const filter = { _id: freelancer.userId._id };
       if (freelancer.userId.isBanned == false) {
         await User.updateOne(filter, { isBanned: true });
-        req.flash("alertMessage", `${freelancer.userId.name} has been banned`);
+        req.flash("alertMessage", `${freelancer.userId.name} berhasil dinonaktifkan`);
       } else {
         await User.updateOne(filter, { isBanned: false });
         req.flash(
           "alertMessage",
-          `${freelancer.userId.name} has been unbanned`
+          `${freelancer.userId.name} berhasil diaktifkan`
         );
       }
       req.flash("alertStatus", "success");
@@ -337,7 +337,7 @@ module.exports = {
       );
       // delete freelancer row
       await freelancer.remove();
-      req.flash("alertMessage", "Delete Success");
+      req.flash("alertMessage", "Freelancer berhasil dihapus");
       req.flash("alertStatus", "success");
       res.redirect("/admin/freelancer");
     } catch (error) {
@@ -379,12 +379,12 @@ module.exports = {
 
       if (serviceUser.userId.isBanned == false) {
         await User.updateOne(filter, { isBanned: true });
-        req.flash("alertMessage", `${serviceUser.userId.name} has been banned`);
+        req.flash("alertMessage", `${serviceUser.userId.name} berhasil dinonaktifkan`);
       } else {
         await User.updateOne(filter, { isBanned: false });
         req.flash(
           "alertMessage",
-          `${serviceUser.userId.name} has been unbanned`
+          `${serviceUser.userId.name} berhasil diaktifkan`
         );
       }
       req.flash("alertStatus", "success");
@@ -430,7 +430,7 @@ module.exports = {
       await user.remove();
       // delete freelancer row
       await serviceuser.remove();
-      req.flash("alertMessage", "Delete Success");
+      req.flash("alertMessage", "User berhasil dihapus");
       req.flash("alertStatus", "success");
       res.redirect("/admin/serviceuser");
     } catch (error) {}
@@ -472,18 +472,18 @@ module.exports = {
         const alertStatus = req.flash("alertStatus");
         const alert = { message: alertMessage, status: alertStatus };
         const order = await Order.findOne({ _id: id })
-        .populate({
-          path: "serviceUserId",
-          select: "userId",
-        })
-        .populate({
-          path: "serviceId",
-          select: "title price description",
-        })
-        .populate({
-          path: "requestId",
-          select: "requestSubject requestDescription finalBudget",
-        });
+          .populate({
+            path: "serviceUserId",
+            select: "userId",
+          })
+          .populate({
+            path: "serviceId",
+            select: "title price description",
+          })
+          .populate({
+            path: "requestId",
+            select: "requestSubject requestDescription finalBudget",
+          });
         const user = await User.findOne({ _id: order.serviceUserId.userId });
         res.render("admin/order/view_order", {
           title: "Detail Order | Admin Kerjain",
@@ -505,7 +505,7 @@ module.exports = {
       const order = await Order.findOne({ _id: id });
       order.payments.status = "paid";
       await order.save();
-      req.flash("alertMessage", "Order Confirmed");
+      req.flash("alertMessage", "Order terkonfirmasi");
       req.flash("alertStatus", "success");
       res.redirect(`/admin/order/${id}`);
     } catch (error) {
@@ -518,12 +518,25 @@ module.exports = {
       const { id } = req.params;
       const order = await Order.findOne({ _id: id });
       order.payments.status = "rejected";
-      req.flash("alertMessage", "Order Rejected");
+      req.flash("alertMessage", "Order ditolak");
       req.flash("alertStatus", "success");
       await order.save();
       res.redirect(`/admin/order/${id}`);
     } catch (error) {
       res.redirect("/admin/order");
     }
+  },
+
+  actionSendSalary: async (req, res) => {
+    const {id} = req.params;
+    const order = await Order.findOne({ _id: id }).select("proofSalary");
+    if (fs.existsSync(path.join(`public/${order.imgUrl}`))) {
+      await fs.unlink(path.join(`public/${order.imgUrl}`));
+    }
+    order.proofSalary = `images/order/proof_salary/${req.file.filename}`;
+    await order.save();
+    req.flash("alertMessage", "Bukti transfer berhasil dikirim");
+    req.flash("alertStatus", "primary");
+    res.redirect(`/admin/order`);
   },
 };
