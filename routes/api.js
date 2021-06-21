@@ -10,6 +10,8 @@ router.get("/freelancer/:id", apiController.detailPage);
 router.post("/register", apiController.register);
 router.post("/login", apiController.login);
 router.get("/landing-page/me", verify, apiController.me);
+router.get("/profile/get", verify, apiController.getProfile);
+router.put("/profile/update", verify, apiController.editProfile);
 router.get("/order/get", verify, apiController.getOrder);
 router.get("/order/get/:id", verify, apiController.getOrderDetail);
 router.post(

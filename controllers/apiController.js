@@ -611,7 +611,10 @@ module.exports = {
         return res.status(400).send("Email or password is wrong");
 
       if (user.level != "service_user")
-        return res.status(400).send("You are not service user");
+        return res.status(200).send({
+          message: "Maaf anda bukan service user",
+          meta: {},
+        });
 
       const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
         expiresIn: 3600,
@@ -1353,7 +1356,10 @@ module.exports = {
   deleteAllChat: async (req, res) => {
     const serviceUserId = req.user.id;
     const freelancerUserId = req.params.id;
-    const filter = { serviceUserId: serviceUserId, freelancerUserId: freelancerUserId };
+    const filter = {
+      serviceUserId: serviceUserId,
+      freelancerUserId: freelancerUserId,
+    };
     await Chat.deleteMany(filter);
     res.status(202).send({ message: "all chats deleted successfully" });
   },
@@ -1389,5 +1395,24 @@ module.exports = {
     });
     if (!data) return res.send({ message: "Failed to add chat!" });
     res.status(201).send({ message: "Success Reply", data });
+  },
+
+  getProfile: async (req, res) => {
+    const user = await User.findOne({ _id: req.user.id });
+    res.status(200).send(user);
+  },
+  
+  editProfile: async (req, res) => {
+    const { name, email, address, phone } = req.body;
+    const user = await User.findOne({ _id: req.user.id });
+
+    user.name = name;
+    user.email = email;
+    user.address = address;
+    user.phone = phone;
+    const save = await user.save();
+    if (!save)
+      return res.status(400).send({ message: "Failed to edit profile" });
+    res.status(201).send({ message: "Success Edit Profile" });
   },
 };
