@@ -29,13 +29,11 @@ mongoose.connect(process.env.DB_CONNECT, {
   useFindAndModify: false,
 });
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-
-// router custom
+// router
+const indexRouter = require("./routes/index");
 const adminRouter = require("./routes/admin");
 const freelancerRouter = require("./routes/freelancer");
-const apiRouter = require("./routes/api");
+const serviceUserRouter = require("./routes/service_user");
 
 var app = express();
 
@@ -65,13 +63,12 @@ app.use(
 app.use(cors())
 app.use(favicon(path.join(__dirname, 'assets/images', 'favicon.ico')))
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
 
-// use custom router
+// use router
+app.use("/", indexRouter);
 app.use("/admin", adminRouter);
-app.use("/freelancer", freelancerRouter);
-app.use("/api/v1/user", apiRouter);
+app.use("/api/v1/freelancer", freelancerRouter);
+app.use("/api/v1/user", serviceUserRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

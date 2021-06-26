@@ -1,23 +1,19 @@
 const router = require("express").Router();
 const freelancerController = require("../controllers/freelancerController");
-const { uploadService, uploadUser, uploadServiceUser, uploadWork } = require("../middlewares/multer");
-const { isLogin } = require("../middlewares/auth");
+const {
+  uploadService,
+  uploadUser,
+  uploadServiceUser,
+  uploadWork,
+} = require("../middlewares/multer");
 
-// auth
-router.use(isLogin);
+const { verify } = require("../middlewares/auth");
 
 // dashboard
-router.get("/", freelancerController.viewDashboard);
-router.get("/dashboard", freelancerController.viewDashboard);
-
-// profile
-router.get("/profile", freelancerController.viewProfile);
-router.put("/profile/:id/personal", uploadUser, freelancerController.actionEditPersonal);
-router.put("/profile/:id/service", uploadServiceUser, freelancerController.actionEditService);
-router.put("/profile/:id/bank", freelancerController.actionEditBank);
+router.get("/dashboard", verify, freelancerController.getDashboard);
 
 // service
-router.get("/service", freelancerController.viewService);
+router.get("/services", verify, freelancerController.getServices);
 router.post(
   "/service/add",
   uploadService,
@@ -34,16 +30,15 @@ router.delete(
 );
 
 // request
-router.get("/request", freelancerController.viewRequest);
-router.get("/request/:id", freelancerController.viewRequestDetail);
+router.get("/requests", verify, freelancerController.getRequests);
+router.get("/requests/:id", verify, freelancerController.getRequest);
 router.post("/request/bid", freelancerController.actionRequestBid);
 router.put("/request/bid", freelancerController.actionChangeBid);
 
-
 // chat
-router.get("/chat", freelancerController.viewChat);
+router.get("/chats", verify, freelancerController.getChats);
 router.delete("/chat/:id/delete", freelancerController.actionDeleteChat);
-router.get("/chat/:id", freelancerController.viewDetailChat);
+router.get("/chats/:id", verify, freelancerController.getChat);
 router.delete(
   "/chat/detail/:id/delete",
   freelancerController.actionDeleteDetailChat
@@ -51,11 +46,26 @@ router.delete(
 router.post("/chat/detail/:id/reply", freelancerController.actionReplyChat);
 
 // setting
-router.get("/setting/edit-profile", freelancerController.viewEditProfil);
+router.get("/profile", verify, freelancerController.getProfile);
+router.put(
+  "/profile/:id/personal",
+  uploadUser,
+  freelancerController.actionEditPersonal
+);
+router.put(
+  "/profile/:id/service",
+  uploadServiceUser,
+  freelancerController.actionEditService
+);
+router.put("/profile/:id/bank", freelancerController.actionEditBank);
 
 // order
-router.get("/order", freelancerController.viewOrder);
-router.get("/order/:id", freelancerController.viewDetailOrder);
-router.put("/order/:id/upload", uploadWork, freelancerController.actionSendWork);
+router.get("/orders", verify, freelancerController.getOrders);
+router.get("/orders/:id", verify, freelancerController.getOrder);
+router.put(
+  "/order/:id/upload",
+  uploadWork,
+  freelancerController.actionSendWork
+);
 
 module.exports = router;

@@ -12,88 +12,36 @@ const fs = require("fs-extra");
 const path = require("path");
 
 module.exports = {
-  viewDashboard: async (req, res) => {
-    const level = req.session.user.level;
-    if (level != "freelancer") {
-      level == "admin" ? res.redirect("/admin") : res.redirect("/");
-    } else {
-      const alertMessage = req.flash("alertMessage");
-      const alertStatus = req.flash("alertStatus");
-      const alert = { message: alertMessage, status: alertStatus };
-      const id = req.session.user.id;
-      const order = await Freelancer.findOne({ userId: id })
-        .select("_id")
-        .populate("orderId");
-      const freelancer = await Freelancer.findOne({ userId: req.session.user.id }).select('_id');
-      const service = await Service.find({freelancerId: freelancer._id});
-      const unread = await Chat.find({
-        freelancerUserId: req.session.user.id,
-        isReadFreelancer: false,
-      }).select("isReadFreelancer");
-      res.render("freelancer/dashboard/view_dashboard", {
-        title: "Dashboard | Freelancer",
-        user: req.session.user,
-        alert,
-        unread,
-        order,
-        service,
-        unread,
-      });
-    }
+  getDashboard: async (req, res) => {
+    const id = req.user.id;
+    const order = await Freelancer.findOne({ userId: id })
+      .select("_id")
+      .populate({ select: "id", path: "orderId" });
+    const freelancer = await Freelancer.findOne({
+      userId: id,
+    }).select("_id");
+    const service = await Service.find({ freelancerId: freelancer._id }).select(
+      "_id"
+    );
+    const unread = await Chat.find({
+      freelancerUserId: id,
+      isReadFreelancer: false,
+    }).select("isReadFreelancer");
+    res.send({
+      total_order: order.orderId.length,
+      total_service: service.length,
+    });
   },
 
-  viewProfile: async (req, res) => {
-    const level = req.session.user.level;
-    if (level != "freelancer") {
-      level == "admin" ? res.redirect("/admin") : res.redirect("/");
-    } else {
-      const alertMessage = req.flash("alertMessage");
-      const alertStatus = req.flash("alertStatus");
-      const alert = { message: alertMessage, status: alertStatus };
-      const id = req.session.user.id;
-      const unread = await Chat.find({
-        freelancerUserId: req.session.user.id,
-        isReadFreelancer: false,
-      }).select("isReadFreelancer");
-      const freelancer = await Freelancer.findOne({ userId: id })
-        .select(
-          "_id title description rating bankName bankAccount accountHolder imgUrl"
-        )
-        .populate("userId")
-        .populate({ path: "categoryId", select: "id name" });
-      res.render("freelancer/profile/view_profile", {
-        title: "Dashboard | Profile",
-        user: req.session.user,
-        alert,
-        unread,
-        freelancer,
-      });
-    }
-  },
-
-  viewService: async (req, res) => {
-    const level = req.session.user.level;
-    if (level != "freelancer") {
-      level == "admin" ? res.redirect("/admin") : res.redirect("/");
-    } else {
-      const alertMessage = req.flash("alertMessage");
-      const alertStatus = req.flash("alertStatus");
-      const alert = { message: alertMessage, status: alertStatus };
-      const id = req.session.user.id;
-      const unread = await Chat.find({
-        freelancerUserId: req.session.user.id,
-        isReadFreelancer: false,
-      }).select("isReadFreelancer");
-      const freelancer = await Freelancer.findOne({ userId: id }).select("_id");
-      const service = await Service.find({ freelancerId: freelancer._id });
-      res.render("freelancer/service/view_service", {
-        title: "Dashboard | Profile",
-        user: req.session.user,
-        alert,
-        unread,
-        service,
-      });
-    }
+  getServices: async (req, res) => {
+    const id = req.user.id;
+    const unread = await Chat.find({
+      freelancerUserId: id,
+      isReadFreelancer: false,
+    }).select("isReadFreelancer");
+    const freelancer = await Freelancer.findOne({ userId: id }).select("_id");
+    const service = await Service.find({ freelancerId: freelancer._id });
+    res.status(200).send(service);
   },
 
   actionAddService: async (req, res) => {
@@ -190,111 +138,85 @@ module.exports = {
     }
   },
 
-  viewRequest: async (req, res) => {
-    const level = req.session.user.level;
-    if (level != "freelancer") {
-      level == "admin" ? res.redirect("/admin") : res.redirect("/");
-    } else {
-      const alertMessage = req.flash("alertMessage");
-      const alertStatus = req.flash("alertStatus");
-      const alert = { message: alertMessage, status: alertStatus };
-      const unread = await Chat.find({
-        freelancerUserId: req.session.user.id,
-        isReadFreelancer: false,
-      }).select("isReadFreelancer");
+  getRequests: async (req, res) => {
+    const id = req.user.id;
+    const unread = await Chat.find({
+      freelancerUserId: id,
+      isReadFreelancer: false,
+    }).select("isReadFreelancer");
 
-      const freelancer = await Freelancer.findOne({
-        userId: req.session.user.id,
-      }).select("categoryId");
-      const mongoose = require("mongoose");
-      const request = await Request.aggregate([
-        {
-          $match: {
-            categoryId: mongoose.Types.ObjectId(freelancer.categoryId),
-          },
+    const freelancer = await Freelancer.findOne({
+      userId: id,
+    }).select("categoryId");
+    const mongoose = require("mongoose");
+    const request = await Request.aggregate([
+      {
+        $match: {
+          categoryId: mongoose.Types.ObjectId(freelancer.categoryId),
         },
-        {
-          $lookup: {
-            from: "serviceusers",
-            localField: "serviceUserId",
-            foreignField: "_id",
-            as: "serviceUserId",
-          },
+      },
+      {
+        $lookup: {
+          from: "serviceusers",
+          localField: "serviceUserId",
+          foreignField: "_id",
+          as: "serviceUserId",
         },
-        {
-          $lookup: {
-            from: "users",
-            localField: "serviceUserId.userId",
-            foreignField: "_id",
-            as: "userId",
-          },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "serviceUserId.userId",
+          foreignField: "_id",
+          as: "userId",
         },
-        {
-          $lookup: {
-            from: "orders",
-            localField: "serviceUserId._id",
-            foreignField: "serviceUserId",
-            as: "orderer",
-          },
+      },
+      {
+        $lookup: {
+          from: "orders",
+          localField: "serviceUserId._id",
+          foreignField: "serviceUserId",
+          as: "orderer",
         },
-        {
-          $project: {
-            status: "$orderer.payments",
-            "userId.name": 1,
-            requestSubject: 1,
-            requestDescription: 1,
-            requestBudget: 1,
-            finalBudget: 1,
-            freelancerId: 1,
-          },
+      },
+      {
+        $project: {
+          status: "$orderer.payments",
+          "userId.name": 1,
+          requestSubject: 1,
+          requestDescription: 1,
+          requestBudget: 1,
+          finalBudget: 1,
+          freelancerId: 1,
         },
-      ]);
-      res.render("freelancer/request/view_request", {
-        title: "Dashboard | Permintaan",
-        user: req.session.user,
-        alert,
-        unread,
-        request,
-        action: "view",
-      });
-    }
+      },
+    ]);
+    res.status(200).send(request);
   },
 
-  viewRequestDetail: async (req, res) => {
-    const level = req.session.user.level;
-    if (level != "freelancer") {
-      level == "admin" ? res.redirect("/admin") : res.redirect("/");
-    } else {
-      const alertMessage = req.flash("alertMessage");
-      const alertStatus = req.flash("alertStatus");
-      const alert = { message: alertMessage, status: alertStatus };
-      const unread = await Chat.find({
-        freelancerUserId: req.session.user.id,
-        isReadFreelancer: false,
-      }).select("isReadFreelancer");
-      const { id } = req.params;
-      const request = await Request.findOne({ _id: id });
-      const serviceUser = await ServiceUser.findOne({
-        _id: request.serviceUserId,
-      })
-        .select("id")
-        .populate({ path: "userId", select: "name email phone" });
+  getRequest: async (req, res) => {
+    const userId = req.user.id;
+    const unread = await Chat.find({
+      freelancerUserId: userId,
+      isReadFreelancer: false,
+    }).select("isReadFreelancer");
+    const { id } = req.params;
+    const request = await Request.findOne({ _id: id });
+    const serviceUser = await ServiceUser.findOne({
+      _id: request.serviceUserId,
+    })
+      .select("id")
+      .populate({ path: "userId", select: "name email phone" });
 
-      const requestBid = await RequestBid.findOne({
-        requestId: request._id,
-      });
+    const requestBid = await RequestBid.findOne({
+      requestId: id,
+    });
 
-      res.render("freelancer/request/view_request", {
-        title: "Dashboard | Permintaan",
-        user: req.session.user,
-        alert,
-        unread,
-        request,
-        serviceUser,
-        requestBid,
-        action: "detail",
-      });
-    }
+    res.status(200).send({
+      request: request,
+      service_user: serviceUser,
+      request_bid: requestBid,
+    });
   },
 
   actionRequestBid: async (req, res) => {
@@ -326,57 +248,64 @@ module.exports = {
     res.redirect(`/freelancer/request/${newRequestBid.requestId}`);
   },
 
-  viewChat: async (req, res) => {
-    const level = req.session.user.level;
-    if (level != "freelancer") {
-      level == "admin" ? res.redirect("/admin") : res.redirect("/");
-    } else {
-      const alertMessage = req.flash("alertMessage");
-      const alertStatus = req.flash("alertStatus");
-      const alert = { message: alertMessage, status: alertStatus };
-      const unread = await Chat.find({
-        freelancerUserId: req.session.user.id,
-        isReadFreelancer: false,
-      }).select("isReadFreelancer");
-      const mongoose = require("mongoose");
-      const chats = await Chat.aggregate([
-        {
-          $match: {
-            freelancerUserId: mongoose.Types.ObjectId(req.session.user.id),
-          },
+  getChats: async (req, res) => {
+    const userId = req.user.id;
+    const unread = await Chat.find({
+      freelancerUserId: userId,
+      isReadFreelancer: false,
+    }).select("isReadFreelancer");
+    const mongoose = require("mongoose");
+    const chats = await Chat.aggregate([
+      {
+        $match: {
+          freelancerUserId: mongoose.Types.ObjectId(userId),
         },
-        {
-          $lookup: {
-            from: "users",
-            localField: "serviceUserId",
-            foreignField: "_id",
-            as: "serviceUserId",
-          },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "serviceUserId",
+          foreignField: "_id",
+          as: "serviceUserId",
         },
-        {
-          $lookup: {
-            from: "users",
-            localField: "from",
-            foreignField: "_id",
-            as: "from",
-          },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "from",
+          foreignField: "_id",
+          as: "from",
         },
-        { $sort: { time: -1 } },
-        {
-          $group: {
-            _id: "$serviceUserId",
-            doc: { $first: "$$ROOT" },
-          },
+      },
+      { $sort: { time: -1 } },
+      {
+        $group: {
+          _id: "$serviceUserId",
+          doc: { $first: "$$ROOT" },
         },
-      ]);
-      res.render("freelancer/chat/view_chat", {
-        title: "Chat | Kerjain",
-        user: req.session.user,
-        alert,
-        unread,
-        chats,
-      });
-    }
+      },
+      { $sort: { "doc.time": -1 } },
+      {
+        $project: {
+          "_id._id": 1,
+          "doc._id": 1,
+          "doc.isReadFreelancer": 1,
+          "doc.isReadServiceUser": 1,
+          "doc.time": 1,
+          "doc.freelancerUserId": 1,
+          "doc.serviceUserId._id": 1,
+          "doc.serviceUserId.name": 1,
+          "doc.from._id": 1,
+          "doc.from.name": 1,
+          "doc.to": 1,
+          "doc.message": 1,
+          "doc.__v": 1,
+        },
+      },
+    ]);
+    res.status(200).send({
+      chats,
+    });
   },
 
   actionDeleteChat: async (req, res) => {
@@ -397,55 +326,21 @@ module.exports = {
     }
   },
 
-  viewDetailChat: async (req, res) => {
-    const level = req.session.user.level;
-    if (level != "freelancer") {
-      level == "admin" ? res.redirect("/admin") : res.redirect("/");
-    } else {
-      const alertMessage = req.flash("alertMessage");
-      const alertStatus = req.flash("alertStatus");
-      const alert = { message: alertMessage, status: alertStatus };
-      const unread = await Chat.find({
-        freelancerUserId: req.session.user.id,
-        isReadFreelancer: false,
-      }).select("isReadFreelancer");
-      const serviceUserId = req.params;
+  getChat: async (req, res) => {
+    const userId = req.user.id;
+    const unread = await Chat.find({
+      freelancerUserId: userId,
+      isReadFreelancer: false,
+    }).select("isReadFreelancer");
+    const serviceUserId = req.params.id;
 
-      var perPage = 10,
-        page = Math.max(0, req.params.page);
-      await Chat.find({
-        freelancerUserId: req.session.user.id,
-        serviceUserId: serviceUserId.id,
-      })
-        .populate({ path: "from", select: "id name" })
-        .limit(perPage)
-        .skip(perPage * page)
-        .sort("time")
-        .exec(function (err, chats) {
-          for (i = 0; i < chats.length; i++) {
-            chats[i].isReadFreelancer = true;
-            chats[i].save(function (err) {
-              if (err) {
-                console.error("ERROR!");
-              }
-            });
-          }
-          Chat.count({ serviceUserId: serviceUserId.id }).exec(function (
-            err,
-            count
-          ) {
-            res.render("freelancer/chat/view_detail_chat", {
-              title: "Detail Chat | Kerjain",
-              user: req.session.user,
-              alert,
-              unread,
-              chats,
-              page,
-              pages: count / perPage,
-            });
-          });
-        });
-    }
+    const chat = await Chat.find({
+      freelancerUserId: userId,
+      serviceUserId: serviceUserId,
+    })
+      .populate({ path: "from", select: "id name" })
+      .sort("time");
+    res.send(chat);
   },
 
   actionDeleteDetailChat: async (req, res) => {
@@ -489,85 +384,46 @@ module.exports = {
     res.redirect(`/freelancer/chat/${id}`);
   },
 
-  viewOrder: async (req, res) => {
-    try {
-      const level = req.session.user.level;
-      if (level != "freelancer") {
-        level == "admin" ? res.redirect("/admin") : res.redirect("/");
-      } else {
-        const id = req.session.user.id;
-        const unread = await Chat.find({
-          freelancerUserId: req.session.user.id,
-          isReadFreelancer: false,
-        }).select("isReadFreelancer");
-        const alertMessage = req.flash("alertMessage");
-        const alertStatus = req.flash("alertStatus");
-        const alert = { message: alertMessage, status: alertStatus };
-        const order = await Freelancer.findOne({ userId: id })
-          .select("orderId")
-          .populate({
-            path: "orderId",
-            select: "id orderDate payments total",
-          });
-        const totalOrder = order.orderId.length;
-        res.render("freelancer/order/view_order", {
-          title: "View Order | Admin Kerjain",
-          user: req.session.user,
-          alert,
-          unread,
-          order,
-          totalOrder,
-          action: "view",
-        });
-      }
-    } catch (error) {
-      res.redirect("/freelancer/dashboard");
-    }
+  getOrders: async (req, res) => {
+    const userId = req.user.id;
+    const unread = await Chat.find({
+      freelancerUserId: userId,
+      isReadFreelancer: false,
+    }).select("isReadFreelancer");
+    const order = await Freelancer.findOne({ userId: userId })
+      .select("orderId")
+      .populate({
+        path: "orderId",
+        select: "id orderDate payments total",
+      });
+    const totalOrder = order.orderId.length;
+    res.status(200).send(order);
   },
 
-  viewDetailOrder: async (req, res) => {
-    try {
-      const level = req.session.user.level;
-      if (level != "freelancer") {
-        level == "admin" ? res.redirect("/admin") : res.redirect("/");
-      } else {
-        const { id } = req.params;
-        const unread = await Chat.find({
-          freelancerUserId: req.session.user.id,
-          isReadFreelancer: false,
-        }).select("isReadFreelancer");
-        const alertMessage = req.flash("alertMessage");
-        const alertStatus = req.flash("alertStatus");
-        const alert = { message: alertMessage, status: alertStatus };
-        const order = await Order.findOne({ _id: id })
-          .populate({
-            path: "serviceUserId",
-            select: "userId",
-          })
-          .populate({
-            path: "serviceId",
-            select: "title price description",
-          })
-          .populate({
-            path: "requestId",
-            select: "requestSubject requestDescription finalBudget",
-          });
-        const serviceUser = await User.findOne({
-          _id: order.serviceUserId.userId,
-        });
-        res.render("freelancer/order/view_order", {
-          title: "View Order | Admin Kerjain",
-          user: req.session.user,
-          alert,
-          unread,
-          order,
-          serviceUser,
-          action: "detail",
-        });
-      }
-    } catch (error) {
-      res.redirect("/freelancer/order");
-    }
+  getOrder: async (req, res) => {
+    const userId = req.user.id;
+    const { id } = req.params;
+    const unread = await Chat.find({
+      freelancerUserId: userId,
+      isReadFreelancer: false,
+    }).select("isReadFreelancer");
+    const order = await Order.findOne({ _id: id })
+      .populate({
+        path: "serviceUserId",
+        select: "userId",
+      })
+      .populate({
+        path: "serviceId",
+        select: "title price description",
+      })
+      .populate({
+        path: "requestId",
+        select: "requestSubject requestDescription finalBudget",
+      });
+    const serviceUser = await User.findOne({
+      _id: order.serviceUserId.userId,
+    });
+    res.status(200).send({ order, serviceUser });
   },
 
   actionSendWork: async (req, res) => {
@@ -583,33 +439,19 @@ module.exports = {
     res.redirect(`/freelancer/order`);
   },
 
-  viewEditProfil: async (req, res) => {
-    const level = req.session.user.level;
-    if (level != "freelancer") {
-      level == "admin" ? res.redirect("/admin") : res.redirect("/");
-    } else {
-      const alertMessage = req.flash("alertMessage");
-      const alertStatus = req.flash("alertStatus");
-      const alert = { message: alertMessage, status: alertStatus };
-      const id = req.session.user.id;
-      const unread = await Chat.find({
-        freelancerUserId: req.session.user.id,
-        isReadFreelancer: false,
-      }).select("isReadFreelancer");
-      const freelancer = await Freelancer.findOne({ userId: id })
-        .select(
-          "_id title description rating bankName bankAccount accountHolder imgUrl"
-        )
-        .populate("userId")
-        .populate({ path: "categoryId", select: "id name" });
-      res.render("freelancer/setting/view_edit_profile", {
-        title: "Dashboard | Profile",
-        user: req.session.user,
-        alert,
-        unread,
-        freelancer,
-      });
-    }
+  getProfile: async (req, res) => {
+    const userId = req.user.id;
+    const unread = await Chat.find({
+      freelancerUserId: userId,
+      isReadFreelancer: false,
+    }).select("isReadFreelancer");
+    const freelancer = await Freelancer.findOne({ userId: userId })
+      .select(
+        "_id title description rating bankName bankAccount accountHolder imgUrl"
+      )
+      .populate("userId")
+      .populate({ path: "categoryId", select: "id name" });
+    res.status(200).send(freelancer);
   },
 
   actionEditPersonal: async (req, res) => {

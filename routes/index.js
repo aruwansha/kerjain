@@ -9,5 +9,6 @@ router.get("/login", authController.viewSignin);
 router.post("/login", authController.actionSignin);
 router.get("/logout", authController.actionLogout);
 router.put("/change-password", authController.actionChangePassword);
+router.post("/api/v1/login", authController.login);
 
 module.exports = router;

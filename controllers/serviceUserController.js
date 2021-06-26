@@ -13,13 +13,9 @@ const mongoose = require("mongoose");
 
 const {
   registerValidation,
-  loginValidation,
   requestValidation,
   reviewValidation,
 } = require("../validator.js");
-
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 
 module.exports = {
   landingPage: async (req, res) => {
@@ -591,40 +587,6 @@ module.exports = {
       });
     } catch (error) {
       res.send({ error });
-    }
-  },
-
-  login: async (req, res) => {
-    try {
-      const error = loginValidation(req.body).error;
-      if (error) return res.status(400).send(error.details[0].message);
-
-      const user = await User.findOne({ email: req.body.email.toLowerCase() });
-
-      if (!user) return res.status(400).send("Email or password is wrong");
-
-      const isPasswordMatch = await bcrypt.compare(
-        req.body.password,
-        user.password
-      );
-      if (!isPasswordMatch)
-        return res.status(400).send("Email or password is wrong");
-
-      if (user.level != "service_user")
-        return res.status(200).send({
-          message: "Maaf anda bukan service user",
-          meta: {},
-        });
-
-      const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
-        expiresIn: 3600,
-      });
-      res.status(200).send({
-        message: "Success Login",
-        data: { name: user.name, token: token },
-      });
-    } catch (error) {
-      res.status(500).send(error);
     }
   },
 
@@ -1331,6 +1293,7 @@ module.exports = {
           doc: { $first: "$$ROOT" },
         },
       },
+      { $sort: { "doc.time": -1 } },
       {
         $project: {
           "_id._id": 1,
@@ -1379,7 +1342,7 @@ module.exports = {
     const { id } = req.params;
     const chat = await Chat.findOne({ _id: id });
     await chat.remove();
-    res.status.send({ message: "chat deleted successfully" });
+    res.status(202).send({ message: "chat deleted successfully" });
   },
 
   addChat: async (req, res) => {

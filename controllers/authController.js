@@ -1,7 +1,10 @@
 const User = require("../models/user");
-const bcrypt = require("bcrypt");
 const Freelancer = require("../models/freelancer");
 const Category = require("../models/category");
+
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { loginValidation } = require("../validator.js");
 
 module.exports = {
   viewSignup: async (req, res) => {
@@ -195,12 +198,50 @@ module.exports = {
         req.flash("alertStatus", "danger");
         res.redirect("back");
       } else {
-        user.password = password1
-        await user.save()
+        user.password = password1;
+        await user.save();
         req.flash("alertMessage", "password berhasil diubah");
         req.flash("alertStatus", "success");
         res.redirect("back");
       }
+    }
+  },
+
+  // API SIDE
+
+  login: async (req, res) => {
+    try {
+      const error = loginValidation(req.body).error;
+      if (error) return res.status(400).send(error.details[0].message);
+
+      const user = await User.findOne({ email: req.body.email.toLowerCase() });
+
+      if (!user) return res.status(400).send("Email or password is wrong");
+
+      const isPasswordMatch = await bcrypt.compare(
+        req.body.password,
+        user.password
+      );
+      if (!isPasswordMatch)
+        return res.status(400).send("Email or password is wrong");
+
+      const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+        expiresIn: 3600,
+      });
+      if (user.level === "service_user") {
+        res.status(200).send({
+          message: "Success Login",
+          data: { name: user.name, level: "service_user", token: token },
+        });
+      }
+      if (user.level === "freelancer") {
+        res.status(200).send({
+          message: "Success Login",
+          data: { name: user.name, level: "freelancer", token: token },
+        });
+      }
+    } catch (error) {
+      res.status(500).send(error);
     }
   },
 };
