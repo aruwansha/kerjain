@@ -44,98 +44,71 @@ module.exports = {
     res.status(200).send(service);
   },
 
-  actionAddService: async (req, res) => {
-    try {
-      const { title, description, price } = req.body;
-      const freelancer = await Freelancer.findOne({
-        userId: req.session.user.id,
+  postService: async (req, res) => {
+    const userId = req.user.id;
+    const { title, description, price } = req.body;
+    const freelancer = await Freelancer.findOne({
+      userId: userId,
+    });
+
+    const service = await Service.find({ freelancerId: freelancer._id });
+
+    if (service.length < 3) {
+      const newService = await Service.create({
+        freelancerId: freelancer._id,
+        title,
+        description,
+        price,
+        imgUrl: `images/service/${req.file.filename}`,
       });
 
-      const service = await Service.find({ freelancerId: freelancer._id });
-
-      if (service.length < 3) {
-        const newService = await Service.create({
-          freelancerId: freelancer._id,
-          title,
-          description,
-          price,
-          imgUrl: `images/service/${req.file.filename}`,
-        });
-
-        freelancer.serviceId.push({ _id: newService._id });
-        freelancer.save();
-        req.flash("alertMessage", "Berhasil menambahkan data");
-        req.flash("alertStatus", "success");
-      } else {
-        req.flash(
-          "alertMessage",
-          "Layanan sudah penuh, silakan hapus atau edit salah satu layanan"
-        );
-        req.flash("alertStatus", "danger");
-      }
-
-      res.redirect("/freelancer/service");
-    } catch (error) {
-      req.flash("alertMessage", `${error}`);
-      req.flash("alertStatus", "danger");
-      res.redirect("/freelancer/service");
+      freelancer.serviceId.push({ _id: newService._id });
+      freelancer.save();
+      res.status(201).send({ message: "Berhasil menambah data" });
+    } else {
+      res.status(201).send({ message: "Layanan sudah penuh" });
     }
   },
 
-  actionEditServiceDetail: async (req, res) => {
-    try {
-      const { id, title, description, price } = req.body;
-      const service = await Service.findOne({ _id: id });
-      if (req.file == undefined) {
-        service.title = title;
-        service.description = description;
-        service.price = price;
-        await service.save();
-      } else {
-        if (fs.existsSync(path.join(`public/${service.imgUrl}`))) {
-          await fs.unlink(path.join(`public/${service.imgUrl}`));
-        }
-        service.title = title;
-        service.description = description;
-        service.price = price;
-        service.imgUrl = `images/service/${req.file.filename}`;
-        await service.save();
-      }
-      req.flash("alertMessage", "Berhasil mengubah data");
-      req.flash("alertStatus", "success");
-      res.redirect("/freelancer/service");
-    } catch (error) {
-      req.flash("alertMessage", `${error}`);
-      req.flash("alertStatus", "danger");
-      res.redirect("/freelancer/service");
-    }
-  },
-
-  actionDeleteServiceDetail: async (req, res) => {
-    try {
-      const { id } = req.body;
-      const service = await Service.findOne({ _id: id });
+  putService: async (req, res) => {
+    const { id, title, description, price } = req.body;
+    const service = await Service.findOne({ _id: id });
+    if (req.file == undefined) {
+      service.title = title;
+      service.description = description;
+      service.price = price;
+      await service.save();
+    } else {
       if (fs.existsSync(path.join(`public/${service.imgUrl}`))) {
         await fs.unlink(path.join(`public/${service.imgUrl}`));
       }
-      const freelancer = await Freelancer.findOne({
-        userId: req.session.user.id,
-      });
-
-      await Freelancer.updateOne(
-        { _id: freelancer._id },
-        { $pull: { serviceId: { _id: service._id } } }
-      );
-
-      await service.remove();
-      req.flash("alertMessage", "Berhasil menghapus data");
-      req.flash("alertStatus", "success");
-      res.redirect("/freelancer/service");
-    } catch (error) {
-      req.flash("alertMessage", `${error}`);
-      req.flash("alertStatus", "danger");
-      res.redirect("/freelancer/service");
+      service.title = title;
+      service.description = description;
+      service.price = price;
+      service.imgUrl = `images/service/${req.file.filename}`;
+      await service.save();
     }
+    res.status(200).send({ message: "Data berhasil diperbaharui" });
+  },
+
+  deleteService: async (req, res) => {
+    const userId = req.user.id;
+    const { id } = req.body;
+    const service = await Service.findOne({ _id: id });
+    if (fs.existsSync(path.join(`public/${service.imgUrl}`))) {
+      await fs.unlink(path.join(`public/${service.imgUrl}`));
+    }
+    const freelancer = await Freelancer.findOne({
+      userId: userId,
+    });
+
+    await Freelancer.updateOne(
+      { _id: freelancer._id },
+      { $pull: { serviceId: { _id: service._id } } }
+    );
+
+    await service.remove();
+    res.status(203).send({ message: "Data berhasil dihapus" });
   },
 
   getRequests: async (req, res) => {
@@ -219,11 +192,12 @@ module.exports = {
     });
   },
 
-  actionRequestBid: async (req, res) => {
+  postBid: async (req, res) => {
+    const userId = req.user.id;
     const { nominal, id } = req.body;
 
     const freelancerId = await Freelancer.findOne({
-      userId: req.session.user.id,
+      userId: userId,
     }).select("_id");
 
     await RequestBid.create({
@@ -231,21 +205,15 @@ module.exports = {
       freelancerId: freelancerId._id,
       bid: nominal,
     });
-
-    req.flash("alertMessage", "Berhasil Mengikuti Lelang");
-    req.flash("alertStatus", "success");
-    res.redirect(`/freelancer/request/${id}`);
+    res.status(201).send({ message: "Berhasil mengikuti bid" });
   },
 
-  actionChangeBid: async (req, res) => {
+  putBid: async (req, res) => {
     const { nominal, id } = req.body;
-
     const newRequestBid = await RequestBid.findOne({ _id: id });
     newRequestBid.bid = nominal;
     newRequestBid.save();
-    req.flash("alertMessage", "Berhasil Mengikuti Lelang");
-    req.flash("alertStatus", "success");
-    res.redirect(`/freelancer/request/${newRequestBid.requestId}`);
+    res.status(200).send({ message: "Berhasil merubah bid" });
   },
 
   getChats: async (req, res) => {
@@ -308,22 +276,15 @@ module.exports = {
     });
   },
 
-  actionDeleteChat: async (req, res) => {
-    try {
-      const { id } = req.params;
-      const filter = {
-        serviceUserId: id,
-        freelancerUserId: req.session.user.id,
-      };
-      await Chat.deleteMany(filter);
-      req.flash("alertMessage", "Chat berhasil dihapus");
-      req.flash("alertStatus", "primary");
-      res.redirect("/freelancer/chat");
-    } catch (error) {
-      req.flash("alertMessage", error);
-      req.flash("alertStatus", "primary");
-      res.redirect("/freelancer/chat");
-    }
+  deleteChats: async (req, res) => {
+    const userId = req.user.id;
+    const { id } = req.params;
+    const filter = {
+      serviceUserId: id,
+      freelancerUserId: userId,
+    };
+    await Chat.deleteMany(filter);
+    res.status(203).send({ message: "Chat telah terhapus" });
   },
 
   getChat: async (req, res) => {
@@ -343,45 +304,26 @@ module.exports = {
     res.send(chat);
   },
 
-  actionDeleteDetailChat: async (req, res) => {
-    try {
-      const { id } = req.params;
-      const chat = await Chat.findOne({ _id: id });
-      await chat.remove();
-
-      const check = await Chat.find();
-
-      if ((check.length = 1)) {
-        req.flash("alertMessage", "Chat berhasil dihapus");
-        req.flash("alertStatus", "primary");
-        res.redirect(`/freelancer/chat`);
-      } else {
-        const serviceUserId = chat.serviceUserId;
-        req.flash("alertMessage", "Chat berhasil dihapus");
-        req.flash("alertStatus", "primary");
-        res.redirect(`/freelancer/chat/${serviceUserId}`);
-      }
-    } catch (error) {
-      req.flash("alertMessage", error);
-      req.flash("alertStatus", "primary");
-      res.redirect("/freelancer/chat");
-    }
+  deleteChat: async (req, res) => {
+    const { id } = req.params;
+    const chat = await Chat.findOne({ _id: id });
+    await chat.remove();
+    res.status(203).send({ message: "Chat telah terhapus" });
   },
 
-  actionReplyChat: async (req, res) => {
+  postChat: async (req, res) => {
+    const userId = req.user.id;
     const { id } = req.params;
     const { message } = req.body;
     await Chat.create({
-      freelancerUserId: req.session.user.id,
+      freelancerUserId: userId,
       serviceUserId: id,
-      from: req.session.user.id,
+      from: userId,
       to: id,
       message: message,
       isReadFreelancer: true,
     });
-    req.flash("alertMessage", "Pesan Terkirim");
-    req.flash("alertStatus", "primary");
-    res.redirect(`/freelancer/chat/${id}`);
+    res.status(201).send({ message: "Berhasil mengirim chat" });
   },
 
   getOrders: async (req, res) => {
@@ -426,7 +368,7 @@ module.exports = {
     res.status(200).send({ order, serviceUser });
   },
 
-  actionSendWork: async (req, res) => {
+  sendProofWork: async (req, res) => {
     const { id } = req.params;
     const order = await Order.findOne({ _id: id }).select("work");
     if (fs.existsSync(path.join(`public/${order.imgUrl}`))) {
@@ -434,9 +376,7 @@ module.exports = {
     }
     order.work = `images/order/proof_work/${req.file.filename}`;
     await order.save();
-    req.flash("alertMessage", "Bukti pekerjaan berhasil dikirim");
-    req.flash("alertStatus", "primary");
-    res.redirect(`/freelancer/order`);
+    res.status(200).send({ message: "Bukti pengerjaan sudah dikirim" });
   },
 
   getProfile: async (req, res) => {
@@ -454,84 +394,64 @@ module.exports = {
     res.status(200).send(freelancer);
   },
 
-  actionEditPersonal: async (req, res) => {
-    try {
-      const { firstname, lastname, email, address, phone } = req.body;
-      const user = await User.findOne({ _id: req.session.user.id });
-      if (req.file == undefined) {
-        user.name = `${firstname} ${lastname}`;
-        user.email = email;
-        user.address = address;
-        user.phone = phone;
-        await user.save();
-      } else {
-        if (fs.existsSync(path.join(`public/${user.imgUrl}`))) {
-          await fs.unlink(path.join(`public/${user.imgUrl}`));
-        }
-        user.name = `${firstname} ${lastname}`;
-        user.email = email;
-        user.address = address;
-        user.phone = phone;
-        user.imgUrl = `images/user/${req.file.filename}`;
-        await user.save();
+  putPersonalData: async (req, res) => {
+    const userId = req.user.id;
+    const { firstname, lastname, email, address, phone } = req.body;
+    const user = await User.findOne({ _id: userId });
+    if (req.file == undefined) {
+      user.name = `${firstname} ${lastname}`;
+      user.email = email;
+      user.address = address;
+      user.phone = phone;
+      await user.save();
+    } else {
+      if (fs.existsSync(path.join(`public/${user.imgUrl}`))) {
+        await fs.unlink(path.join(`public/${user.imgUrl}`));
       }
-      req.flash("alertMessage", "Data berhasil disimpan");
-      req.flash("alertStatus", "primary");
-      res.redirect("/freelancer/setting/edit-profile");
-    } catch (error) {
-      res.redirect("/freelancer/setting/edit-profile");
+      user.name = `${firstname} ${lastname}`;
+      user.email = email;
+      user.address = address;
+      user.phone = phone;
+      user.imgUrl = `images/user/${req.file.filename}`;
+      await user.save();
     }
+    res.status(200).send({ message: "Data berhasil diperbaharui" });
   },
 
-  actionEditService: async (req, res) => {
-    try {
-      const { title, description } = req.body;
-      const freelancer = await Freelancer.findOne({
-        userId: req.session.user.id,
-      });
-      if (title === "" || description === "") {
-        req.flash("alertMessage", "Field tidak boleh kosong!");
-        req.flash("alertStatus", "danger");
-        res.redirect("back");
-      } else if (req.file == undefined) {
-        freelancer.title = title;
-        freelancer.description = description;
-        await freelancer.save();
-      } else {
-        if (fs.existsSync(path.join(`public/${freelancer.imgUrl}`))) {
-          await fs.unlink(path.join(`public/${freelancer.imgUrl}`));
-        }
-        freelancer.title = title;
-        freelancer.description = description;
-        freelancer.imgUrl = `images/freelancer/${req.file.filename}`;
-        freelancer.isActive = true;
-        await freelancer.save();
-        req.flash("alertMessage", "Data berhasil disimpan");
-        req.flash("alertStatus", "primary");
-        res.redirect("/freelancer/setting/edit-profile");
-      }
-    } catch (error) {
-      req.flash("alertMessage", `${error}`);
-      req.flash("alertStatus", "primary");
-      res.redirect("/freelancer/setting/edit-profile");
-    }
-  },
-
-  actionEditBank: async (req, res) => {
-    try {
-      const { bankName, bankAccount, accountHolder } = req.body;
-      const freelancer = await Freelancer.findOne({
-        userId: req.session.user.id,
-      });
-      freelancer.bankName = bankName;
-      freelancer.bankAccount = bankAccount;
-      freelancer.accountHolder = accountHolder;
+  putServiceData: async (req, res) => {
+    const userId = req.user.id;
+    const { title, description } = req.body;
+    const freelancer = await Freelancer.findOne({
+      userId: userId,
+    });
+    if (req.file == undefined) {
+      freelancer.title = title;
+      freelancer.description = description;
       await freelancer.save();
-      req.flash("alertMessage", "Data berhasil disimpan");
-      req.flash("alertStatus", "primary");
-      res.redirect("/freelancer/setting/edit-profile");
-    } catch (error) {
-      res.redirect("/freelancer/setting/edit-profile");
+      res.status(200).send({ message: "Data berhasil diperbaharui" });
+    } else {
+      if (fs.existsSync(path.join(`public/${freelancer.imgUrl}`))) {
+        await fs.unlink(path.join(`public/${freelancer.imgUrl}`));
+      }
+      freelancer.title = title;
+      freelancer.description = description;
+      freelancer.imgUrl = `images/freelancer/${req.file.filename}`;
+      freelancer.isActive = true;
+      await freelancer.save();
+      res.status(200).send({ message: "Data berhasil diperbaharui" });
     }
+  },
+
+  putBankData: async (req, res) => {
+    const userId = req.user.id;
+    const { bankName, bankAccount, accountHolder } = req.body;
+    const freelancer = await Freelancer.findOne({
+      userId: userId,
+    });
+    freelancer.bankName = bankName;
+    freelancer.bankAccount = bankAccount;
+    freelancer.accountHolder = accountHolder;
+    await freelancer.save();
+    res.status(200).send({ message: "Data berhasil diperbaharui" });
   },
 };

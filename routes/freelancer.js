@@ -16,56 +16,59 @@ router.get("/dashboard", verify, freelancerController.getDashboard);
 router.get("/services", verify, freelancerController.getServices);
 router.post(
   "/service/add",
+  verify,
   uploadService,
-  freelancerController.actionAddService
+  freelancerController.postService
 );
 router.put(
   "/service/edit",
+  verify,
   uploadService,
-  freelancerController.actionEditServiceDetail
+  freelancerController.putService
 );
-router.delete(
-  "/service/delete",
-  freelancerController.actionDeleteServiceDetail
-);
+router.delete("/service/delete", verify, freelancerController.deleteService);
 
 // request
 router.get("/requests", verify, freelancerController.getRequests);
 router.get("/requests/:id", verify, freelancerController.getRequest);
-router.post("/request/bid", freelancerController.actionRequestBid);
-router.put("/request/bid", freelancerController.actionChangeBid);
+router.post("/request/bid", verify, freelancerController.postBid);
+router.put("/request/bid", verify, freelancerController.putBid);
 
 // chat
 router.get("/chats", verify, freelancerController.getChats);
-router.delete("/chat/:id/delete", freelancerController.actionDeleteChat);
+router.delete("/chats/:id", verify, freelancerController.deleteChats);
 router.get("/chats/:id", verify, freelancerController.getChat);
 router.delete(
-  "/chat/detail/:id/delete",
-  freelancerController.actionDeleteDetailChat
+  "/chats/detail/:id",
+  verify,
+  freelancerController.deleteChat
 );
-router.post("/chat/detail/:id/reply", freelancerController.actionReplyChat);
+router.post("/chat/:id", verify, freelancerController.postChat);
 
 // setting
 router.get("/profile", verify, freelancerController.getProfile);
 router.put(
-  "/profile/:id/personal",
+  "/profile/personal",
+  verify,
   uploadUser,
-  freelancerController.actionEditPersonal
+  freelancerController.putPersonalData
 );
 router.put(
-  "/profile/:id/service",
+  "/profile/service",
+  verify,
   uploadServiceUser,
-  freelancerController.actionEditService
+  freelancerController.putServiceData
 );
-router.put("/profile/:id/bank", freelancerController.actionEditBank);
+router.put("/profile/bank", verify, freelancerController.putBankData);
 
 // order
 router.get("/orders", verify, freelancerController.getOrders);
 router.get("/orders/:id", verify, freelancerController.getOrder);
 router.put(
   "/order/:id/upload",
+  verify,
   uploadWork,
-  freelancerController.actionSendWork
+  freelancerController.sendProofWork
 );
 
 module.exports = router;
