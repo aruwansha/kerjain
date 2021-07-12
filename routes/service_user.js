@@ -32,10 +32,10 @@ router.get("/request/:id", verify, serviceUserController.getDetailRequest);
 router.put("/request/:id", verify, serviceUserController.chooseFreelancer);
 router.get("/review/get", verify, serviceUserController.getReview);
 router.post("/review/add/:id", verify, serviceUserController.addReview);
-router.get("/chat/get", verify, serviceUserController.chats);
-router.get("/chat/get/:id", verify, serviceUserController.detailChat);
-router.post("/chat/add/:id", verify, serviceUserController.addChat);
-router.delete("/chat/delete/:id", verify, serviceUserController.deleteAllChat);
-router.delete("/chat/get/delete/:id", verify, serviceUserController.deleteChat);
+router.get("/chats", verify, serviceUserController.chats);
+router.get("/chats/:id", verify, serviceUserController.detailChat);
+router.post("/chat/:id", verify, serviceUserController.addChat);
+router.delete("/chats/:id", verify, serviceUserController.deleteAllChat);
+router.delete("/chats/detail/:id", verify, serviceUserController.deleteChat);
 
 module.exports = router;
