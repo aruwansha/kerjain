@@ -8,6 +8,7 @@ const RequestBid = require("../models/request_bid");
 const Order = require("../models/order");
 const Chat = require("../models/chat");
 
+const bcrypt = require("bcrypt");
 const fs = require("fs-extra");
 const path = require("path");
 
