@@ -503,4 +503,20 @@ module.exports = {
     await freelancer.save();
     res.status(200).send({ message: "Data berhasil diperbaharui" });
   },
+
+  putPassword: async (req, res) => {
+    const { old_password, new_password } = req.body;
+    const user = await User.findOne({ _id: req.session.user.id });
+    const isPasswordMatch = await bcrypt.compare(old_password, user.password);
+
+    if (!isPasswordMatch) {
+      req.flash("alertMessage", "password lama salah");
+      req.flash("alertStatus", "danger");
+      res.status.send("Password lama salah");
+    } else {
+      user.password = new_password;
+      await user.save();
+      res.status(200).send("Password berhasil diperbaharui");
+    }
+  },
 };

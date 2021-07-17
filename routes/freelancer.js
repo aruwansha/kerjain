@@ -53,6 +53,7 @@ router.put(
   uploadServiceUser,
   freelancerController.putServiceData
 );
+
 router.put("/profile/bank", verify, freelancerController.putBankData);
 
 // order
@@ -64,5 +65,7 @@ router.put(
   uploadWork,
   freelancerController.sendProofWork
 );
+
+router.put("/password", verify, freelancerController.putPassword);
 
 module.exports = router;
