@@ -235,10 +235,13 @@ module.exports = {
         });
       }
       if (user.level === "freelancer") {
-        res.status(200).send({
-          message: "Success Login",
-          data: { name: user.name, level: "freelancer", token: token },
-        });
+        if (user.isBanned === true)
+          return res.status(400).send("Akun anda belum aktif, silakan menunggu");
+        if (user.isBanned === false)
+          return res.status(200).send({
+            message: "Success Login",
+            data: { name: user.name, level: "freelancer", token: token },
+          });
       }
     } catch (error) {
       res.status(500).send(error);

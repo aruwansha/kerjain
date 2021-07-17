@@ -1144,26 +1144,10 @@ module.exports = {
       },
       {
         $lookup: {
-          from: "freelancers",
-          localField: "requestBidId.freelancerId",
-          foreignField: "_id",
-          as: "freelancers",
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "freelancers.userId",
-          foreignField: "_id",
-          as: "freelancer",
-        },
-      },
-      {
-        $lookup: {
           from: "reviews",
           localField: "freelancers._id",
           foreignField: "freelancerId",
-          as: "reviews",
+          as: "reviewfreelancer",
         },
       },
       {
@@ -1186,8 +1170,7 @@ module.exports = {
           "request.requestId": 1,
           requestBidId: 1,
           "freelancer.name": 1,
-          ratingLength: { $size: "$reviews" },
-          ratingTotal: { $sum: "$reviews.rating" },
+          freelancers: 1,
         },
       },
       {
@@ -1202,13 +1185,7 @@ module.exports = {
           "request.requestId": 1,
           requestBidId: 1,
           "freelancer.name": 1,
-          rating: {
-            $cond: {
-              if: { $eq: ["$ratingTotal", 0] },
-              then: 0,
-              else: { $divide: ["$ratingTotal", "$ratingLength"] },
-            },
-          },
+          freelancers: 1,
         },
       },
     ]);
@@ -1364,7 +1341,7 @@ module.exports = {
     const user = await User.findOne({ _id: req.user.id });
     res.status(200).send(user);
   },
-  
+
   editProfile: async (req, res) => {
     const { name, email, address, phone } = req.body;
     const user = await User.findOne({ _id: req.user.id });

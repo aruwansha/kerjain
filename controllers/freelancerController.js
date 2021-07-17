@@ -12,6 +12,48 @@ const fs = require("fs-extra");
 const path = require("path");
 
 module.exports = {
+  register: async (req, res) => {
+    const emailExists = await User.findOne({
+      email: req.body.email.toLowerCase(),
+    });
+    if (emailExists) return res.status(400).send("Email already taken");
+
+    const { firstname, lastname, email, password, categoryId } = req.body;
+    if (
+      firstname === undefined ||
+      lastname === undefined ||
+      email === undefined ||
+      password === undefined ||
+      categoryId === undefined
+    ) {
+      res.status(400).send({ message: "Tolong lengkapi field" });
+    } else {
+      const createUser = await User.create({
+        name: `${firstname} ${lastname}`,
+        email: email.toLowerCase(),
+        password,
+        level: "freelancer",
+        isBanned: true,
+      });
+
+      // get selected category
+      const category = await Category.findOne({ _id: categoryId });
+
+      // create freelancer user
+      const createFreelancer = await Freelancer.create({
+        userId: createUser._id,
+        categoryId: categoryId,
+      });
+
+      // push freelancerId to category schema
+      category.freelancerId.push({ _id: createFreelancer._id });
+      await category.save();
+      res.status(201).send({
+        message: "Berhasil Mendaftar, Tunggu konfirmasi admin untuk bisa login",
+      });
+    }
+  },
+
   getDashboard: async (req, res) => {
     const id = req.user.id;
     const order = await Freelancer.findOne({ userId: id })
@@ -66,7 +108,7 @@ module.exports = {
       freelancer.save();
       res.status(201).send({ message: "Berhasil menambah data" });
     } else {
-      res.status(201).send({ message: "Layanan sudah penuh" });
+      res.status(200).send({ message: "Layanan sudah penuh" });
     }
   },
 
@@ -93,7 +135,7 @@ module.exports = {
 
   deleteService: async (req, res) => {
     const userId = req.user.id;
-    const { id } = req.body;
+    const { id } = req.params;
     const service = await Service.findOne({ _id: id });
     if (fs.existsSync(path.join(`public/${service.imgUrl}`))) {
       await fs.unlink(path.join(`public/${service.imgUrl}`));
@@ -174,6 +216,9 @@ module.exports = {
       isReadFreelancer: false,
     }).select("isReadFreelancer");
     const { id } = req.params;
+    const freelancerId = await Freelancer.findOne({ userId: userId }).select(
+      "id"
+    );
     const request = await Request.findOne({ _id: id });
     const serviceUser = await ServiceUser.findOne({
       _id: request.serviceUserId,
@@ -183,6 +228,7 @@ module.exports = {
 
     const requestBid = await RequestBid.findOne({
       requestId: id,
+      freelancerId: freelancerId._id,
     });
 
     res.status(200).send({
@@ -196,6 +242,8 @@ module.exports = {
     const userId = req.user.id;
     const { nominal, id } = req.body;
 
+    const user = await User.findOne({ _id: userId }).select("name");
+
     const freelancerId = await Freelancer.findOne({
       userId: userId,
     }).select("_id");
@@ -203,6 +251,7 @@ module.exports = {
     await RequestBid.create({
       requestId: id,
       freelancerId: freelancerId._id,
+      name: user.name,
       bid: nominal,
     });
     res.status(201).send({ message: "Berhasil mengikuti bid" });

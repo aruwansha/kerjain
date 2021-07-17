@@ -10,6 +10,10 @@ const requestSchema = new mongoose.Schema({
     type: ObjectId,
     ref: "Freelancer",
   },
+  name: {
+    type: String,
+    required: true,
+  },
   bid: {
     type: Number,
     required: true,

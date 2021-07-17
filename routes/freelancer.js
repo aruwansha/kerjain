@@ -9,24 +9,22 @@ const {
 
 const { verify } = require("../middlewares/auth");
 
+// signup
+router.post("/register", freelancerController.register);
+
 // dashboard
 router.get("/dashboard", verify, freelancerController.getDashboard);
 
 // service
 router.get("/services", verify, freelancerController.getServices);
 router.post(
-  "/service/add",
+  "/service",
   verify,
   uploadService,
   freelancerController.postService
 );
-router.put(
-  "/service/edit",
-  verify,
-  uploadService,
-  freelancerController.putService
-);
-router.delete("/service/delete", verify, freelancerController.deleteService);
+router.put("/service", verify, uploadService, freelancerController.putService);
+router.delete("/service/:id", verify, freelancerController.deleteService);
 
 // request
 router.get("/requests", verify, freelancerController.getRequests);
@@ -38,11 +36,7 @@ router.put("/request/bid", verify, freelancerController.putBid);
 router.get("/chats", verify, freelancerController.getChats);
 router.delete("/chats/:id", verify, freelancerController.deleteChats);
 router.get("/chats/:id", verify, freelancerController.getChat);
-router.delete(
-  "/chats/detail/:id",
-  verify,
-  freelancerController.deleteChat
-);
+router.delete("/chats/detail/:id", verify, freelancerController.deleteChat);
 router.post("/chat/:id", verify, freelancerController.postChat);
 
 // setting
@@ -65,7 +59,7 @@ router.put("/profile/bank", verify, freelancerController.putBankData);
 router.get("/orders", verify, freelancerController.getOrders);
 router.get("/orders/:id", verify, freelancerController.getOrder);
 router.put(
-  "/order/:id/upload",
+  "/order/:id/send-work",
   verify,
   uploadWork,
   freelancerController.sendProofWork
