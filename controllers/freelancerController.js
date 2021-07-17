@@ -505,8 +505,9 @@ module.exports = {
   },
 
   putPassword: async (req, res) => {
+    const userId = req.user.id;
     const { old_password, new_password } = req.body;
-    const user = await User.findOne({ _id: req.session.user.id });
+    const user = await User.findOne({ _id: userId });
     const isPasswordMatch = await bcrypt.compare(old_password, user.password);
 
     if (!isPasswordMatch) {
