@@ -30,58 +30,58 @@ module.exports = {
     }
   },
 
-  actionSignup: async (req, res) => {
-    const emailExists = await User.findOne({
-      email: req.body.email.toLowerCase(),
-    });
-    if (emailExists) return res.status(400).send("Email already taken");
+  // actionSignup: async (req, res) => {
+  //   const emailExists = await User.findOne({
+  //     email: req.body.email.toLowerCase(),
+  //   });
+  //   if (emailExists) return res.status(400).send("Email already taken");
 
-    const { firstname, lastname, email, password, password2, categoryId } =
-      req.body;
-    if (
-      firstname === undefined ||
-      lastname === undefined ||
-      email === undefined ||
-      password === undefined ||
-      password2 === undefined ||
-      categoryId === undefined
-    ) {
-      req.flash("alertMessage", "Tolong lengkapi field!");
-      req.flash("alertStatus", "danger");
-      res.redirect("back");
-    } else if (password != password2) {
-      req.flash("alertMessage", "Password harus sama!");
-      req.flash("alertStatus", "danger");
-      res.redirect("back");
-    } else {
-      const createUser = await User.create({
-        name: `${firstname} ${lastname}`,
-        email: email.toLowerCase(),
-        password,
-        level: "freelancer",
-        isBanned: true,
-      });
+  //   const { firstname, lastname, email, password, password2, categoryId } =
+  //     req.body;
+  //   if (
+  //     firstname === undefined ||
+  //     lastname === undefined ||
+  //     email === undefined ||
+  //     password === undefined ||
+  //     password2 === undefined ||
+  //     categoryId === undefined
+  //   ) {
+  //     req.flash("alertMessage", "Tolong lengkapi field!");
+  //     req.flash("alertStatus", "danger");
+  //     res.redirect("back");
+  //   } else if (password != password2) {
+  //     req.flash("alertMessage", "Password harus sama!");
+  //     req.flash("alertStatus", "danger");
+  //     res.redirect("back");
+  //   } else {
+  //     const createUser = await User.create({
+  //       name: `${firstname} ${lastname}`,
+  //       email: email.toLowerCase(),
+  //       password,
+  //       level: "freelancer",
+  //       isBanned: true,
+  //     });
 
-      // get selected category
-      const category = await Category.findOne({ _id: categoryId });
+  //     // get selected category
+  //     const category = await Category.findOne({ _id: categoryId });
 
-      // create freelancer user
-      const createFreelancer = await Freelancer.create({
-        userId: createUser._id,
-        categoryId: categoryId,
-      });
+  //     // create freelancer user
+  //     const createFreelancer = await Freelancer.create({
+  //       userId: createUser._id,
+  //       categoryId: categoryId,
+  //     });
 
-      // push freelancerId to category schema
-      category.freelancerId.push({ _id: createFreelancer._id });
-      await category.save();
-      req.flash(
-        "alertMessage",
-        "Berhasil Mendaftar, Tunggu konfirmasi admin untuk bisa login"
-      );
-      req.flash("alertStatus", "primary");
-      res.redirect("/login");
-    }
-  },
+  //     // push freelancerId to category schema
+  //     category.freelancerId.push({ _id: createFreelancer._id });
+  //     await category.save();
+  //     req.flash(
+  //       "alertMessage",
+  //       "Berhasil Mendaftar, Tunggu konfirmasi admin untuk bisa login"
+  //     );
+  //     req.flash("alertStatus", "primary");
+  //     res.redirect("/login");
+  //   }
+  // },
 
   viewSignin: async (req, res) => {
     try {
@@ -132,7 +132,7 @@ module.exports = {
             res.redirect("back");
           }
           if (user.level == "freelancer") {
-            res.redirect("back");
+            res.redirect("https://kerjain.herokuapp.com/login");
           }
         } else if (user.isBanned == true) {
           req.flash("alertMessage", "Akun anda belum aktif");
@@ -149,12 +149,6 @@ module.exports = {
             req.flash("alertMessage", "Login Berhasil");
             req.flash("alertStatus", "primary");
             res.redirect("/admin/dashboard");
-          }
-
-          if (user.level == "freelancer") {
-            req.flash("alertMessage", "Login Berhasil");
-            req.flash("alertStatus", "primary");
-            res.redirect("/freelancer/dashboard");
           }
         }
       }
@@ -236,7 +230,9 @@ module.exports = {
       }
       if (user.level === "freelancer") {
         if (user.isBanned === true)
-          return res.status(400).send("Akun anda belum aktif, silakan menunggu");
+          return res
+            .status(400)
+            .send("Akun anda belum aktif, silakan menunggu");
         if (user.isBanned === false)
           return res.status(200).send({
             message: "Success Login",
