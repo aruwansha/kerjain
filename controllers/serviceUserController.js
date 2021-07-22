@@ -1062,6 +1062,7 @@ module.exports = {
       },
       {
         $project: {
+          "freelancerId._id": 1,
           payments: 1,
           orderDate: 1,
           invoice: 1,
