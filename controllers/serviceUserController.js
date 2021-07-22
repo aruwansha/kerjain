@@ -1025,7 +1025,23 @@ module.exports = {
           from: "users",
           localField: "serviceUserId.userId",
           foreignField: "_id",
-          as: "userId",
+          as: "su",
+        },
+      },
+      {
+        $lookup: {
+          from: "freelancers",
+          localField: "freelancerId",
+          foreignField: "_id",
+          as: "freelancerId",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "freelancerId.userId",
+          foreignField: "_id",
+          as: "fu",
         },
       },
       {
@@ -1046,12 +1062,12 @@ module.exports = {
       },
       {
         $project: {
-          freelancerId: 1,
           payments: 1,
           orderDate: 1,
           invoice: 1,
           work: 1,
-          "userId.name": 1,
+          "fu.name": 1,
+          "su.name": 1,
           "service.title": 1,
           "request.requestSubject": 1,
           serviceId: 1,

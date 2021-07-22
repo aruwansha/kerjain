@@ -236,7 +236,12 @@ module.exports = {
         if (user.isBanned === false)
           return res.status(200).send({
             message: "Success Login",
-            data: { name: user.name, level: "freelancer", token: token },
+            data: {
+              name: user.name,
+              picture: user.imgUrl,
+              level: "freelancer",
+              token: token,
+            },
           });
       }
     } catch (error) {
